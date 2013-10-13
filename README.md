@@ -13,11 +13,24 @@ To install and use the package, you need to run something like:
     ~$ wget --no-check-certificate https://github.com/atelierspierrot/dev-tools/archive/master.tar.gz
     ~$ tar -xvf master.tar.gz
     ~$ cp dev-tools-master/deploy.sh path/to/your/project/bin/ \
-        && cp -r dev-tools-master/deploy-actions/ path/to/your/project/bin \
-        && cp -r dev-tools-master/bash-library path/to/your/project/bin \
-        && cp dev-tools-master/deploy.conf path/to/your/project/ \
+        && cp -R dev-tools-master/deploy-actions path/to/your/project/bin \
+        && cp -R dev-tools-master/bash-library path/to/your/project/bin \
+        && cp dev-tools-master/deploy.conf path/to/your/project/
     ~$ chmod +x path/to/your/project/bin/deploy.sh
 
+If you already use the [Bash Library](https://github.com/atelierspierrot/bash-library) in your
+project, just re-define the `BASHLIBRARY_PATH` configuration setting as described below.
+
+If you are a [Composer](http://getcomposer.org) user, you can simply add to your requirements:
+
+    "require": {
+        ...
+        "atelierspierrot/dev-tools": "dev-master"
+    },
+    "config": {
+        ...
+        "bin-dir": "bin"
+    },
 
 
 ## Usage
