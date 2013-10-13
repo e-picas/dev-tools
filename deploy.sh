@@ -107,6 +107,12 @@ targetdir_required () {
     if [ ! -d "$_TARGET" ]; then error "Unknown root directory '${_TARGET}' !"; fi
 }
 
+#### trigger_event ( command )
+## trigger a user defined command for an event
+trigger_event () {
+    iexec "$1"
+}
+
 #### first setup ##########################
 
 if [ ! -d "${_BASEDIR}" ]; then
@@ -147,10 +153,18 @@ done
 if [ ! -z "$ACTION" ]
 then
     ACTIONFILE="${_BASEDIR}/${ACTION}.sh"
+    PREACTION="EVENT_PRE_${ACTION}"
+    POSTACTION="EVENT_POST_${ACTION}"
     if [ -f "$ACTIONFILE" ]
     then
         export _BASEDIR _BACKUP_DIR _PROJECT _TARGET
+        if [ ! -z "${!PREACTION}" ]; then
+            trigger_event "${!PREACTION}"
+        fi
         source "$ACTIONFILE"
+        if [ ! -z "${!POSTACTION}" ]; then
+            trigger_event "${!POSTACTION}"
+        fi
     else
         error "Unknown action '${ACTION}' (use option '-z' to list available action scripts) !"
     fi

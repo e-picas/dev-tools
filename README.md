@@ -11,7 +11,7 @@ In a terminal, run:
 
     sh ./deploy.sh
 
-For available actions, run:
+To list available actions, run:
 
     sh ./deploy.sh -z
 
@@ -30,3 +30,15 @@ which is embedded by default in `bin/`. You can over-write the library loaded (a
 embedded version) re-defining the `BASHLIBRARY_PATH` of the configuration file.
 
 
+## Events
+
+For each action of the `deploy.sh` script, an event will be triggered BEFORE and AFTER the
+action is called. This allows user to define a special behavior for each action using the
+configuration values constructed like:
+
+    EVENT_PRE_action
+    EVENT_POST_action
+
+For instance, to echo `done` after the `cleanup` action, use:
+
+    EVENT_POST_cleanup="echo 'done'"
