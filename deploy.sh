@@ -5,8 +5,20 @@
 # deploy.sh -vi --project=PROJECT action
 #
 
+######## Inclusion of the config
+CFGFILE="deploy.conf"
+if [ -f "$CFGFILE" ]; then source "$CFGFILE"; else
+    PADDER=$(printf '%0.1s' "#"{1..1000})
+    printf "\n### %*.*s\n    %s\n    %s\n%*.*s\n\n" 0 $(($(tput cols)-4)) "ERROR! $PADDER" \
+        "Unable to find required configuration file '$CFGFILE'!" \
+        "Sent in '$0' line '${LINENO}' by '`whoami`' - pwd is '`pwd`'" \
+        0 $(tput cols) "$PADDER";
+    exit 1
+fi
+######## !Inclusion of the config
+
 ######## Inclusion of the lib
-LIBFILE="`dirname $0`/bin/bash-library.sh"
+LIBFILE="`dirname $0`/${BASHLIBRARY_PATH}"
 if [ -f "$LIBFILE" ]; then source "$LIBFILE"; else
     PADDER=$(printf '%0.1s' "#"{1..1000})
     printf "\n### %*.*s\n    %s\n    %s\n%*.*s\n\n" 0 $(($(tput cols)-4)) "ERROR! $PADDER" \

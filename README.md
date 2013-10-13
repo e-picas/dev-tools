@@ -18,3 +18,15 @@ For available actions, run:
 To run an action, run:
 
     sh ./deploy.sh [options] action_name
+
+
+## Configuration & Dependencies
+
+The package is distributed with a configuration file named `deploy.conf` with default settings.
+You can define or re-define some settings in this file to fit your environment needs.
+
+This package is based on the [Bash Library](https://github.com/atelierspierrot/bash-library)
+which is embedded by default in `bin/`. You can over-write the library loaded (and skip the
+embedded version) re-defining the `BASHLIBRARY_PATH` of the configuration file.
+
+
