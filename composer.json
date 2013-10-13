@@ -18,6 +18,7 @@
     "bin": [
         "deploy.sh",
         "deploy.conf",
+        "deploy-actions",
         "bash-library"
     ],
     "extra": {

@@ -5,40 +5,50 @@
 # deploy.sh -vi --project=PROJECT action
 #
 
+###### First paths
+_REALPATH="$0"
+_REALDIRPATH="`dirname $_REALPATH`"
+
+#### findRequirements ( path , info string )
+# search for a relative or root path
+findRequirements() {
+    REQFILE="$1"
+    ROOTREQFILE="${_REALDIRPATH}/${REQFILE}"
+    REQINFO="$2"
+    if [ -e "$REQFILE" ]; then
+        echo "$REQFILE"
+        return 0
+    elif [ -e "$ROOTREQFILE" ]; then
+        echo "$ROOTREQFILE"
+        return 0
+    else
+        PADDER=$(printf '%0.1s' "#"{1..1000})
+        printf "\n### %*.*s\n    %s\n    %s\n%*.*s\n\n" 0 $(($(tput cols)-4)) "ERROR! $PADDER" \
+            "Unable to find required $REQINFO '$REQFILE'!" \
+            "Sent in '$0' line '${LINENO}' by '`whoami`' - pwd is '`pwd`'" \
+            0 $(tput cols) "$PADDER";
+        exit 1
+    fi
+}
+
 ######## Inclusion of the config
-CFGFILE="deploy.conf"
-if [ -f "$CFGFILE" ]; then source "$CFGFILE"; else
-    PADDER=$(printf '%0.1s' "#"{1..1000})
-    printf "\n### %*.*s\n    %s\n    %s\n%*.*s\n\n" 0 $(($(tput cols)-4)) "ERROR! $PADDER" \
-        "Unable to find required configuration file '$CFGFILE'!" \
-        "Sent in '$0' line '${LINENO}' by '`whoami`' - pwd is '`pwd`'" \
-        0 $(tput cols) "$PADDER";
-    exit 1
-fi
-######## !Inclusion of the config
+CFGFILE=`findRequirements "deploy.conf" "configuration file"`
+if [ -f "$CFGFILE" ]; then source "$CFGFILE"; else echo "$CFGFILE"; exit 1; fi
 
 ######## Inclusion of the lib
-LIBFILE="`dirname $0`/${BASHLIBRARY_PATH}"
-if [ -f "$LIBFILE" ]; then source "$LIBFILE"; else
-    PADDER=$(printf '%0.1s' "#"{1..1000})
-    printf "\n### %*.*s\n    %s\n    %s\n%*.*s\n\n" 0 $(($(tput cols)-4)) "ERROR! $PADDER" \
-        "Unable to find required library file '$LIBFILE'!" \
-        "Sent in '$0' line '${LINENO}' by '`whoami`' - pwd is '`pwd`'" \
-        0 $(tput cols) "$PADDER";
-    exit 1
-fi
-######## !Inclusion of the lib
+LIBFILE=`findRequirements "${BASHLIBRARY_PATH}" "bash library"`
+if [ -f "$LIBFILE" ]; then source "$LIBFILE"; else echo "$LIBFILE"; exit 1; fi
+
+######## Path of the actions
+BASEDIRPATH=`findRequirements "deploy-actions" "actions directory"`
+if [ ! -d "$BASEDIRPATH" ]; then echo "$BASEDIRPATH"; exit 1; fi
 
 #### script settings ##########################
 
-_REALPATH="`realpath $BASH_SOURCE`"
-declare -x _BASEDIR="`dirname $_REALPATH`/deploy-actions"
+declare -x _BASEDIR="$BASEDIRPATH"
 declare -x _BACKUP_DIR="${_BASEDIR}/backup/"
 declare -x _PROJECT="project"
-declare -x _SET="full"
 declare -x _TARGET
-declare -x _TARGETMEDIA
-
 declare -x ACTION
 declare -x ACTION_DESCRIPTION=""
 declare -x SCRIPTMAN=false

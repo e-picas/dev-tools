@@ -5,6 +5,21 @@ This package is a set of shell scripts to help managing a package life-cycle, su
 up some un-wanted files to prepare a deployment, actually deploy the package loading some
 environment specific files and helping create some GIT version TAGs.
 
+
+## Installation
+
+To install and use the package, you need to run something like:
+
+    ~$ wget --no-check-certificate https://github.com/atelierspierrot/dev-tools/archive/master.tar.gz
+    ~$ tar -xvf master.tar.gz
+    ~$ cp dev-tools-master/deploy.sh path/to/your/project/bin/ \
+        && cp -r dev-tools-master/deploy-actions/ path/to/your/project/bin \
+        && cp -r dev-tools-master/bash-library path/to/your/project/bin \
+        && cp dev-tools-master/deploy.conf path/to/your/project/ \
+    ~$ chmod +x path/to/your/project/bin/deploy.sh
+
+
+
 ## Usage
 
 In a terminal, run:
