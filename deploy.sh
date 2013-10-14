@@ -114,10 +114,10 @@ OPTIONS="<bold>-p | --project=PATH</bold>\tthe project path (default is 'pwd' - 
 \t<bold>-q | --quiet</bold>\t\tdecrease script verbosity, nothing will be written unless errors \n\
 \t<bold>-f | --force</bold>\t\tforce some commands to not prompt confirmation \n\
 \t<bold>-i | --interactive</bold>\task for confirmation before any action \n\
-\t<bold>-x | --debug</bold>\t\tsee commands to run but not run them actually";
+\t<bold>-x | --dry-run</bold>\t\tsee commands to run but not run them actually";
 declare -rx SYNOPSIS_ERROR="<bold>error:</bold> no action to execute \n\
-<bold>usage:</bold> ${0}  [-${COMMON_OPTIONS_ARGS}] ... ${actionssynopsis}\n\
-\t<action : ${actionsstr}>  -- \n\
+<bold>usage:</bold> ${0}  [-${COMMON_OPTIONS_ARGS}] [-x|--dry-run] ... ${actionssynopsis}\n\
+\t-p | --project=path <action : ${actionsstr}>  -- \n\
 Run option '-h' for help.";
 COMMON_OPTIONS_ARGS="p:${COMMON_OPTIONS_ARGS}"
 
@@ -173,6 +173,7 @@ while getopts "p:${COMMON_OPTIONS_ARGS}" OPTION $options; do
         p) _TARGET=$OPTARG;;
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
+                dry-run*) DEBUG=true;;
                 project*) _TARGET=$LONGOPTARG;;
                 \?) ;;
             esac ;;
