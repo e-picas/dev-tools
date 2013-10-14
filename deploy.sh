@@ -11,6 +11,7 @@ _REALDIRPATH="`dirname $_REALPATH`"
 
 #### findRequirements ( path , info string )
 # search for a relative or root path
+# this needs to be defined first as it is used to find the library
 findRequirements() {
     REQFILE="$1"
     ROOTREQFILE="${_REALDIRPATH}/${REQFILE}"
@@ -43,50 +44,84 @@ if [ -f "$LIBFILE" ]; then source "$LIBFILE"; else echo "$LIBFILE"; exit 1; fi
 BASEDIRPATH=`findRequirements "deploy-actions" "actions directory"`
 if [ ! -d "$BASEDIRPATH" ]; then echo "$BASEDIRPATH"; exit 1; fi
 
+#### load_actions_infos ()
+# load the available actions in $ACTIONS_LIST
+# load the available actions synopsis in $ACTIONS_SYNOPSIS
+# load the available actions synopsis in $ACTIONS_DESCRIPTIONS
+# this needs to be defined here as it is used for strings below
+load_actions_infos () {
+    ACTIONS_LIST=()
+    ACTIONS_SYNOPSIS=()
+    ACTIONS_DESCRIPTIONS=()
+    export SCRIPTMAN=true
+    for action in $_BASEDIR/*.sh; do
+        myaction=${action##$_BASEDIR/}
+        pos=${#ACTIONS_LIST[@]}
+        source "${action}"
+        ACTIONS_LIST[$pos]="${myaction%%.sh}"
+        if [ -n "$ACTION_SYNOPSIS" ]; then
+            ACTIONS_SYNOPSIS[$pos]="${ACTION_SYNOPSIS}"
+        fi
+        if [ -n "$ACTION_DESCRIPTION" ]; then
+            ACTIONS_DESCRIPTIONS[$pos]="${ACTION_DESCRIPTION}"
+        fi
+    done
+    export ACTIONS_LIST ACTIONS_SYNOPSIS ACTIONS_DESCRIPTIONS
+    export SCRIPTMAN=false
+}
+
 #### script settings ##########################
 
 declare -x _BASEDIR="$BASEDIRPATH"
 declare -x _BACKUP_DIR="${_BASEDIR}/backup/"
 declare -x _PROJECT="project"
-declare -x _TARGET
+declare -x _TARGET=`pwd`
 declare -x ACTION
 declare -x ACTION_DESCRIPTION=""
 declare -x SCRIPTMAN=false
+declare -xa ACTIONS_LIST=() && declare -xa ACTIONS_SYNOPSIS=() && declare -xa ACTIONS_DESCRIPTIONS=() && load_actions_infos
 MANPAGE_NODEPEDENCY=true
+
+actionsstr=""
+actionsdescription=""
+actionssynopsis=""
+for i in ${!ACTIONS_LIST[*]}; do
+    itemstr=${ACTIONS_LIST[$i]}
+    if [ "${#actionsstr}" == 0 ]; then
+        actionsstr="${itemstr}"
+    else
+        actionsstr="${actionsstr} | ${itemstr}"
+    fi
+    actionsdescription="${actionsdescription}\n\n\t<bold>${itemstr}</bold>\n"
+    itemdesc=${ACTIONS_DESCRIPTIONS[$i]}
+    if [ -n "${itemdesc}" ]; then
+        actionsdescription="${actionsdescription}\t${itemdesc}"
+    fi
+    itemsyn=${ACTIONS_SYNOPSIS[$i]}
+    if [ -n "${itemsyn}" ]; then
+        actionssynopsis="${actionssynopsis}\n\t${itemsyn} ..."
+    fi
+done
 
 NAME="DevTools - Deployment facilities"
 DESCRIPTION="This helper script will assist you in creating version tags of a git repository, deploying a project and its environment dependencies etc."
+DESCRIPTION="${DESCRIPTION}\n\n<bold>AVAILABLE ACTIONS</bold>${actionsdescription}"
 SYNOPSIS="$LIB_SYNOPSIS_ACTION"
-OPTIONS="<bold>-z | --actions</bold>\t\tget the list of available actions\n\
-\t<bold>-p | --project=NAME</bold>\tthe project name\n\
+OPTIONS="<bold>-p | --project=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
+\t<bold>-d | --working-dir=PATH</bold>\tredefine the working directory (default is 'pwd' - 'PATH' must exist)\n\
 \t<bold>-h | --help</bold>\t\tshow this information message \n\
 \t<bold>-v | --verbose</bold>\t\tincrease script verbosity \n\
 \t<bold>-q | --quiet</bold>\t\tdecrease script verbosity, nothing will be written unless errors \n\
 \t<bold>-f | --force</bold>\t\tforce some commands to not prompt confirmation \n\
 \t<bold>-i | --interactive</bold>\task for confirmation before any action \n\
-\t<bold>-x | --debug</bold>\t\tsee commands to run but not run them actually \n\
-\t<bold>-V | --version</bold>\t\tsee the script version when available\n\
-\t<bold>-d | --working-dir=PATH</bold>\tredefine the working directory (default is 'pwd' - 'PATH' must exist)\n\
-\t<bold>-l | --log=FILENAME</bold>\tdefine the log filename to use (default is '${LIB_LOGFILE}')";
+\t<bold>-x | --debug</bold>\t\tsee commands to run but not run them actually";
+declare -rx SYNOPSIS_ERROR="<bold>error:</bold> no action to execute \n\
+<bold>usage:</bold> ${0}  [-${COMMON_OPTIONS_ARGS}] ... ${actionssynopsis}\n\
+\t<action : ${actionsstr}>  -- \n\
+Run option '-h' for help.";
+COMMON_OPTIONS_ARGS="p:${COMMON_OPTIONS_ARGS}"
 
 #### internal lib ##########################
-
-#### list_actions ()
-# list available action scripts
-list_actions () {
-    local actions_str="\n<underline>Available actions:</underline>\n"
-    export SCRIPTMAN=true
-    for action in $_BASEDIR/*.sh; do
-        myaction=${action##$_BASEDIR/}
-        actions_str="${actions_str}\n    <bold>${myaction%%.sh}</bold> \n"
-        source "${_BASEDIR}/${myaction}"
-        if [ -n "$ACTION_DESCRIPTION" ]; then
-            actions_str="${actions_str}\t${ACTION_DESCRIPTION}\n"
-        fi
-    done
-    actions_str="${actions_str}\n<${COLOR_COMMENT}>`library_info`</${COLOR_COMMENT}>";
-    parsecolortags "${actions_str}\n"
-}
 
 #### root_required ()
 # ensure current user is root
@@ -97,19 +132,9 @@ root_required () {
     fi
 }
 
-#### project_required ()
-# ensure the project name is defined
-project_required () {
-    if [ -z "$_PROJECT" ]; then
-        prompt 'Name of the project to work on' '' ''
-        export _PROJECT=$USERRESPONSE
-    fi
-}
-
 #### targetdir_required ()
 # ensure the project root directory is defined
 targetdir_required () {
-    _TARGET="$WORKINGDIR"
     if [ -z "$_TARGET" ]; then
         prompt 'Target directory of the project to work on' `pwd` ''
         export _TARGET=$USERRESPONSE
@@ -123,36 +148,32 @@ trigger_event () {
     iexec "$1"
 }
 
-#### first setup ##########################
+#### first setup & options treatment ##########################
+
+parsecomonoptions "$@"
 
 if [ ! -d "${_BASEDIR}" ]; then
     error "Unknown dependencies directory '${_BASEDIR}' (this is where you must put your dependencies dirs/files) !"
 fi
 
 if [ ! -d "${_BACKUP_DIR}" ]; then
-    mkdir "${_BACKUP_DIR}" && chmod 777 "${_BACKUP_DIR}"
+    mkdir "${_BACKUP_DIR}" && chmod 775 "${_BACKUP_DIR}"
     if [ ! -d "${_BACKUP_DIR}" ]; then
         error "Backup directory '${_BACKUP_DIR}' can't be created (try to run this script as 'sudo') !"
     fi
 fi
 
-#### options treatment ##########################
-
-parsecomonoptions "$@"
-
 OPTIND=1
 options=$(getscriptoptions "$@")
 ACTION=$(getlastargument $options)
-while getopts "zp:${COMMON_OPTIONS_ARGS}" OPTION $options; do
+while getopts "p:${COMMON_OPTIONS_ARGS}" OPTION $options; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         d|f|h|i|l|q|v|V|x) rien=rien;;
-        z) title; list_actions; exit 0;;
-        p) _PROJECT=$OPTARG;;
+        p) _TARGET=$OPTARG;;
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
-                actions) title; list_actions; exit 0;;
-                project*) _PROJECT=$LONGOPTARG;;
+                project*) _TARGET=$LONGOPTARG;;
                 \?) ;;
             esac ;;
         \?) ;;
@@ -176,10 +197,10 @@ then
             trigger_event "${!POSTACTION}"
         fi
     else
-        error "Unknown action '${ACTION}' (use option '-z' to list available action scripts) !"
+        error "Unknown action '${ACTION}' !"
     fi
 else
-    usage
+    parsecolortags "${SYNOPSIS_ERROR}"
 fi
 
 exit 0

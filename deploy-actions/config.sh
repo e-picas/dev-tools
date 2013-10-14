@@ -9,6 +9,7 @@ ACTION_DESCRIPTION="Manage the deploy facilities configuration for a package (st
 \t\t<bold>--config-var=NAME</bold>\tselect a configuration variable\n\
 \t\t<bold>--config-val=VALUE</bold>\tdefine a configuration variable value\n\
 \t\t<bold>--config-file</bold>\t\tsee current configuration file path";
+ACTION_SYNOPSIS="[--config-var=name] [--config-val=value] [--config-file]"
 if $SCRIPTMAN; then return; fi
 
 targetdir_required
@@ -18,6 +19,7 @@ CFGVAR=''
 CFGVAL=''
 CFGACTION='read'
 OPTIND=1
+options=$(getscriptoptions "$@")
 while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
     OPTARG="${OPTARG#=}"
     case $OPTION in

@@ -3,29 +3,17 @@
 # action for ../deploy.sh
 #
 
-ACTION_DESCRIPTION="This will clean all OS or IDE specific files from the project";
+ACTION_DESCRIPTION="This will clean all OS or IDE specific files from the project (config var: 'CLEANUP_FILES')";
 if $SCRIPTMAN; then return; fi
 
 targetdir_required
-unwanted_files=(
-.DS_Store
-.AppleDouble
-.LSOverride
-.Spotlight-V100
-.Trashes
-Icon
-._*
-*~
-*~lock*
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-.project
-.buildpath
-)
+
+if [ -z $CLEANUP_FILES ]; then
+    error "Configuration var 'CLEANUP_FILES' not found !"
+fi
 
 verecho "> cleaning files in '$_TARGET' ..."
-for FNAME in "${unwanted_files[@]}"; do
+for FNAME in "${CLEANUP_FILES[@]}"; do
     if $VERBOSE; then
         iexec "find $_TARGET -type f -name $FNAME -exec rm -v {} \;"
     else
