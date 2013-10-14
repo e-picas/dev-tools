@@ -34,5 +34,9 @@ user/*
 vendor/*
 */vendor/*
 
+# specific to the "wip" branch
+build/*
+dev/*
+
 # devtools specific
 deploy-actions/backup
