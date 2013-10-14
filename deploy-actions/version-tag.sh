@@ -66,7 +66,13 @@ if $VERBOSE; then
 fi
 
 verecho "> creating git tag named '$TAG_NAME' ..."
-iexec "cd ${_TARGET} && git tag -a $TAG_NAME -m 'Automatic versioning tag' && git push origin $TAG_NAME"
+iexec "cd ${_TARGET} && git tag -a $TAG_NAME -m 'Automatic versioning tag'"
+if $VERBOSE; then
+    verecho "> tag $TAG_NAME created - pushing to remote ..."
+else
+    echo "tag $TAG_NAME created - pushing to remote ..."
+fi
+iexec "git push origin $TAG_NAME"
 verecho "_ ok"
 
 # Endfile
