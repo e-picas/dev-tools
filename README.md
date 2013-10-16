@@ -5,6 +5,9 @@ This package is a set of shell scripts to help managing a package life-cycle, su
 up some un-wanted files to prepare a deployment, actually deploy the package loading some
 environment specific files and helping create some GIT version TAGs.
 
+The tools embedded in this package are based on our work about the best practices in project
+deployment: <http://github.com/atelierspierrot/atelierspierrot/blob/master/Package-Deployment.md>.
+
 
 ## Installation
 
@@ -39,9 +42,9 @@ In a terminal, run:
 
     sh ./deploy.sh
 
-To list available actions, run:
+To see a full help info with the list of available actions, run:
 
-    sh ./deploy.sh -z
+    sh ./deploy.sh -h
 
 To run an action, run:
 
@@ -51,7 +54,14 @@ To run an action, run:
 ## Configuration & Dependencies
 
 The package is distributed with a configuration file named `deploy.conf` with default settings.
-You can define or re-define some settings in this file to fit your environment needs.
+You can define or re-define some settings in this file to fit your environment needs globally.
+You can also over-write all configuration values in a specific `.devtools` file at the root
+directory of each project. The configuration files used are INI like:
+
+    # comment begins with a sharp
+    CONFIG_VAR=my value
+
+Any available configuration variable is shown in the usage string.
 
 This package is based on the [Bash Library](https://github.com/atelierspierrot/bash-library)
 which is embedded by default in `bin/`. You can over-write the library loaded (and skip the
@@ -70,3 +80,22 @@ configuration values constructed like:
 For instance, to echo `done` after the `cleanup` action, use:
 
     EVENT_POST_cleanup="echo 'done'"
+
+
+## Author & License
+
+>    Dev Tools
+
+>    https://github.com/php-carteblanche/dev-tools
+
+>    Copyleft 2013, Pierre Cassat and contributors
+
+>    Licensed under the GPL Version 3 license.
+
+>    http://opensource.org/licenses/GPL-3.0
+
+>    ----
+
+>    Les Ateliers Pierrot - Paris, France
+
+>    <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>

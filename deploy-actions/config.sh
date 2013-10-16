@@ -3,17 +3,17 @@
 # action for ../deploy.sh
 #
 
-filename='.devtools'
+filename="$DEFAULT_CONFIG_FILE"
 
 ACTION_DESCRIPTION="Manage the deploy facilities configuration for a package (stored in '$filename') ; with no option, current config will be shown ; to read or define a value, use:\n\
-\t\t<bold>--config-var=NAME</bold>\tselect a configuration variable\n\
-\t\t<bold>--config-val=VALUE</bold>\tdefine a configuration variable value\n\
-\t\t<bold>--config-file</bold>\t\tsee current configuration file path";
-ACTION_SYNOPSIS="[--config-var=name] [--config-val=value] [--config-file]"
+\t\t<bold>--var=NAME</bold>\tselect a configuration variable\n\
+\t\t<bold>--val=VALUE</bold>\tdefine a configuration variable value\n\
+\t\t<bold>--filename</bold>\tsee current configuration file path\n\
+\t\t<bold>--full</bold>\t\tsee full configuration for the project (defaults and custom)";
+ACTION_SYNOPSIS="[--var=name] [--val=value] [--filename] [--full]"
 if $SCRIPTMAN; then return; fi
 
 targetdir_required
-filepath="${_TARGET}/$filename"
 
 CFGVAR=''
 CFGVAL=''
@@ -25,14 +25,18 @@ while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
-                config-var*) CFGVAR=$LONGOPTARG && CFGACTION='get';;
-                config-val*) CFGVAL=$LONGOPTARG && CFGACTION='set';;
-                config-file) CFGACTION='file';;
+                var*) CFGVAR=$LONGOPTARG && CFGACTION='get';;
+                val*) CFGVAL=$LONGOPTARG && CFGACTION='set';;
+                filename) CFGACTION='file';;
+                full) CFGACTION='readfull';;
                 \?) ;;
             esac ;;
         \?) ;;
     esac
 done
+
+_TARGET=$(realpath "$_TARGET")
+filepath=$(realpath "${_TARGET}/$filename")
 
 if [ ! -z "$CFGACTION" ]
 then
@@ -41,6 +45,21 @@ then
             verecho "Reading config file '$filepath':"
             if [ -f "$filepath" ]; then
                 cat $filepath
+            else
+                echo "No configuration file found"
+            fi
+            ;;
+        readfull)
+            tmpconfigfile=$(gettempfilepath "`basename $_TARGET`$filename")
+            sed -e '/^#/d' -e '/^$/d' "$CFGFILE" > "$tmpconfigfile"
+            while read p; do
+                CFGVAR="${p%=*}"
+                CFGVAL="${p#*=}"
+                setconfigval "$tmpconfigfile" $CFGVAR "$CFGVAL"
+            done < "$filepath"
+            verecho "Reading merged default config with config file '$filepath':"
+            if [ -f "$tmpconfigfile" ]; then
+                cat $tmpconfigfile
             else
                 echo "No configuration file found"
             fi

@@ -55,6 +55,9 @@ load_actions_infos () {
     ACTIONS_DESCRIPTIONS=()
     export SCRIPTMAN=true
     for action in $_BASEDIR/*.sh; do
+        ACTION_SYNOPSIS=''
+        ACTION_DESCRIPTION=''
+        ACTION_CFGVARS=''
         myaction=${action##$_BASEDIR/}
         pos=${#ACTIONS_LIST[@]}
         source "${action}"
@@ -65,8 +68,11 @@ load_actions_infos () {
         if [ -n "$ACTION_DESCRIPTION" ]; then
             ACTIONS_DESCRIPTIONS[$pos]="${ACTION_DESCRIPTION}"
         fi
+        if [ -n "$ACTION_CFGVARS" ]; then
+            ACTIONS_CFGVARS=("${ACTIONS_CFGVARS[@]}" "${ACTION_CFGVARS[@]}")
+        fi
     done
-    export ACTIONS_LIST ACTIONS_SYNOPSIS ACTIONS_DESCRIPTIONS
+    export ACTIONS_LIST ACTIONS_SYNOPSIS ACTIONS_DESCRIPTIONS ACTIONS_CFGVARS
     export SCRIPTMAN=false
 }
 
@@ -79,7 +85,9 @@ declare -x _TARGET=`pwd`
 declare -x ACTION
 declare -x ACTION_DESCRIPTION=""
 declare -x SCRIPTMAN=false
-declare -xa ACTIONS_LIST=() && declare -xa ACTIONS_SYNOPSIS=() && declare -xa ACTIONS_DESCRIPTIONS=() && load_actions_infos
+declare -xa ACTIONS_LIST=() && declare -xa ACTIONS_SYNOPSIS=() && declare -xa ACTIONS_DESCRIPTIONS=() && \
+    declare -xa ACTIONS_CFGVARS=( DEFAULT_CONFIG_FILE BASHLIBRARY_PATH ) && \
+    load_actions_infos;
 MANPAGE_NODEPEDENCY=true
 
 actionsstr=""
@@ -140,12 +148,25 @@ targetdir_required () {
         export _TARGET=$USERRESPONSE
     fi
     if [ ! -d "$_TARGET" ]; then error "Unknown root directory '${_TARGET}' !"; fi
+    load_target_config
 }
 
 #### trigger_event ( command )
 ## trigger a user defined command for an event
 trigger_event () {
     iexec "$1"
+}
+
+#### load_target_config ()
+# overwrite current deploy config with target's custom one if so
+load_target_config () {
+    target_configfile=$(realpath "${_TARGET}/${DEFAULT_CONFIG_FILE}")
+    if [ -f "$target_configfile" ]; then
+        source "$target_configfile"
+    fi
+    for p in "${ACTIONS_CFGVARS[@]}"; do
+        export "$p"
+    done
 }
 
 #### first setup & options treatment ##########################
