@@ -4,6 +4,7 @@
 #
 
 ACTION_DESCRIPTION="This will clean all OS or IDE specific files from the project (config var: 'CLEANUP_FILES')";
+ACTION_CFGVARS=( CLEANUP_FILES )
 if $SCRIPTMAN; then return; fi
 
 targetdir_required
@@ -11,6 +12,8 @@ targetdir_required
 if [ -z $CLEANUP_FILES ]; then
     error "Configuration var 'CLEANUP_FILES' not found !"
 fi
+
+_TARGET=$(realpath "$_TARGET")
 
 verecho "> cleaning files in '$_TARGET' ..."
 for FNAME in "${CLEANUP_FILES[@]}"; do
