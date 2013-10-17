@@ -87,9 +87,13 @@ To see a full help info with the list of available actions, run:
 
     sh ./deploy.sh -h
 
+To see a specific help info for an action, run:
+
+    sh ./deploy.sh -h action
+
 To run an action, run:
 
-    sh ./deploy.sh [options] action_name
+    sh ./deploy.sh [global options] [action options] action_name
 
 
 ## Configuration & Dependencies
@@ -104,9 +108,14 @@ directory of each project. The configuration files used are INI like:
 
 Any available configuration variable is shown in the usage string.
 
+Configuration variables are named following some simple rules:
+
+-   a global configuration variable is named like `DEFAULT_VARIABLE`
+-   an action specific configuration variable is named like `DEFAULT_ACTION-NAME_VARIABLE`
+
 This package is based on the [Bash Library](https://github.com/atelierspierrot/bash-library)
 which is embedded by default in `bin/`. You can over-write the library loaded (and skip the
-embedded version) re-defining the `BASHLIBRARY_PATH` of the configuration file.
+embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH` of the configuration file.
 
 
 ## Events
