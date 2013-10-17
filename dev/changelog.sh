@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #git --no-pager log --format="%ai %aN %n%n%x09* %s%d%n"
-#echo 'ok' && exit 0
+echo 'ok' && exit 0
 
 
 CHANGELOG=`ls | egrep 'change|history' -i`

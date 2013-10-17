@@ -1,5 +1,11 @@
 #!/bin/bash
 # 
+# DevTools - Packages development & deployment facilities
+# Copyleft (c) 2013 Pierre Cassat and contributors
+# <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
+# License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
+# Sources <https://github.com/atelierspierrot/dev-tools>
+# 
 # action for ../deploy.sh
 #
 
@@ -52,11 +58,13 @@ then
         readfull)
             tmpconfigfile=$(gettempfilepath "`basename $_TARGET`$filename")
             sed -e '/^#/d' -e '/^$/d' "$CFGFILE" > "$tmpconfigfile"
-            while read p; do
-                CFGVAR="${p%=*}"
-                CFGVAL="${p#*=}"
-                setconfigval "$tmpconfigfile" $CFGVAR "$CFGVAL"
-            done < "$filepath"
+            if [ -f "$filepath" ]; then
+                while read p; do
+                    CFGVAR="${p%=*}"
+                    CFGVAL="${p#*=}"
+                    setconfigval "$tmpconfigfile" $CFGVAR "$CFGVAL"
+                done < "$filepath"
+            fi
             verecho "Reading merged default config with config file '$filepath':"
             if [ -f "$tmpconfigfile" ]; then
                 cat $tmpconfigfile
