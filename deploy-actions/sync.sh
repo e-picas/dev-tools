@@ -1,14 +1,20 @@
 #!/bin/bash
 # 
+# DevTools - Packages development & deployment facilities
+# Copyleft (c) 2013 Pierre Cassat and contributors
+# <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
+# License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
+# Sources <https://github.com/atelierspierrot/dev-tools>
+#
 # action for ../deploy.sh
 #
 
 ACTION_DESCRIPTION="Will 'rsync' a project directory to a target, which can use SSH protocol if so ; use the '-x' option to process a '--dry-run' rsync \n\
 \t\t<bold>--target=SERVER</bold>\t\t\tthe server name to use for synchronization (config var: 'DEFAULT_SYNC_SERVER') \n\
-\t\t<bold>--options=\"RSYNC OPTIONS\"</bold>\tan options string used for the 'rsync' command (config var: 'DEFAULT_RSYNC_OPTIONS') \n\
+\t\t<bold>--options=\"RSYNC OPTIONS\"</bold>\tan options string used for the 'rsync' command (config var: 'DEFAULT_SYNC_RSYNC_OPTIONS') \n\
 \t\t<bold>--env=ENV</bold>\t\t\tthe environment shortcut to deploy if so (config var: 'DEFAULT_SYNC_ENV')";
 ACTION_SYNOPSIS="[--env=env] [--target=server] [--options=\"rsync options\"]"
-ACTION_CFGVARS=( DEFAULT_SYNC_SERVER DEFAULT_RSYNC_OPTIONS DEFAULT_SYNC_ENV )
+ACTION_CFGVARS=( DEFAULT_SYNC_SERVER DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_ENV )
 if $SCRIPTMAN; then return; fi
 
 targetdir_required
@@ -19,8 +25,8 @@ RSYNC_OPTIONS=""
 if [ ! -z "$DEFAULT_SYNC_SERVER" ]; then
     TARGETSERVER="$DEFAULT_SYNC_SERVER"
 fi
-if [ ! -z "$DEFAULT_RSYNC_OPTIONS" ]; then
-    RSYNC_OPTIONS="$DEFAULT_RSYNC_OPTIONS"
+if [ ! -z "$DEFAULT_SYNC_RSYNC_OPTIONS" ]; then
+    RSYNC_OPTIONS="$DEFAULT_SYNC_RSYNC_OPTIONS"
 fi
 if [ ! -z "$DEFAULT_SYNC_ENV" ]; then
     TARGETENV="$DEFAULT_SYNC_ENV"

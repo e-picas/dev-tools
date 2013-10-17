@@ -1,11 +1,17 @@
 #!/bin/bash
 # 
+# DevTools - Packages development & deployment facilities
+# Copyleft (c) 2013 Pierre Cassat and contributors
+# <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
+# License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
+# Sources <https://github.com/atelierspierrot/dev-tools>
+#
 # action for ../deploy.sh
 #
 
 ACTION_DESCRIPTION="Will search for files suffixed by '__ENV__' in 'path' and over-write the original ones (without suffix).\n\
-\t\t<bold>--set=ENV</bold>\tthe environment shortcut to deploy (default is 'DEFAULT' - config var: 'DEFAULT_DEPLOY_ENV')";
-ACTION_SYNOPSIS="[--set=env]"
+\t\t<bold>--env=ENV</bold>\tthe environment shortcut to deploy (default is 'DEFAULT' - config var: 'DEFAULT_DEPLOY_ENV')";
+ACTION_SYNOPSIS="[--env=env]"
 ACTION_CFGVARS=( DEFAULT_DEPLOY_ENV )
 if $SCRIPTMAN; then return; fi
 
@@ -23,7 +29,7 @@ while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
-                set*) TARGETENV=$LONGOPTARG;;
+                env*) TARGETENV=$LONGOPTARG;;
                 \?) ;;
             esac ;;
         \?) ;;
