@@ -1,15 +1,31 @@
 Dev Tools
 =========
 
-This package is a set of shell scripts to help managing a package life-cycle, such as cleaning
+This package is a set of shell scripts to help in package development life-cycle, such as cleaning
 up some un-wanted files to prepare a deployment, actually deploy the package loading some
 environment specific files and helping create some GIT version TAGs.
 
 The tools embedded in this package are based on our work about the best practices in project
-deployment: <http://github.com/atelierspierrot/atelierspierrot/blob/master/Package-Deployment.md>.
+development and deployment: <http://github.com/atelierspierrot/atelierspierrot/blob/master/Package-Deployment.md>.
+
+
+## Presentation
+
+The `dev-tools` package is one single shell script that handles a set of available actions
+(defined themselves as shell scripts) to execute something upon a package in development. The usage is
+quite simple as it just requires to understand the command line call of one single script.
+The global script always follows the same rules and acts like a dispatcher that distributes the
+options to an action. More, creating a new action (such as your own actions) is as simple
+as writing a new shell script in the `deploy-actions/` directory and call it with the global
+script.
+
+A simple set of rules are to be followed to construct a new action with a specific help string,
+some specific command line options and configuration variables.
 
 
 ## Installation
+
+### Classic install
 
 To install and use the package, you need to run something like:
 
@@ -19,12 +35,37 @@ To install and use the package, you need to run something like:
         && cp -R dev-tools-master/deploy-actions path/to/your/project/bin \
         && cp -R dev-tools-master/bash-library path/to/your/project/bin \
         && cp dev-tools-master/deploy.conf path/to/your/project/
-    ~$ chmod +x path/to/your/project/bin/deploy.sh
+    // do not forget here to change "path/to/your/project" to fit your project ...
+    ~$ chmod a+x path/to/your/project/bin/deploy.sh
 
 If you already use the [Bash Library](https://github.com/atelierspierrot/bash-library) in your
-project, just re-define the `BASHLIBRARY_PATH` configuration setting as described below.
+project, just re-define the `DEFAULT_BASHLIBRARY_PATH` configuration setting as described below.
 
-If you are a [Composer](http://getcomposer.org) user, you can simply add to your requirements:
+### Global install
+
+If you plan to often use this package, you can install it globally in your `bin/` directory.
+If you do so, just ensure that the following required files are copied:
+
+-   the original script `deploy.sh`
+-   the actions directory (and its contents) `deploy-actions/`
+-   the Bash Library directory (and its contents) `bash-library/`
+
+You can run something like the followings, assuming you are at the package root directory:
+
+    ~$ cp deploy.sh ~/bin/ \
+        && cp -R deploy-actions ~/bin/ \
+        && cp -R bash-library ~/bin/ \
+        && cp deploy.conf ~/bin/
+    ~$ chmod a+x ~/bin/deploy.sh
+
+For facility, you can event rename `deploy.sh` to just `deploy`:
+
+    ~$ mv deploy.sh deploy
+
+### Using Composer
+
+If you are a [Composer](http://getcomposer.org) user, you can simply add the package to your
+requirements and ensure to define a `bin` directory:
 
     "require": {
         ...
