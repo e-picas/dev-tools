@@ -9,9 +9,9 @@
 # action for ../deploy.sh
 #
 
-ACTION_DESCRIPTION="This will create a new GIT version TAG ; you can define: \n\
-\t\t<bold>--name=VERSION</bold>\tthe name of the new tag ; default will be next increased version number \n\
-\t\t<bold>--branch=NAME</bold>\twhich branch to use (default is 'master' - config var: 'DEFAULT_VERSIONTAG_BRANCH')";
+ACTION_DESCRIPTION="This will create a new GIT version TAG according to the semantic versioning (see <http://semver.org/>).";
+ACTION_OPTIONS="<bold>--name=VERSION</bold>\tthe name of the new tag ; default will be next increased version number \n\
+\t<bold>--branch=NAME</bold>\twhich branch to use (default is 'master' - config var: 'DEFAULT_VERSIONTAG_BRANCH')";
 ACTION_SYNOPSIS="[--name=version] [--branch=name]"
 ACTION_CFGVARS=( DEFAULT_VERSIONTAG_BRANCH )
 if $SCRIPTMAN; then return; fi

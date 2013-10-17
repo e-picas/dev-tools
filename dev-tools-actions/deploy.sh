@@ -9,8 +9,8 @@
 # action for ../deploy.sh
 #
 
-ACTION_DESCRIPTION="Will search for files suffixed by '__ENV__' in 'path' and over-write the original ones (without suffix).\n\
-\t\t<bold>--env=ENV</bold>\tthe environment shortcut to deploy (default is 'DEFAULT' - config var: 'DEFAULT_DEPLOY_ENV')";
+ACTION_DESCRIPTION="Will search for files suffixed by '__ENV__' in the project path and over-write the original ones (without suffix).";
+ACTION_OPTIONS="<bold>--env=ENV</bold>\tthe environment shortcut to deploy (default is 'DEFAULT' - config var: 'DEFAULT_DEPLOY_ENV')";
 ACTION_SYNOPSIS="[--env=env]"
 ACTION_CFGVARS=( DEFAULT_DEPLOY_ENV )
 if $SCRIPTMAN; then return; fi

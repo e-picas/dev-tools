@@ -11,11 +11,11 @@
 
 filename="$DEFAULT_CONFIG_FILE"
 
-ACTION_DESCRIPTION="Manage the deploy facilities configuration for a package (stored in '$filename') ; with no option, current config will be shown ; to read or define a value, use:\n\
-\t\t<bold>--var=NAME</bold>\tselect a configuration variable\n\
-\t\t<bold>--val=VALUE</bold>\tdefine a configuration variable value\n\
-\t\t<bold>--filename</bold>\tsee current configuration file path\n\
-\t\t<bold>--full</bold>\t\tsee full configuration for the project (defaults and custom)";
+ACTION_DESCRIPTION="Manage the deploy facilities configuration for a package (stored in '$filename') ; with no option, current config will be shown.";
+ACTION_OPTIONS="<bold>--var=NAME</bold>\tselect a configuration variable to read or define\n\
+\t<bold>--val=VALUE</bold>\tdefine a configuration variable value (requires the '--var' option to be defined)\n\
+\t<bold>--filename</bold>\tsee current configuration file path for the project\n\
+\t<bold>--full</bold>\t\tsee the full configuration entries for the project (defaults and custom)";
 ACTION_SYNOPSIS="[--var=name] [--val=value] [--filename] [--full]"
 if $SCRIPTMAN; then return; fi
 

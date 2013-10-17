@@ -9,10 +9,10 @@
 # action for ../deploy.sh
 #
 
-ACTION_DESCRIPTION="This will fix files and directories UNIX rights recursively on the project ; you can define: \n\
-\t\t<bold>--dirs=CHMOD</bold>\tthe rights level setted for directories (default is '0755' - config var: 'DEFAULT_FIXRIGHTS_DIRS_CHMOD') \n\
-\t\t<bold>--files=CHMOD</bold>\tthe rights level setted for files (default is '0644' - config var: 'DEFAULT_FIXRIGHTS_FILES_CHMOD') \n\
-\t\t<bold>--bin=PATH</bold>\tdirname of the binaries, to define their rights on 'a+x' (default is 'bin/' - config var: 'DEFAULT_FIXRIGHTS_BIN_DIR')";
+ACTION_DESCRIPTION="This will fix files and directories UNIX rights recursively on the project.";
+ACTION_OPTIONS="<bold>--dirs=CHMOD</bold>\tthe rights level setted for directories (default is '0755' - config var: 'DEFAULT_FIXRIGHTS_DIRS_CHMOD') \n\
+\t<bold>--files=CHMOD</bold>\tthe rights level setted for files (default is '0644' - config var: 'DEFAULT_FIXRIGHTS_FILES_CHMOD') \n\
+\t<bold>--bin=PATH</bold>\tdirname of the binaries, to define their rights on 'a+x' (default is 'bin/' - config var: 'DEFAULT_FIXRIGHTS_BIN_DIR')";
 ACTION_SYNOPSIS="[--files=chmod] [--dirs=chmod] [--bin=path]"
 ACTION_CFGVARS=( DEFAULT_FIXRIGHTS_BIN_DIR DEFAULT_FIXRIGHTS_FILES_CHMOD DEFAULT_FIXRIGHTS_DIRS_CHMOD )
 if $SCRIPTMAN; then return; fi

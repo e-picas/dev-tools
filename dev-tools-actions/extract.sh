@@ -9,11 +9,11 @@
 # action for ../deploy.sh
 #
 
-ACTION_DESCRIPTION="Will search and extract strings from files contents recursively ; result is written on STDOUT but can be stored in a file \n\
-\t\t<bold>--begin=MASK</bold>\t\tthe mask to use to begin the matching (config var: 'DEFAULT_EXTRACT_BEGIN_MASK') \n\
-\t\t<bold>--end=MASK</bold>\t\tthe mask to use to end the matching (config var: 'DEFAULT_EXTRACT_END_MASK') \n\
-\t\t<bold>--output=FILENAME</bold>\ta filename to write results in (this will overwrite any existing file)\n\
-\t\t<bold>--filename</bold>\t\twrite matching filenames before content";
+ACTION_DESCRIPTION="Will search and extract strings from files contents recursively ; result is written on STDOUT but can be stored in a file.";
+ACTION_OPTIONS="<bold>--begin=MASK</bold>\t\tthe mask to use to begin the matching (config var: 'DEFAULT_EXTRACT_BEGIN_MASK') \n\
+\t<bold>--end=MASK</bold>\t\tthe mask to use to end the matching (config var: 'DEFAULT_EXTRACT_END_MASK') \n\
+\t<bold>--output=FILENAME</bold>\ta filename to write results in (this will overwrite any existing file)\n\
+\t<bold>--filename</bold>\t\twrite matching filenames before content";
 ACTION_SYNOPSIS="[--begin=mask] [--end=mask] [--output=filename] [--filename]"
 ACTION_CFGVARS=( DEFAULT_EXTRACT_BEGIN_MASK DEFAULT_EXTRACT_END_MASK DEFAULT_EXTRACT_SHOW_FILENAME )
 if $SCRIPTMAN; then return; fi

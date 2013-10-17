@@ -25,6 +25,13 @@ some specific command line options and configuration variables.
 
 ## Installation
 
+The following files are required for the DevTools to work:
+
+-   the original script `dev-tools.sh`;
+-   the actions directory (and its contents) `dev-tools-actions/`;
+-   the [Bash Library](https://github.com/atelierspierrot/bash-library) directory
+    (and its contents) `bash-library/`.
+
 ### Classic install
 
 To install and use the package, you need to run something like:
@@ -39,17 +46,11 @@ To install and use the package, you need to run something like:
     ~$ chmod a+x path/to/your/project/bin/dev-tools.sh
 
 If you already use the [Bash Library](https://github.com/atelierspierrot/bash-library) in your
-project, just re-define the `DEFAULT_BASHLIBRARY_PATH` configuration setting as described below.
+project, you can avoid duplicate following the configuration procedure described in next chapter.
 
 ### Global install
 
-If you plan to often use this package, you can install it globally in your `bin/` directory.
-If you do so, just ensure that the following required files are copied:
-
--   the original script `dev-tools.sh`
--   the actions directory (and its contents) `dev-tools-actions/`
--   the Bash Library directory (and its contents) `bash-library/`
-
+If you plan to often use this package, you can install it globally in your `$HOME/bin/` directory.
 You can run something like the followings, assuming you are at the package root directory:
 
     ~$ cp dev-tools.sh ~/bin/ \
