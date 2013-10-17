@@ -6,14 +6,16 @@
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
 # Sources <https://github.com/atelierspierrot/dev-tools>
 #
-# Global help : `deploy.sh -h`
-# Action help : `deploy.sh -h action`
-# Action usage : `deploy.sh [-vix] -p=PROJECT_PATH [action options] action`
+# Global help : `dev-tools.sh -h`
+# Action help : `dev-tools.sh -h action`
+# Action usage : `dev-tools.sh [-vix] -p=PROJECT_PATH [action options] action`
 #
 
 ###### First paths
 _REALPATH="$0"
 _REALDIRPATH="`dirname $_REALPATH`"
+_DEVTOOLS_CONFIGFILE="dev-tools.conf"
+_DEVTOOLS_ACTIONSDIR="dev-tools-actions"
 
 #### findRequirements ( path , info string )
 # search for a relative or root path
@@ -39,7 +41,7 @@ findRequirements() {
 }
 
 ######## Inclusion of the config
-CFGFILE=`findRequirements "deploy.conf" "configuration file"`
+CFGFILE=`findRequirements "${_DEVTOOLS_CONFIGFILE}" "configuration file"`
 if [ -f "$CFGFILE" ]; then source "$CFGFILE"; else echo "$CFGFILE"; exit 1; fi
 
 ######## Inclusion of the lib
@@ -47,7 +49,7 @@ LIBFILE=`findRequirements "${DEFAULT_BASHLIBRARY_PATH}" "bash library"`
 if [ -f "$LIBFILE" ]; then source "$LIBFILE"; else echo "$LIBFILE"; exit 1; fi
 
 ######## Path of the actions
-BASEDIRPATH=`findRequirements "deploy-actions" "actions directory"`
+BASEDIRPATH=`findRequirements "${_DEVTOOLS_ACTIONSDIR}" "actions directory"`
 if [ ! -d "$BASEDIRPATH" ]; then echo "$BASEDIRPATH"; exit 1; fi
 
 #### load_actions_infos ()

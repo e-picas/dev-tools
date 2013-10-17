@@ -16,7 +16,7 @@ The `dev-tools` package is one single shell script that handles a set of availab
 quite simple as it just requires to understand the command line call of one single script.
 The global script always follows the same rules and acts like a dispatcher that distributes the
 options to an action. More, creating a new action (such as your own actions) is as simple
-as writing a new shell script in the `deploy-actions/` directory and call it with the global
+as writing a new shell script in the `dev-tools-actions/` directory and call it with the global
 script.
 
 A simple set of rules are to be followed to construct a new action with a specific help string,
@@ -31,12 +31,12 @@ To install and use the package, you need to run something like:
 
     ~$ wget --no-check-certificate https://github.com/atelierspierrot/dev-tools/archive/master.tar.gz
     ~$ tar -xvf master.tar.gz
-    ~$ cp dev-tools-master/deploy.sh path/to/your/project/bin/ \
-        && cp -R dev-tools-master/deploy-actions path/to/your/project/bin \
+    ~$ cp dev-tools-master/dev-tools.sh path/to/your/project/bin/ \
+        && cp -R dev-tools-master/dev-tools-actions path/to/your/project/bin \
         && cp -R dev-tools-master/bash-library path/to/your/project/bin \
-        && cp dev-tools-master/deploy.conf path/to/your/project/
+        && cp dev-tools-master/dev-tools.conf path/to/your/project/
     // do not forget here to change "path/to/your/project" to fit your project ...
-    ~$ chmod a+x path/to/your/project/bin/deploy.sh
+    ~$ chmod a+x path/to/your/project/bin/dev-tools.sh
 
 If you already use the [Bash Library](https://github.com/atelierspierrot/bash-library) in your
 project, just re-define the `DEFAULT_BASHLIBRARY_PATH` configuration setting as described below.
@@ -46,21 +46,21 @@ project, just re-define the `DEFAULT_BASHLIBRARY_PATH` configuration setting as 
 If you plan to often use this package, you can install it globally in your `bin/` directory.
 If you do so, just ensure that the following required files are copied:
 
--   the original script `deploy.sh`
--   the actions directory (and its contents) `deploy-actions/`
+-   the original script `dev-tools.sh`
+-   the actions directory (and its contents) `dev-tools-actions/`
 -   the Bash Library directory (and its contents) `bash-library/`
 
 You can run something like the followings, assuming you are at the package root directory:
 
-    ~$ cp deploy.sh ~/bin/ \
-        && cp -R deploy-actions ~/bin/ \
+    ~$ cp dev-tools.sh ~/bin/ \
+        && cp -R dev-tools-actions ~/bin/ \
         && cp -R bash-library ~/bin/ \
-        && cp deploy.conf ~/bin/
-    ~$ chmod a+x ~/bin/deploy.sh
+        && cp dev-tools.conf ~/bin/
+    ~$ chmod a+x ~/bin/dev-tools.sh
 
-For facility, you can event rename `deploy.sh` to just `deploy`:
+For facility, you can event rename `dev-tools.sh` to just `dev-tools`:
 
-    ~$ mv deploy.sh deploy
+    ~$ mv dev-tools.sh dev-tools
 
 ### Using Composer
 
@@ -81,24 +81,24 @@ requirements and ensure to define a `bin` directory:
 
 In a terminal, run:
 
-    sh ./deploy.sh
+    sh ./dev-tools.sh
 
 To see a full help info with the list of available actions, run:
 
-    sh ./deploy.sh -h
+    sh ./dev-tools.sh -h
 
 To see a specific help info for an action, run:
 
-    sh ./deploy.sh -h action
+    sh ./dev-tools.sh -h action
 
 To run an action, run:
 
-    sh ./deploy.sh [global options] [action options] action_name
+    sh ./dev-tools.sh [global options] [action options] action_name
 
 
 ## Configuration & Dependencies
 
-The package is distributed with a configuration file named `deploy.conf` with default settings.
+The package is distributed with a configuration file named `dev-tools.conf` with default settings.
 You can define or re-define some settings in this file to fit your environment needs globally.
 You can also over-write all configuration values in a specific `.devtools` file at the root
 directory of each project. The configuration files used are INI like:
@@ -120,7 +120,7 @@ embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH` of the configuratio
 
 ## Events
 
-For each action of the `deploy.sh` script, an event will be triggered BEFORE and AFTER the
+For each action of the `dev-tools.sh` script, an event will be triggered BEFORE and AFTER the
 action is called. This allows user to define a special behavior for each action using the
 configuration values constructed like:
 
