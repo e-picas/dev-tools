@@ -14,7 +14,7 @@ ACTION_OPTIONS="<bold>--begin=MASK</bold>\t\tthe mask to use to begin the matchi
 \t<bold>--end=MASK</bold>\t\tthe mask to use to end the matching (config var: 'DEFAULT_EXTRACT_END_MASK') \n\
 \t<bold>--output=FILENAME</bold>\ta filename to write results in (this will overwrite any existing file)\n\
 \t<bold>--filename</bold>\t\twrite matching filenames before content";
-ACTION_SYNOPSIS="[--begin=mask] [--end=mask] [--output=filename] [--filename]"
+ACTION_SYNOPSIS="[--begin=mask]  [--end=mask]  [--output=filename]  [--filename]"
 ACTION_CFGVARS=( DEFAULT_EXTRACT_BEGIN_MASK DEFAULT_EXTRACT_END_MASK DEFAULT_EXTRACT_SHOW_FILENAME )
 if $SCRIPTMAN; then return; fi
 

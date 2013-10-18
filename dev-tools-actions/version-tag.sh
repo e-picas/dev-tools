@@ -12,8 +12,9 @@
 ACTION_DESCRIPTION="This will create a new GIT version TAG according to the semantic versioning (see <http://semver.org/>).";
 ACTION_OPTIONS="<bold>--name=VERSION</bold>\tthe name of the new tag ; default will be next increased version number \n\
 \t<bold>--branch=NAME</bold>\twhich branch to use (default is 'master' - config var: 'DEFAULT_VERSIONTAG_BRANCH')\n\
-\t<bold>--hook=PATH</bold>\tdefine a pre-tag hook file (config var: 'DEFAULT_VERSIONTAG_HOOK' - see 'pre-tag-hook.sample')";
-ACTION_SYNOPSIS="[--name=version] [--branch=name] [--hook=path]"
+\t<bold>--hook=PATH</bold>\tdefine a pre-tag hook file (config var: 'DEFAULT_VERSIONTAG_HOOK' - see 'pre-tag-hook.sample')\n\
+\t<bold>--no-hook</bold>\tdo not run any pre-tag hook file (disable config setting)";
+ACTION_SYNOPSIS="[--name=version]  [--branch=name]  [--hook=path]  [--no-hook]"
 ACTION_CFGVARS=( DEFAULT_VERSIONTAG_BRANCH DEFAULT_VERSIONTAG_HOOK )
 if $SCRIPTMAN; then return; fi
 
@@ -45,6 +46,7 @@ while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
                 name*) TAG_NAME=$LONGOPTARG;;
                 branch*) BRANCH_NAME=$LONGOPTARG;;
                 hook*) HOOK_PATH=$LONGOPTARG;;
+                no-hook) declare -rx HOOK_PATH="";;
                 \?) ;;
             esac ;;
         \?) ;;
@@ -58,6 +60,8 @@ if [ -z "$TAG_NAME" ]; then
     if [ ! -z "$gittags" ]; then
         lasttag="${gittags[${#gittags[@]} - 1]}"
         # see: http://stackoverflow.com/a/8653732/2512020
+        #TAG_NAME=$(echo "$lasttag" | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}')
+        # new version to only increment last part of X.Y.Z
         TAG_NAME=$(echo "$lasttag" | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}')
     fi
 else

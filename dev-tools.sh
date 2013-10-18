@@ -113,7 +113,7 @@ declare -x DEPLOY_HELP="Run option '-h' for help.";
 declare -x DEPLOY_ACTIONS_HELP="Run option '-h action' for help about a specific action.";
 declare -x SHORT_DESCRIPTION="This helper script will assist you in creating version tags of a git repository, deploying a project and its environment dependencies etc.\n\
 \tRun option '<bold>-h action</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
-declare -x SEE_ALSO="This tool is an open source stuff: <http://github.com/atelierspierrot/dev-tools>\n\
+declare -x SEE_ALSO="This tool is an open source stuff licensed under GNU/GPL v3: <http://github.com/atelierspierrot/dev-tools>\n\
 \tTo transmit a bug or an evolution: <http://github.com/atelierspierrot/dev-tools/issues>\n\
 \tThis tool is base on the Bash Library: <http://github.com/atelierspierrot/bash-library>"
 
@@ -138,7 +138,7 @@ for i in ${!ACTIONS_LIST[*]}; do
     itemsyn=${ACTIONS_SYNOPSIS[$i]}
     if [ -n "${itemsyn}" ]; then
         actionsdescription="${actionsdescription}\n\t`printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemsyn}\" \"${itemstr}\"`";
-        actionssynopsis="${actionssynopsis}\n\t... ${itemsyn} ${itemstr}"
+        actionssynopsis="${actionssynopsis}\n\t... ${itemsyn}  ${itemstr}"
     else
         actionsdescription="${actionsdescription}\n\t`printf \"${ACTION_SYNOPSIS_MASK}\" '' \"${itemstr}\"`";
     fi
@@ -155,8 +155,8 @@ declare -x OPTIONS="Below is a list of common options available ; each action ca
 \t<bold>-x | --debug</bold>\t\tsee commands to run but not run them actually\n\
 \t<bold>--dry-run</bold>\t\talias of '-x'\n\
 \n${OPTIONS_USAGE_INFOS}";
-declare -x SYNOPSIS_ERROR="${0}  [-${COMMON_OPTIONS_ARGS}] [-x|--dry-run]  ... ${actionssynopsis}\n\
-\t-p | --project=path <action : ${actionsstr}> --";
+declare -x SYNOPSIS_ERROR="${0}  [-${COMMON_OPTIONS_ARGS}]  [-x|--dry-run]  ... ${actionssynopsis}\n\
+\t-p | --project=path  <action : ${actionsstr}> --";
 
 #### internal lib ##########################
 
