@@ -80,8 +80,7 @@ if [ ! -z "$BRANCH_NAME" ]; then
     if [ "$exists" == '' ]; then
         error "Branch '$BRANCH_NAME' doesn't exist !"
     fi
-    set -e
-    iexec "cd $_TARGET && git checkout $BRANCH_NAME 1>&2"
+    iexec "set -e && cd $_TARGET && git checkout $BRANCH_NAME 1>&2"
 fi
 
 if $VERBOSE; then
