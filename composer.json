@@ -2,7 +2,7 @@
     "name": "atelierspierrot/dev-tools",
     "type": "library",
     "description": "Some development tools facilities to manage app packages",
-    "keywords": [ "bash", "developer", "dev tools" ],
+    "keywords": [ "shell", "developer", "dev tools" ],
     "homepage": "http://github.com/atelierspierrot/dev-tools",
     "license": "GPL-3.0",
     "authors": [{

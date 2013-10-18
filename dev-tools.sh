@@ -4,7 +4,7 @@
 # Copyleft (c) 2013 Pierre Cassat and contributors
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <https://github.com/atelierspierrot/dev-tools>
+# Sources <http://github.com/atelierspierrot/dev-tools>
 #
 # Global help : `dev-tools.sh -h`
 # Action help : `dev-tools.sh -h action`
@@ -107,13 +107,13 @@ declare -xa ACTIONS_LIST=() && declare -xa ACTIONS_SYNOPSIS=() && declare -xa AC
     load_actions_infos;
 
 # script infos
-declare -rx NAME="DevTools - Packages development & deployment facilities"
-declare -rx SYNOPSIS="$LIB_SYNOPSIS_ACTION"
-declare -rx DEPLOY_HELP="Run option '-h' for help.";
-declare -rx DEPLOY_ACTIONS_HELP="Run option '-h action' for help about a specific action.";
-declare -rx SHORT_DESCRIPTION="This helper script will assist you in creating version tags of a git repository, deploying a project and its environment dependencies etc.\n\
-\t${DEPLOY_ACTIONS_HELP}";
-declare -rx SEE_ALSO="This tool is an open source stuff: <http://github.com/atelierspierrot/dev-tools>\n\
+declare -x NAME="DevTools - Packages development & deployment facilities"
+declare -x SYNOPSIS="$LIB_SYNOPSIS_ACTION"
+declare -x DEPLOY_HELP="Run option '-h' for help.";
+declare -x DEPLOY_ACTIONS_HELP="Run option '-h action' for help about a specific action.";
+declare -x SHORT_DESCRIPTION="This helper script will assist you in creating version tags of a git repository, deploying a project and its environment dependencies etc.\n\
+\tRun option '<bold>-h action</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
+declare -x SEE_ALSO="This tool is an open source stuff: <http://github.com/atelierspierrot/dev-tools>\n\
 \tTo transmit a bug or an evolution: <http://github.com/atelierspierrot/dev-tools/issues>\n\
 \tThis tool is base on the Bash Library: <http://github.com/atelierspierrot/bash-library>"
 
@@ -138,35 +138,27 @@ for i in ${!ACTIONS_LIST[*]}; do
     itemsyn=${ACTIONS_SYNOPSIS[$i]}
     if [ -n "${itemsyn}" ]; then
         actionsdescription="${actionsdescription}\n\t`printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemsyn}\" \"${itemstr}\"`";
-        actionssynopsis="${actionssynopsis}\n\t${itemsyn} ..."
+        actionssynopsis="${actionssynopsis}\n\t... ${itemsyn} ${itemstr}"
     else
         actionsdescription="${actionsdescription}\n\t`printf \"${ACTION_SYNOPSIS_MASK}\" '' \"${itemstr}\"`";
     fi
 done
-declare -rx DESCRIPTION="${SHORT_DESCRIPTION}\n\n<bold>AVAILABLE ACTIONS</bold>${actionsdescription}"
-declare -rx OPTIONS="<bold>-p | --project=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
+declare -x DESCRIPTION="${SHORT_DESCRIPTION}\n\n<bold>AVAILABLE ACTIONS</bold>${actionsdescription}"
+declare -x OPTIONS="Below is a list of common options available ; each action can accepts other options.\n\n\
+\t<bold>-p | --project=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
 \t<bold>-d | --working-dir=PATH</bold>\tredefine the working directory (default is 'pwd' - 'PATH' must exist)\n\
 \t<bold>-h | --help</bold>\t\tshow this information message \n\
 \t<bold>-v | --verbose</bold>\t\tincrease script verbosity \n\
 \t<bold>-q | --quiet</bold>\t\tdecrease script verbosity, nothing will be written unless errors \n\
 \t<bold>-f | --force</bold>\t\tforce some commands to not prompt confirmation \n\
 \t<bold>-i | --interactive</bold>\task for confirmation before any action \n\
-\t<bold>-x | --dry-run</bold>\t\tsee commands to run but not run them actually";
-declare -rx SYNOPSIS_ERROR="<bold>error:</bold> %s \n\
-<bold>usage:</bold> ${0}  [-${COMMON_OPTIONS_ARGS}] [-x|--dry-run] ... ${actionssynopsis}\n\
-\t-p | --project=path <action : ${actionsstr}>  -- \n\
-${DEPLOY_HELP}\n\
-${DEPLOY_ACTIONS_HELP}";
+\t<bold>-x | --debug</bold>\t\tsee commands to run but not run them actually\n\
+\t<bold>--dry-run</bold>\t\talias of '-x'\n\
+\n${OPTIONS_USAGE_INFOS}";
+declare -x SYNOPSIS_ERROR="${0}  [-${COMMON_OPTIONS_ARGS}] [-x|--dry-run]  ... ${actionssynopsis}\n\
+\t-p | --project=path <action : ${actionsstr}> --";
 
 #### internal lib ##########################
-
-#### synopsis_error ( error string )
-# send a simple error with script synopsis
-synopsis_error () {
-    printf "`parsecolortags \"${SYNOPSIS_ERROR}\"`" "${1:-unkonwn}"
-    echo
-    exit $E_OPTS
-}
 
 #### action_file ( action name )
 # find action file
@@ -209,10 +201,10 @@ action_usage () {
             TMP_USAGE="${TMP_USAGE}\n\n<bold>OPTIONS</bold>\n\t${ACTION_OPTIONS}";
         fi
         if [ -n "${ACTION_CFGVARS}" ]; then
-            TMP_USAGE="${TMP_USAGE}\n\n<bold>ENVIRONMENT</bold>\n\tAvailable configuration variables: <bold>${ACTION_CFGVARS[@]}</bold>";
+            TMP_USAGE="${TMP_USAGE}\n\n<bold>ENVIRONMENT</bold>\n\tAvailable configuration variables: <${COLOR_NOTICE}>${ACTION_CFGVARS[@]}</${COLOR_NOTICE}>";
         fi
         if [ -n "${ACTION_FILE}" ]; then
-            TMP_USAGE="${TMP_USAGE}\n\n<bold>FILE</bold>\n\t${ACTION_FILE}";
+            TMP_USAGE="${TMP_USAGE}\n\n<bold>FILE</bold>\n\t<underline>${ACTION_FILE}</underline>";
         fi
         local TMP_VERS="`library_info`"
         TMP_USAGE="${TMP_USAGE}\n\n<${COLOR_COMMENT}>${TMP_VERS}</${COLOR_COMMENT}>";
@@ -282,7 +274,7 @@ parsecomonoptions () {
     if [ ! -z $ACTION ]; then
         action_file $ACTION
         if [ ! -f "$ACTION_FILE" ]; then
-            synopsis_error "unknown action '${ACTION}'"
+            simple_error "unknown action '${ACTION}'"
         fi
     fi
     while getopts ":p:${COMMON_OPTIONS_ARGS}" OPTION $options; do
@@ -355,10 +347,10 @@ then
             trigger_event "${!POSTACTION}"
         fi
     else
-        synopsis_error "unknown action '${ACTION}'"
+        simple_error "unknown action '${ACTION}'"
     fi
 else
-    synopsis_error "no action to execute"
+    simple_error "no action to execute"
 fi
 
 exit 0

@@ -4,9 +4,9 @@
 # Copyleft (c) 2013 Pierre Cassat and contributors
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <https://github.com/atelierspierrot/dev-tools>
+# Sources <http://github.com/atelierspierrot/dev-tools>
 #
-# action for ../deploy.sh
+# action for Dev-Tools
 #
 
 ACTION_DESCRIPTION="Will 'rsync' a project directory to a target, which can use SSH protocol if so ; use the '-x' option to process a '--dry-run' rsync.";

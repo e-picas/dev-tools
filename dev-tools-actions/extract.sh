@@ -4,9 +4,9 @@
 # Copyleft (c) 2013 Pierre Cassat and contributors
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <https://github.com/atelierspierrot/dev-tools>
+# Sources <http://github.com/atelierspierrot/dev-tools>
 #
-# action for ../deploy.sh
+# action for Dev-Tools
 #
 
 ACTION_DESCRIPTION="Will search and extract strings from files contents recursively ; result is written on STDOUT but can be stored in a file.";
