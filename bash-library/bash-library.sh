@@ -4,7 +4,7 @@
 # Copyleft (c) 2013 Pierre Cassat and contributors
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <https://github.com/atelierspierrot/bash-library>
+# Sources <http://github.com/atelierspierrot/bash-library>
 # 
 # bin/bash-library.sh
 # 
@@ -23,9 +23,9 @@ declare -x E_OPTS=81
 declare -x E_CMD=82
 declare -x E_PATH=83
 
-##@ SCRIPT_INFOS = ( NAME VERSION DATE PRESENTATION LICENSE HOME )
+##@ SCRIPT_INFOS = ( NAME VERSION DATE PRESENTATION LICENSE HOMEPAGE )
 # see http://en.wikipedia.org/wiki/Man_page
-declare -rxa SCRIPT_INFOS=(NAME VERSION DATE PRESENTATION LICENSE HOME)
+declare -rxa SCRIPT_INFOS=(NAME VERSION DATE PRESENTATION LICENSE HOMEPAGE)
 
 ##@ MANPAGE_INFOS = ( SYNOPSIS DESCRIPTION OPTIONS FILES ENVIRONMENT BUGS AUTHOR SEE_ALSO )
 declare -rxa MANPAGE_INFOS=(SYNOPSIS DESCRIPTION OPTIONS FILES ENVIRONMENT BUGS AUTHOR SEE_ALSO)
@@ -109,14 +109,14 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 # LIBRARY INFOS #####################################################################
 
 declare -rx LIB_NAME="Bash shell library"
-declare -rx LIB_VERSION="0.0.4"
-declare -rx LIB_DATE="2013-06-11"
+declare -rx LIB_VERSION="1.0.2"
+declare -rx LIB_DATE="2013-10-18"
 declare -rx LIB_PRESENTATION="The open source bash library of Les Ateliers Pierrot"
 declare -rx LIB_AUTHOR="Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>"
 declare -rx LIB_LICENSE="GPL-3.0"
 declare -rx LIB_LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
 declare -rx LIB_PACKAGE="atelierspierrot/bash-library"
-declare -rx LIB_HOME="http://github.com/atelierspierrot/bash-library"
+declare -rx LIB_HOME="https://github.com/atelierspierrot/bash-library"
 declare -rx LIB_BUGS="http://github.com/atelierspierrot/bash-library/issues"
 
 declare -rx LIB_NAME_DEFAULT="bashlib"
@@ -1189,7 +1189,7 @@ library_version () {
                 _done=true
                 add="`git rev-parse --abbrev-ref HEAD` `git rev-parse HEAD`"
                 if [ -n "$add" ]; then
-                    TMP_VERS="${TMP_VERS} ${add}"
+                    TMP_VERS="${TMP_VERS} [@${add}]"
                 fi
             fi
             cd $oldpwd
