@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# An example hook script called before version tag creation.
+# This will receive three arguments:
+# - $1: the project path to work on
+# - $2: the tag name to create 
+# - $3: the branch name 
+#
+# To enable this hook, define the `DEFAULT_VERSIONTAG_HOOK` configuration variable on
+# this script.
+
+PROJECT_PATH="$1"
+TAG_NAME="$2"
+BRANCH_NAME="$3"
+

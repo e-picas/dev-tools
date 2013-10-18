@@ -4,13 +4,13 @@
 # Copyleft (c) 2013 Pierre Cassat and contributors
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <https://github.com/atelierspierrot/dev-tools>
+# Sources <http://github.com/atelierspierrot/dev-tools>
 #
-# action for ../deploy.sh
+# action for Dev-Tools
 #
 
-ACTION_DESCRIPTION="Will search for files suffixed by '__ENV__' in 'path' and over-write the original ones (without suffix).\n\
-\t\t<bold>--env=ENV</bold>\tthe environment shortcut to deploy (default is 'DEFAULT' - config var: 'DEFAULT_DEPLOY_ENV')";
+ACTION_DESCRIPTION="Will search for files suffixed by '__ENV__' in the project path and over-write the original ones (without suffix).";
+ACTION_OPTIONS="<bold>--env=ENV</bold>\tthe environment shortcut to deploy (default is 'DEFAULT' - config var: 'DEFAULT_DEPLOY_ENV')";
 ACTION_SYNOPSIS="[--env=env]"
 ACTION_CFGVARS=( DEFAULT_DEPLOY_ENV )
 if $SCRIPTMAN; then return; fi

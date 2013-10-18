@@ -4,7 +4,7 @@
 # Copyleft (c) 2013 Pierre Cassat and contributors
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <https://github.com/atelierspierrot/bash-library>
+# Sources <http://github.com/atelierspierrot/bash-library>
 # 
 # bin/bash-library.sh
 # 
@@ -23,9 +23,9 @@ declare -x E_OPTS=81
 declare -x E_CMD=82
 declare -x E_PATH=83
 
-##@ SCRIPT_INFOS = ( NAME VERSION DATE PRESENTATION LICENSE HOME )
+##@ SCRIPT_INFOS = ( NAME VERSION DATE PRESENTATION LICENSE HOMEPAGE )
 # see http://en.wikipedia.org/wiki/Man_page
-declare -rxa SCRIPT_INFOS=(NAME VERSION DATE PRESENTATION LICENSE HOME)
+declare -rxa SCRIPT_INFOS=(NAME VERSION DATE PRESENTATION LICENSE HOMEPAGE)
 
 ##@ MANPAGE_INFOS = ( SYNOPSIS DESCRIPTION OPTIONS FILES ENVIRONMENT BUGS AUTHOR SEE_ALSO )
 declare -rxa MANPAGE_INFOS=(SYNOPSIS DESCRIPTION OPTIONS FILES ENVIRONMENT BUGS AUTHOR SEE_ALSO)
@@ -109,15 +109,15 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 # LIBRARY INFOS #####################################################################
 
 declare -rx LIB_NAME="Bash shell library"
-declare -rx LIB_VERSION="0.0.4"
-declare -rx LIB_DATE="2013-06-11"
+declare -rx LIB_VERSION="1.0.2"
+declare -rx LIB_DATE="2013-10-18"
 declare -rx LIB_PRESENTATION="The open source bash library of Les Ateliers Pierrot"
 declare -rx LIB_AUTHOR="Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>"
 declare -rx LIB_LICENSE="GPL-3.0"
 declare -rx LIB_LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
 declare -rx LIB_PACKAGE="atelierspierrot/bash-library"
 declare -rx LIB_HOME="https://github.com/atelierspierrot/bash-library"
-declare -rx LIB_BUGS="https://github.com/atelierspierrot/bash-library/issues"
+declare -rx LIB_BUGS="http://github.com/atelierspierrot/bash-library/issues"
 
 declare -rx LIB_NAME_DEFAULT="bashlib"
 declare -rx LIB_LOGFILE="${LIB_NAME_DEFAULT}.log"
@@ -148,6 +148,7 @@ declare -rx COMMON_OPTIONS_INFO="\n\
 
 declare -rx LIB_SYNOPSIS="~\$ <bold>${0}</bold>  -[<underline>COMMON OPTIONS</underline>]  -[<underline>SCRIPT OPTIONS</underline> [=<underline>VALUE</underline>]]  [<underline>ARGUMENTS</underline>]  --";
 declare -rx LIB_SYNOPSIS_ACTION="~\$ <bold>${0}</bold>  -[<underline>COMMON OPTIONS</underline>]  -[<underline>SCRIPT OPTIONS</underline> [=<underline>VALUE</underline>]]  [<underline>ACTION</underline>]  --";
+declare -rx LIB_SYNOPSIS_ERROR="${0}  [-${COMMON_OPTIONS_ARGS}]  [-SCRIPT OPTIONS [=VALUE]]  <action>  --";
 
 declare -rx LIB_SEE_ALSO="<bold>bash</bold>";
 
@@ -659,6 +660,36 @@ patherror () {
         ${FUNCNAME[1]} ${BASH_LINENO[0]};
 }
 
+#### simple_error ( string , status = 90 , synopsis = SYNOPSIS_ERROR , funcname = FUNCNAME[1] , line = BASH_LINENO[1] )
+## writes an error string as a simple message with a synopsis usage info
+##@error default status is E_ERROR (90)
+simple_error () {
+    local ERRSYNOPSIS=""
+    local ERRSTRING="${1:-unknown error}"
+    local ERRSTATUS="${2:-${E_ERROR}}"
+    if [ ! -z "$3" ]; then
+        if [ "$3" == 'lib' ]; then
+            ERRSYNOPSIS=$(echo "$LIB_SYNOPSIS")
+        elif [ "$3" == 'action' ]; then
+            ERRSYNOPSIS=$(echo "$LIB_SYNOPSIS_ACTION")
+        else
+            ERRSYNOPSIS=$(echo "$3")
+        fi
+    elif [ -n "$SYNOPSIS_ERROR" ]; then
+        ERRSYNOPSIS=$(echo "$SYNOPSIS_ERROR")
+    else
+        ERRSYNOPSIS=$(echo "$LIB_SYNOPSIS_ERROR")
+    fi
+    if [ -n "$LOGFILEPATH" ]; then log "${ERRSTRING}" "error:${ERRSTATUS}"; fi
+    if $DEBUG; then
+        ERRSTR="${ERRSTR}\n\tat ${3:-${FUNCNAME[1]}} line ${4:-${BASH_LINENO[1]}}"
+    fi
+    printf "`parsecolortags \"<bold>error:</bold> %s \n<bold>usage:</bold> %s \nRun option '-h' for help.\"`" \
+        "$ERRSTRING" "$ERRSYNOPSIS";
+    echo
+    exit ${ERRSTATUS}
+}
+
 
 #### TEMPORARY FILES #####################################################################
 
@@ -1144,8 +1175,10 @@ library_usage () {
 #### library_version ()
 ## this function must echo an information about library name & version (with option "--libvers")
 library_version () {
+    local VERSFILE="${BASH_SOURCE/.sh/-gitversion}"
     local TMP_VERS="${LIB_NAME} ${LIB_VERSION}"
     local LIB_MODULE="`dirname $LIBRARY_REALPATH`/.."
+    local _done=false
     if isgitclone $LIB_MODULE; then
         local gitcmd=$(which git)
         local oldpwd=$(pwd)
@@ -1153,13 +1186,17 @@ library_version () {
             cd $LIB_MODULE
             local gitremote=$(git config --get remote.origin.url)
             if [ "${gitremote}" == "${LIB_HOME}.git" -o "${gitremote}" == "${LIB_HOME}" ]; then
+                _done=true
                 add="`git rev-parse --abbrev-ref HEAD` `git rev-parse HEAD`"
                 if [ -n "$add" ]; then
-                    TMP_VERS="${TMP_VERS} ${add}"
+                    TMP_VERS="${TMP_VERS} [@${add}]"
                 fi
             fi
             cd $oldpwd
         fi
+    fi
+    if ! $_done && [ -f "$VERSFILE" ]; then
+        TMP_VERS="${TMP_VERS} [@`cat $VERSFILE`]"
     fi
     echo "${TMP_VERS}"
     return 0

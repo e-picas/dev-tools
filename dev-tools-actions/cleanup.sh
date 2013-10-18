@@ -4,14 +4,13 @@
 # Copyleft (c) 2013 Pierre Cassat and contributors
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <https://github.com/atelierspierrot/dev-tools>
+# Sources <http://github.com/atelierspierrot/dev-tools>
 #
-# action for ../deploy.sh
+# action for Dev-Tools
 #
 
 ACTION_DESCRIPTION="This will clean all OS or IDE specific files from the project (config var: 'DEFAULT_CLEANUP_NAMES').";
-ACTION_LONG_DESCRIPTION="${ACTION_DESCRIPTION}\n\
-\tCurrent settings are <bold>${DEFAULT_CLEANUP_NAMES[@]}</bold>";
+ACTION_OPTIONS="Current settings are <bold>${DEFAULT_CLEANUP_NAMES[@]}</bold>";
 ACTION_CFGVARS=( DEFAULT_CLEANUP_NAMES )
 if $SCRIPTMAN; then return; fi
 

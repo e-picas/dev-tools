@@ -4,17 +4,17 @@
 # Copyleft (c) 2013 Pierre Cassat and contributors
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <https://github.com/atelierspierrot/dev-tools>
+# Sources <http://github.com/atelierspierrot/dev-tools>
 #
-# action for ../deploy.sh
+# action for Dev-Tools
 #
 
-ACTION_DESCRIPTION="Will search and extract strings from files contents recursively ; result is written on STDOUT but can be stored in a file \n\
-\t\t<bold>--begin=MASK</bold>\t\tthe mask to use to begin the matching (config var: 'DEFAULT_EXTRACT_BEGIN_MASK') \n\
-\t\t<bold>--end=MASK</bold>\t\tthe mask to use to end the matching (config var: 'DEFAULT_EXTRACT_END_MASK') \n\
-\t\t<bold>--output=FILENAME</bold>\ta filename to write results in (this will overwrite any existing file)\n\
-\t\t<bold>--filename</bold>\t\twrite matching filenames before content";
-ACTION_SYNOPSIS="[--begin=mask] [--end=mask] [--output=filename] [--filename]"
+ACTION_DESCRIPTION="Will search and extract strings from files contents recursively ; result is written on STDOUT but can be stored in a file.";
+ACTION_OPTIONS="<bold>--begin=MASK</bold>\t\tthe mask to use to begin the matching (config var: 'DEFAULT_EXTRACT_BEGIN_MASK') \n\
+\t<bold>--end=MASK</bold>\t\tthe mask to use to end the matching (config var: 'DEFAULT_EXTRACT_END_MASK') \n\
+\t<bold>--output=FILENAME</bold>\ta filename to write results in (this will overwrite any existing file)\n\
+\t<bold>--filename</bold>\t\twrite matching filenames before content";
+ACTION_SYNOPSIS="[--begin=mask]  [--end=mask]  [--output=filename]  [--filename]"
 ACTION_CFGVARS=( DEFAULT_EXTRACT_BEGIN_MASK DEFAULT_EXTRACT_END_MASK DEFAULT_EXTRACT_SHOW_FILENAME )
 if $SCRIPTMAN; then return; fi
 
