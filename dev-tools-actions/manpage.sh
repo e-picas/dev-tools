@@ -31,7 +31,7 @@ MAKEWHATIS_BIN=`which makewhatis`
 MARKDOWN_BIN=""
 
 # internal MarkdownExtended path
-_vendor_mde="vendor/bin/markdown_extended"
+_vendor_mde="vendor/bin/markdown-extended"
 if [ -f $_vendor_mde ]; then MARKDOWN_BIN="$_vendor_mde"; fi
 _mde="bin/markdown_extended"
 if [ -f $_mde ]; then MARKDOWN_BIN="$_mde"; fi

@@ -17,7 +17,7 @@ _VERSION="${TAG_NAME/v/}"
 _DATE=$(git log -1 --format="%ci" --date=short | cut -s -f 1 -d ' ')
 _MANFILE="MANPAGE.md"
 _MANMANFILE="dev-tools.man"
-_MDEBIN="vendor/bin/markdown_extended"
+_MDEBIN="vendor/bin/markdown-extended"
 
 if [ ! -f "$_MDEBIN" ]; then
     echo "The binary '$_MDEBIN' can't be found ; the manpage will not be updated for this tag."
