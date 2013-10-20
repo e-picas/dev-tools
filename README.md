@@ -122,11 +122,12 @@ Any available configuration variable is shown in the usage string of each action
 Configuration variables are named following some simple rules:
 
 -   a global configuration variable is named like `DEFAULT_VARIABLE`
--   an action specific configuration variable is named like `DEFAULT_ACTION-NAME_VARIABLE`
+-   an action specific configuration variable is named like `DEFAULT_ACTIONNAME_VARIABLE`
 
 This package is based on the [Bash Library](https://github.com/atelierspierrot/bash-library)
-which is embedded by default in `bin/`. You can over-write the library loaded (and skip the
-embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH` of the configuration file.
+which is embedded by default in `bash-library/`. You can over-write the library loaded
+(and skip the embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH` of the
+configuration file.
 
 
 ## Events triggering
