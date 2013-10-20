@@ -15,7 +15,10 @@
         "homepage": "http://github.com/PieroWbmstr"
     }],
     "support": { "issues": "http://github.com/atelierspierrot/dev-tools/issues" },
-    "require-dev": { "atelierspierrot/bash-library": "1.*" },
+    "require-dev": {
+        "atelierspierrot/markdown-extended": "dev-master",
+        "atelierspierrot/bash-library": "1.*" 
+    },
     "bin": [
         "dev-tools.sh",
         "dev-tools.conf",
