@@ -107,7 +107,8 @@ declare -xa ACTIONS_LIST=() && declare -xa ACTIONS_SYNOPSIS=() && declare -xa AC
     load_actions_infos;
 
 # script infos
-declare -x NAME="DevTools - Packages development & deployment facilities"
+declare -x NAME="DevTools"
+declare -x PRESENTATION="Packages development & deployment facilities"
 declare -x SYNOPSIS="$LIB_SYNOPSIS_ACTION"
 declare -x DEPLOY_HELP="Run option '-h' for help.";
 declare -x DEPLOY_ACTIONS_HELP="Run option '-h action' for help about a specific action.";
