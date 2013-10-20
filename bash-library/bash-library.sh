@@ -109,8 +109,8 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 # LIBRARY INFOS #####################################################################
 
 declare -rx LIB_NAME="Bash shell library"
-declare -rx LIB_VERSION="1.0.2"
-declare -rx LIB_DATE="2013-10-18"
+declare -rx LIB_VERSION="1.0.3"
+declare -rx LIB_DATE="2013-10-20"
 declare -rx LIB_PRESENTATION="The open source bash library of Les Ateliers Pierrot"
 declare -rx LIB_AUTHOR="Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>"
 declare -rx LIB_LICENSE="GPL-3.0"
@@ -463,6 +463,16 @@ ucfirst () {
     echo "`strtoupper ${1:0:1}`${1:1:${#1}}"; return 0;
 }
 
+#### explode ( str , delim = ' ' )
+# explode a string in an array using a delimiter
+# result is loaded in '$EXPLODED_ARRAY'
+explode () {
+    local IFS="${2:- }"
+    read -a EXPLODED_ARRAY <<< "$1"
+    export EXPLODED_ARRAY
+    return 0
+}
+
 
 #### BOOLEAN #############################################################################
 
@@ -584,6 +594,35 @@ prompt () {
     _necho "${colored} ${add}" >&2 
     read answer
     export USERRESPONSE=${answer:-$2}
+    return 0
+}
+
+#### selector_prompt ( list[@] , string , list_string , default = 1 )
+## prompt user a string proposing an indexed list of answers for selection
+##+ and returns a valid result (user is re-prompted while the answer seems not correct)
+## NOTE - the 'list' MUST be passed like `list[@]` (no quotes and dollar sign)
+## final user choice is loaded in USERRESPONSE
+selector_prompt () {
+    local list=( "${!1}" )
+    local list_count="${#list[@]}"
+    local string="$2"
+    local list_string="$3"
+    local selected=0
+    local first_time=1
+    while [ $selected -lt 1 -o $selected -gt $list_count ]; do
+        if [ $first_time -eq 0 ]
+        then
+            echo "! - Unknown index '${selected}'"
+            prompt "Please select a value in the list (use indexes between brackets)" "${3:-1}"
+        else
+            first_time=0
+            if [ ! -z "$string" ]; then echo "> ${list_string}:"; fi
+            for i in "${!list[@]}"; do echo "    - [`expr ${i} + 1`] ${list[$i]}"; done
+            prompt "$string" "${3:-1}"
+        fi
+        selected=$USERRESPONSE
+    done
+    export USERRESPONSE="${list[`expr ${selected} - 1`]}"
     return 0
 }
 
