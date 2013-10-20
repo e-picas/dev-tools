@@ -13,8 +13,8 @@ ACTION_DESCRIPTION="Will search and extract strings from files contents recursiv
 ACTION_OPTIONS="<bold>--begin=MASK</bold>\t\tthe mask to use to begin the matching (config var: 'DEFAULT_EXTRACT_BEGIN_MASK') \n\
 \t<bold>--end=MASK</bold>\t\tthe mask to use to end the matching (config var: 'DEFAULT_EXTRACT_END_MASK') \n\
 \t<bold>--output=FILENAME</bold>\ta filename to write results in (this will overwrite any existing file)\n\
-\t<bold>--filename</bold>\t\twrite matching filenames before content";
-ACTION_SYNOPSIS="[--begin=mask]  [--end=mask]  [--output=filename]  [--filename]"
+\t<bold>--show-filename</bold>\t\twrite matching filenames before extracted content (config var: 'DEFAULT_EXTRACT_SHOW_FILENAME')";
+ACTION_SYNOPSIS="[--begin=mask]  [--end=mask]  [--output=filename]  [--show-filename]"
 ACTION_CFGVARS=( DEFAULT_EXTRACT_BEGIN_MASK DEFAULT_EXTRACT_END_MASK DEFAULT_EXTRACT_SHOW_FILENAME )
 if $SCRIPTMAN; then return; fi
 
@@ -44,7 +44,7 @@ while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
                 begin*) BEGIN=$LONGOPTARG;;
                 end*) END=$LONGOPTARG;;
                 output*) OUTPUT=$LONGOPTARG;;
-                filename*) SHOW_FILENAME=true;;
+                show-filename*) SHOW_FILENAME=true;;
                 \?) ;;
             esac ;;
         \?) ;;
