@@ -27,8 +27,8 @@ MANPAGE_DIR=""
 MANPAGE_FILENAME=""
 MANPAGE_SOURCE=""
 WHATIS_BIN=`which whatis`
-MAKEWHATIS_BIN=`which makewhatis`
-MARKDOWN_BIN=""
+MAKEWHATIS_BIN=`which makewhatis` || `which mandb`;
+MARKDOWN_BIN=`which markdown-extended`
 
 # internal MarkdownExtended path
 _vendor_mde="vendor/bin/markdown-extended"
@@ -81,6 +81,15 @@ _TARGET=$(realpath "$_TARGET")
 MANPAGE_SOURCE_RP="${_TARGET}/${MANPAGE_SOURCE}"
 MANPAGE_FILENAME_RP="${_TARGET}/${MANPAGE_FILENAME}"
 MANPAGE_NAME=$(basename "$MANPAGE_FILENAME")
+
+if [ -z $MARKDOWN_BIN ]; then
+    error "Markdown binary not defined!"
+elif [ ! -f "$MARKDOWN_BIN" ]; then
+    echo "The binary '$MARKDOWN_BIN' can't be found ; the manpage will not be updated for this tag."
+    echo "If you want to install the markdown tool, run 'composer update --dev' ..."
+    prompt 'Do you want to continue' 'Y/n' 'y'
+    if [ "$USERRESPONSE" != 'y' ]; then exit 0; fi
+fi
 
 if [ ! -f $MANPAGE_SOURCE_RP ]; then
     error "source file '${MANPAGE_SOURCE_RP}' not found"
