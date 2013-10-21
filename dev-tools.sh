@@ -120,7 +120,7 @@ declare -x SEE_ALSO="This tool is an open source stuff licensed under GNU/GPL v3
 
 # actions infos
 declare -rx ACTION_PRESENTATION_MASK="Help for action \"<bold>%s</bold>\"";
-declare -rx ACTION_SYNOPSIS_MASK="~\$ <bold>${0}</bold>  -[<underline>COMMON OPTIONS</underline>]  %s  %s  --";
+declare -rx ACTION_SYNOPSIS_MASK="~\$ <bold>${0}</bold>  -[<underline>common options</underline>]  %s  %s  --";
 actionsstr=""
 actionsdescription=""
 actionssynopsis=""
