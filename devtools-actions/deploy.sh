@@ -15,22 +15,20 @@ ACTION_SYNOPSIS="[--env=env]"
 ACTION_CFGVARS=( DEFAULT_DEPLOY_ENV )
 if $SCRIPTMAN; then return; fi
 
-targetdir_required
-
 if [ -z $DEFAULT_DEPLOY_ENV ]; then
     error "Configuration var 'DEFAULT_DEPLOY_ENV' not found !"
 fi
 TARGETENV=$DEFAULT_DEPLOY_ENV
 
 OPTIND=1
-options=$(getscriptoptions "$@")
-while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
+while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
+                project*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libhelp|libvers|libdoc) ;;
                 env*) TARGETENV=$LONGOPTARG;;
-                \?) ;;
+                *) simple_error "Unkown option '${OPTARG%=*}'";;
             esac ;;
         \?) ;;
     esac

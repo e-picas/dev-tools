@@ -21,7 +21,6 @@ ACTION_SYNOPSIS="[--source=path]  [--filename=filename]  [--section=section]  [-
 ACTION_CFGVARS=( DEFAULT_MANPAGE_SOURCE DEFAULT_MANPAGE_FILENAME DEFAULT_MANPAGE_SECTION DEFAULT_MANPAGE_WHATIS_BIN DEFAULT_MANPAGE_MAKEWHATIS_BIN DEFAULT_MANPAGE_MARKDOWN_BIN )
 if $SCRIPTMAN; then return; fi
 
-targetdir_required
 MANPAGE_SECTION=""
 MANPAGE_DIR=""
 MANPAGE_FILENAME=""
@@ -58,12 +57,12 @@ fi
 
 # options
 OPTIND=1
-options=$(getscriptoptions "$@")
-while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
+while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
+                project*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libhelp|libvers|libdoc) ;;
                 source*) MANPAGE_SOURCE=$LONGOPTARG;;
                 filename*) MANPAGE_FILENAME=$LONGOPTARG;;
                 section*) MANPAGE_SECTION=$LONGOPTARG;;
@@ -71,7 +70,7 @@ while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
                 makewhatis*) MAKEWHATIS_BIN=$LONGOPTARG;;
                 markdown*) MARKDOWN_BIN=$LONGOPTARG;;
                 dir*) MANPAGE_DIR=$LONGOPTARG;;
-                \?) ;;
+                *) simple_error "Unkown option '${OPTARG#=*}'";;
             esac ;;
         \?) ;;
     esac
@@ -85,8 +84,7 @@ MANPAGE_NAME=$(basename "$MANPAGE_FILENAME")
 if [ -z $MARKDOWN_BIN ]; then
     error "Markdown binary not defined!"
 elif [ ! -f "$MARKDOWN_BIN" ]; then
-    echo "The binary '$MARKDOWN_BIN' can't be found ; the manpage will not be updated for this tag."
-    echo "If you want to install the markdown tool, run 'composer update --dev' ..."
+    echo "The binary '$MARKDOWN_BIN' can't be found ; the manpage will not be updated !"
     prompt 'Do you want to continue' 'Y/n' 'y'
     if [ "$USERRESPONSE" != 'y' ]; then exit 0; fi
 fi

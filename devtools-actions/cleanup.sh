@@ -14,8 +14,6 @@ ACTION_OPTIONS="Current settings are <bold>${DEFAULT_CLEANUP_NAMES[@]}</bold>";
 ACTION_CFGVARS=( DEFAULT_CLEANUP_NAMES )
 if $SCRIPTMAN; then return; fi
 
-targetdir_required
-
 if [ -z $DEFAULT_CLEANUP_NAMES ]; then
     error "Configuration var 'DEFAULT_CLEANUP_NAMES' not found !"
 fi

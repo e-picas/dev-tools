@@ -18,7 +18,6 @@ ACTION_SYNOPSIS="[--name=version]  [--branch=name]  [--hook=path]  [--no-hook]"
 ACTION_CFGVARS=( DEFAULT_VERSIONTAG_BRANCH DEFAULT_VERSIONTAG_HOOK )
 if $SCRIPTMAN; then return; fi
 
-targetdir_required
 TAG_NAME=""
 BRANCH_NAME=""
 HOOK_PATH=""
@@ -37,17 +36,17 @@ if [ ! -z $DEFAULT_VERSIONTAG_HOOK ]; then
 fi
 
 OPTIND=1
-options=$(getscriptoptions "$@")
-while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
+while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
+                project*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libhelp|libvers|libdoc) ;;
                 name*) TAG_NAME=$LONGOPTARG;;
                 branch*) BRANCH_NAME=$LONGOPTARG;;
                 hook*) HOOK_PATH=$LONGOPTARG;;
                 no-hook) declare -rx HOOK_PATH="";;
-                \?) ;;
+                *) simple_error "Unkown option '${OPTARG#=*}'";;
             esac ;;
         \?) ;;
     esac
@@ -71,7 +70,7 @@ else
     fi
     already=$(cd $_TARGET && git tag | grep $TAG_NAME)
     if [ ! -z $already ]; then
-        error "A tag named '$TAG_NAME' already exists !"
+        simple_error "A tag named '$TAG_NAME' already exists !"
     fi
 fi
 

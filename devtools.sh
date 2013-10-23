@@ -4,18 +4,22 @@
 # Copyleft (c) 2013 Pierre Cassat and contributors
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <http://github.com/atelierspierrot/dev-tools>
+# Sources <http://github.com/atelierspierrot/devtools>
 #
-# Global help : `dev-tools.sh -h`
-# Action help : `dev-tools.sh -h action`
-# Action usage : `dev-tools.sh [-vix] -p=PROJECT_PATH [action options] action`
+# Global help : `devtools.sh -h` OR `devtools.sh help`
+# Action help : `devtools.sh action -h` OR `devtools.sh help action`
+# Action usage : `devtools.sh action [-vix] -p=PROJECT_PATH [action options]`
 #
+
+###### Current version
+declare -x NAME="DevTools"
+declare -rx VERSION="1.0.0"
 
 ###### First paths
 declare -rx _REALPATH="$0"
 declare -rx _REALDIRPATH="`dirname $_REALPATH`"
-declare -rx _DEVTOOLS_CONFIGFILE="dev-tools.conf"
-declare -rx _DEVTOOLS_ACTIONSDIR="dev-tools-actions"
+declare -rx _DEVTOOLS_CONFIGFILE="devtools.conf"
+declare -rx _DEVTOOLS_ACTIONSDIR="devtools-actions"
 
 #### findRequirements ( path , info string )
 # search for a relative or root path
@@ -58,13 +62,11 @@ if [ ! -d "$_BASEDIR" ]; then echo "$_BASEDIR"; exit 1; fi
 # load the available actions synopsis in $ACTIONS_DESCRIPTIONS
 # this needs to be defined here as it is used for strings below
 load_actions_infos () {
-    ACTIONS_LIST=()
-    ACTIONS_SYNOPSIS=()
-    ACTIONS_DESCRIPTIONS=()
     export SCRIPTMAN=true
     for action in $_BASEDIR/*.sh; do
         ACTION_SYNOPSIS=''
         ACTION_DESCRIPTION=''
+        ACTION_OPTIONS_ARGS=''
         ACTION_LONGDESCRIPTION=''
         ACTION_CFGVARS=''
         myaction=${action##$_BASEDIR/}
@@ -80,8 +82,11 @@ load_actions_infos () {
         if [ -n "$ACTION_CFGVARS" ]; then
             ACTIONS_CFGVARS=("${ACTIONS_CFGVARS[@]}" "${ACTION_CFGVARS[@]}")
         fi
+        if [ -n "$ACTION_OPTIONS_ARGS" ]; then
+            ACTION_OPTIONS_ARGS[$pos]="${ACTION_OPTIONS_ARGS}"
+        fi
     done
-    export ACTIONS_LIST ACTIONS_SYNOPSIS ACTIONS_DESCRIPTIONS ACTIONS_CFGVARS
+    export ACTIONS_LIST ACTIONS_SYNOPSIS ACTIONS_DESCRIPTIONS ACTIONS_CFGVARS ACTION_OPTIONS_ARGS
     export SCRIPTMAN=false
 }
 
@@ -89,38 +94,44 @@ load_actions_infos () {
 
 # bash-lib settings
 MANPAGE_NODEPEDENCY=true
-COMMON_OPTIONS_ARGS="p:${COMMON_OPTIONS_ARGS}"
+COMMON_OPTIONS_ARGS=":hVfiqvxp:-:"
 
 # paths
 declare -x _BACKUP_DIR="${_BASEDIR}/backup/"
-declare -x _PROJECT="project"
 declare -x _TARGET=`pwd`
 declare -x SCRIPTMAN=false
 
 # per action vars
 declare -x ACTION
 declare -x ACTION_FILE
+declare -x ACTION_INDEX
+declare -x ALLOWED_OPTIONS="${COMMON_OPTIONS_ARGS}"
+declare -xa SCRIPT_OPTS=()
 
 # all actions vars
-declare -xa ACTIONS_LIST=() && declare -xa ACTIONS_SYNOPSIS=() && declare -xa ACTIONS_DESCRIPTIONS=() &&
-    declare -xa ACTIONS_CFGVARS=( DEFAULT_CONFIG_FILE DEFAULT_BASHLIBRARY_PATH ) && \
-    load_actions_infos;
+declare -xa ACTIONS_LIST=()
+declare -xa ACTIONS_SYNOPSIS=()
+declare -xa ACTIONS_OPTIONS_ARGS=()
+declare -xa ACTIONS_DESCRIPTIONS=()
+declare -xa ACTIONS_CFGVARS=( DEFAULT_USER_CONFIG_FILE DEFAULT_PROJECT_CONFIG_FILE DEFAULT_BASHLIBRARY_PATH )
+load_actions_infos
 
 # script infos
-declare -x NAME="DevTools"
 declare -x PRESENTATION="Packages development & deployment facilities"
-declare -x SYNOPSIS="$LIB_SYNOPSIS_ACTION"
+declare -x SYNOPSIS="~\$ <bold>${0}</bold>  [<underline>ACTION</underline>]  -[<underline>COMMON OPTIONS</underline>]  -[<underline>SCRIPT OPTIONS</underline> [=<underline>VALUE</underline>]]  --"
 declare -x DEPLOY_HELP="Run option '-h' for help.";
 declare -x DEPLOY_ACTIONS_HELP="Run option '-h action' for help about a specific action.";
-declare -x SHORT_DESCRIPTION="This helper script will assist you in creating version tags of a git repository, deploying a project and its environment dependencies etc.\n\
-\tRun option '<bold>-h action</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
-declare -x SEE_ALSO="This tool is an open source stuff licensed under GNU/GPL v3: <http://github.com/atelierspierrot/dev-tools>\n\
-\tTo transmit a bug or an evolution: <http://github.com/atelierspierrot/dev-tools/issues>\n\
+declare -x SHORT_DESCRIPTION="This helper script will assist you to execute various common actions on a project and its environment dependencies during development.\n\
+\tRun option '<bold>action -h</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
+declare -x SEE_ALSO="This tool is an open source stuff licensed under GNU/GPL v3: <http://github.com/atelierspierrot/devtools>\n\
+\tTo transmit a bug or an evolution: <http://github.com/atelierspierrot/devtools/issues>\n\
 \tThis tool is base on the Bash Library: <http://github.com/atelierspierrot/bash-library>"
+declare -x COMMON_OPTIONS_GLOBAL="-h|-V"
+declare -x COMMON_OPTIONS_INTERACT="-f|-i|-q|-v"
 
 # actions infos
 declare -rx ACTION_PRESENTATION_MASK="Help for action \"<bold>%s</bold>\"";
-declare -rx ACTION_SYNOPSIS_MASK="~\$ <bold>${0}</bold>  -[<underline>common options</underline>]  %s  %s  --";
+declare -rx ACTION_SYNOPSIS_MASK="~\$ <bold>${0}</bold>  %s  [<underline>common options</underline>]  %s --";
 actionsstr=""
 actionsdescription=""
 actionssynopsis=""
@@ -138,16 +149,16 @@ for i in ${!ACTIONS_LIST[*]}; do
     fi
     itemsyn=${ACTIONS_SYNOPSIS[$i]}
     if [ -n "${itemsyn}" ]; then
-        actionsdescription="${actionsdescription}\n\t`printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemsyn}\" \"${itemstr}\"`";
-        actionssynopsis="${actionssynopsis}\n\t... ${itemsyn}  ${itemstr}"
+        actionsdescription="${actionsdescription}\n\t`printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemstr}\" \"${itemsyn}\"`";
+        actionssynopsis="${actionssynopsis}\n\t... ${itemstr} ${itemsyn}"
     else
-        actionsdescription="${actionsdescription}\n\t`printf \"${ACTION_SYNOPSIS_MASK}\" '' \"${itemstr}\"`";
+        actionsdescription="${actionsdescription}\n\t`printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemstr}\" ''`";
+        actionssynopsis="${actionssynopsis}\n\t... ${itemstr}"
     fi
 done
 declare -x DESCRIPTION="${SHORT_DESCRIPTION}\n\n<bold>AVAILABLE ACTIONS</bold>${actionsdescription}"
 declare -x OPTIONS="Below is a list of common options available ; each action can accepts other options.\n\n\
 \t<bold>-p | --project=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
-\t<bold>-d | --working-dir=PATH</bold>\tredefine the working directory (default is 'pwd' - 'PATH' must exist)\n\
 \t<bold>-h | --help</bold>\t\tshow this information message \n\
 \t<bold>-v | --verbose</bold>\t\tincrease script verbosity \n\
 \t<bold>-q | --quiet</bold>\t\tdecrease script verbosity, nothing will be written unless errors \n\
@@ -156,10 +167,26 @@ declare -x OPTIONS="Below is a list of common options available ; each action ca
 \t<bold>-x | --debug</bold>\t\tsee commands to run but not run them actually\n\
 \t<bold>--dry-run</bold>\t\talias of '-x'\n\
 \n${OPTIONS_USAGE_INFOS}";
-declare -x SYNOPSIS_ERROR="${0}  [-${COMMON_OPTIONS_ARGS}]  [-x|--dry-run]  ... ${actionssynopsis}\n\
-\t-p | --project=path  <action : ${actionsstr}> --";
+declare -x SYNOPSIS_ERROR="${0}  [${COMMON_OPTIONS_GLOBAL}]  [${COMMON_OPTIONS_INTERACT}]  [-x|--dry-run]  [-p|--project=path] ...\
+${actionssynopsis}";
 
 #### internal lib ##########################
+
+#### script_version ( lib = false )
+## this function must echo an information about script NAME and VERSION
+## setting `$lib` on true will add the library infos
+script_version () {
+    local TITLE="${NAME}"
+    if [ "x$VERSION" != 'x' ]; then TITLE="${TITLE} ${VERSION}"; fi    
+    _echo "${TITLE}"
+    if isgitclone; then
+        local gitcmd=$(which git)
+        if [ -n "$gitcmd" ]; then
+            _echo "[git: `git rev-parse --abbrev-ref HEAD` `git rev-parse HEAD`]"
+        fi
+    fi
+    return 0
+}
 
 #### action_file ( action name )
 # find action file
@@ -178,6 +205,51 @@ action_file () {
     export ACTION_FILE
 }
 
+#### action_exists ( action name , error[=true] )
+# test if an action exists and throw an error if not
+action_exists () {
+    local ACTION="$1"
+    local THROWERROR="${2:-true}"
+    action_file "$ACTION"
+    if [ -z "$ACTION_FILE" -o ! -f "$ACTION_FILE" ]; then
+        simple_error "unknown action '${ACTION}'"
+    fi
+    return 0
+}
+
+#### load_action ( action name )
+load_action () {
+    local ACTION="$1"
+    find_action $ACTION
+    # which options are allowed
+    if [ ! -z "$ACTION_INDEX" ]; then
+        action_file $ACTION
+        if [ ! -z "${ACTIONS_OPTIONS_ARGS[$ACTION_INDEX]}" ]; then
+            ALLOWED_OPTIONS="${COMMON_OPTIONS_ARGS}${ACTIONS_OPTIONS_ARGS[$ACTION_INDEX]}"
+        fi
+        if [ ! -z "${ACTIONS_SYNOPSIS[$ACTION_INDEX]}" ]
+            then SYNOPSIS_ERROR="${0}  ${ACTION}  ...\n\t[${COMMON_OPTIONS_GLOBAL}]  [${COMMON_OPTIONS_INTERACT}]  [-x|--dry-run]  [-p|--project=path] ...\n\t${ACTIONS_SYNOPSIS[$ACTION_INDEX]}";
+            else SYNOPSIS_ERROR="${0}  ${ACTION}  ...\n\t[${COMMON_OPTIONS_GLOBAL}]  [${COMMON_OPTIONS_INTERACT}]  [-x|--dry-run]  [-p|--project=path] ";
+        fi
+    fi
+    export ALLOWED_OPTIONS SYNOPSIS_ERROR SYNOPSIS_ERROR
+    return 0
+}
+
+#### find_action ( action name )
+# find action and load its index in ACTION_INDEX
+find_action () {
+    local ACTION="$1"
+    if [ ! -z "$ACTION" ]; then
+        for i in ${!ACTIONS_LIST[*]}; do
+            if [ "${ACTIONS_LIST[$i]}" == "$ACTION" ]; then
+                export ACTION_INDEX=$i
+            fi
+        done
+    fi
+    return 0
+}
+
 #### action_usage ( action name, action file )
 # usage string per action
 action_usage () {
@@ -194,7 +266,7 @@ action_usage () {
 \t`printf \"${ACTION_PRESENTATION_MASK}\" \"${ACTION_NAME}\"`\n\
 \t${NAME}\n\n\
 <bold>SYNOPSIS</bold>\n\
-\t`printf \"${ACTION_SYNOPSIS_MASK}\" \"${ACTION_SYNOPSIS}\" \"${ACTION_NAME}\"`";
+\t`printf \"${ACTION_SYNOPSIS_MASK}\" \"${ACTION_NAME}\" \"${ACTION_SYNOPSIS}\"`";
         if [ -n "${ACTION_DESCRIPTION}" ]; then
             TMP_USAGE="${TMP_USAGE}\n\n<bold>DESCRIIPTION</bold>\n\t${ACTION_DESCRIPTION}";
         fi
@@ -211,10 +283,19 @@ action_usage () {
         TMP_USAGE="${TMP_USAGE}\n\n<${COLOR_COMMENT}>${TMP_VERS}</${COLOR_COMMENT}>";
         parsecolortags "$TMP_USAGE"
     else
-        error "Action file $ACTION_FILE not found!"
+        simple_error "Action file $ACTION_FILE not found!"
     fi
     export SCRIPTMAN=false
     return 0;
+}
+
+#### show_help ()
+show_help () {
+    if [ -z $ACTION ]
+        then usage;
+        else action_exists "$ACTION"; action_usage $ACTION $ACTION_FILE;
+    fi
+    exit 0
 }
 
 #### root_required ()
@@ -254,10 +335,25 @@ trigger_event () {
     iexec "$1"
 }
 
+#### load_user_config ()
+# overwrite current deploy config with user's one if so
+# searched in '$HOME/.devtools_globals'
+load_user_config () {
+    if [ ! -z $HOME ]; then
+        local target_configfile=$(realpath "${HOME}/${DEFAULT_USER_CONFIG_FILE}")
+        if [ -f "$target_configfile" ]; then
+            source "$target_configfile"
+        fi
+        for p in "${ACTIONS_CFGVARS[@]}"; do
+            export "$p"
+        done
+    fi
+}
+
 #### load_target_config ()
 # overwrite current deploy config with target's custom one if so
 load_target_config () {
-    target_configfile=$(realpath "${_TARGET}/${DEFAULT_CONFIG_FILE}")
+    local target_configfile=$(realpath "${_TARGET}/${DEFAULT_PROJECT_CONFIG_FILE}")
     if [ -f "$target_configfile" ]; then
         source "$target_configfile"
     fi
@@ -266,62 +362,42 @@ load_target_config () {
     done
 }
 
-#### parsecomonoptions ( "$@" )
-## over-writing of default function
-parsecomonoptions () {
+#### parseoptions ()
+## parse script options $SCRIPT_OPTS with $ALLOWED_OPTIONS
+parseoptions () {
     local oldoptind=$OPTIND
     local options=$(getscriptoptions "$@")
-    export ACTION=$(getlastargument $options)
-    if [ ! -z $ACTION ]; then
-        action_file $ACTION
-        if [ ! -f "$ACTION_FILE" ]; then
-            simple_error "unknown action '${ACTION}'"
-        fi
-    fi
-    while getopts ":p:${COMMON_OPTIONS_ARGS}" OPTION $options; do
+    while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
         OPTARG="${OPTARG#=}"
         case $OPTION in
         # common options
-            h) 
-                if [ -z $ACTION ]
-                    then usage;
-                    else action_usage $ACTION $ACTION_FILE;
-                fi
-                exit 0;;
+            h) show_help;;
             i) export INTERACTIVE=true; export QUIET=false;;
             v) export VERBOSE=true; export QUIET=false;;
             f) export FORCED=true;;
             x) export DEBUG=true; verecho "- debug option enabled: commands shown as 'debug >> \"cmd\"' are not executed";;
             q) export VERBOSE=false; export INTERACTIVE=false; export QUIET=true;;
-            d) setworkingdir $OPTARG;;
-            l) setlogfilename $OPTARG;;
             V) script_version; exit 0;;
             p) export _TARGET=$OPTARG;;
-            -) case $OPTARG in
+            -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
+                case $OPTARG in
         # common options
                     project*) export _TARGET=$LONGOPTARG;;
-                    help|man|usage) 
-                        if [ -z $ACTION ]
-                            then usage;
-                            else action_usage $ACTION $ACTION_FILE;
-                        fi
-                        exit 0;;
+                    help|man|usage) show_help;;
                     vers*) script_version; exit 0;;
                     interactive) export INTERACTIVE=true; export QUIET=false;;
                     verbose) export VERBOSE=true; export QUIET=false;;
                     force) export FORCED=true;;
                     debug | dry-run*) export DEBUG=true; verecho "- debug option enabled: commands shown as 'debug >> \"cmd\"' are not executed";;
                     quiet) export VERBOSE=false; export INTERACTIVE=false; export QUIET=true;;
-                    working-dir*) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"; setworkingdir $LONGOPTARG;;
-                    log*) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"; setlogfilename $LONGOPTARG;;
         # library options
                     libhelp) clear; library_usage; exit 0;;
                     libvers*) library_version; exit 0;;
                     libdoc*) libdoc; exit 0;;
         # no error for others
-                    *) rien=rien;;
+                    *) ;;
                 esac ;;
-            \?) rien=rien;;
+            \?) simple_error "unknown option '${OPTION}'";;
         esac
     done
     export OPTIND=$oldoptind
@@ -330,25 +406,51 @@ parsecomonoptions () {
 
 #### first setup & options treatment ##########################
 
-parsecomonoptions "$@"
+# transform options and get action
+SCRIPT_OPTS=( $(getscriptoptions "$@") )
+tmp_action="${SCRIPT_OPTS[0]}"
+if [ "${tmp_action:0:1}" != '-' ]; then
+    unset SCRIPT_OPTS[0]
+    ACTION="${tmp_action}"
+    load_action "$ACTION"
+fi
 
+# special help option
+if [ ! -z "$ACTION" -a "$ACTION" == "help" ]; then
+    tmp_action="${SCRIPT_OPTS[1]}"
+    if [ "${tmp_action:0:1}" != '-' ]; then
+        unset SCRIPT_OPTS[0]
+        ACTION="${tmp_action}"
+        load_action "$ACTION"
+    fi
+    show_help
+fi
+
+# common options parsing
+parseoptions
+
+# target project
+targetdir_required
+
+# config
+load_user_config
+load_target_config
+
+# let's go
 if [ ! -z "$ACTION" ]
 then
-    PREACTION="EVENT_PRE_${ACTION}"
-    POSTACTION="EVENT_POST_${ACTION}"
+    action_exists "$ACTION"
+    ACTION_TOUPPER=$(echo "${ACTION}" | tr '[:lower:]' '[:upper:]')
+    PREACTION="EVENT_PRE_${ACTION_TOUPPER}"
+    POSTACTION="EVENT_POST_${ACTION_TOUPPER}"
     # executing requested action
-    if [ -f "$ACTION_FILE" ]
-    then
-        export _BASEDIR _BACKUP_DIR _PROJECT _TARGET
-        if [ ! -z "${!PREACTION}" ]; then
-            trigger_event "${!PREACTION}"
-        fi
-        source "$ACTION_FILE"
-        if [ ! -z "${!POSTACTION}" ]; then
-            trigger_event "${!POSTACTION}"
-        fi
-    else
-        simple_error "unknown action '${ACTION}'"
+    export _BASEDIR _BACKUP_DIR _TARGET
+    if [ ! -z "${!PREACTION}" ]; then
+        trigger_event "${!PREACTION}"
+    fi
+    source "$ACTION_FILE"
+    if [ ! -z "${!POSTACTION}" ]; then
+        trigger_event "${!POSTACTION}"
     fi
 else
     simple_error "no action to execute"

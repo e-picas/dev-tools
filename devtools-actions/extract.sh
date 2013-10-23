@@ -18,7 +18,6 @@ ACTION_SYNOPSIS="[--begin=mask]  [--end=mask]  [--output=filename]  [--show-file
 ACTION_CFGVARS=( DEFAULT_EXTRACT_BEGIN_MASK DEFAULT_EXTRACT_END_MASK DEFAULT_EXTRACT_SHOW_FILENAME )
 if $SCRIPTMAN; then return; fi
 
-targetdir_required
 BEGIN=""
 END=""
 OUTPUT=""
@@ -35,27 +34,27 @@ if [ ! -z "$DEFAULT_EXTRACT_SHOW_FILENAME" ]; then
 fi
 
 OPTIND=1
-options=$(getscriptoptions "$*")
-while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
+while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
+                project*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libhelp|libvers|libdoc) ;;
                 begin*) BEGIN=$LONGOPTARG;;
                 end*) END=$LONGOPTARG;;
                 output*) OUTPUT=$LONGOPTARG;;
                 show-filename*) SHOW_FILENAME=true;;
-                \?) ;;
+                *) simple_error "Unkown option '${OPTARG#=*}'";;
             esac ;;
         \?) ;;
     esac
 done
 
 if [ -z "$BEGIN" ]; then
-    error "No mask defined to begin matching ! (use the '--begin' option or the 'DEFAULT_EXTRACT_BEGIN_MASK' configuration var)"
+    simple_error "No mask defined to begin matching !\n\tuse the '--begin' option or the 'DEFAULT_EXTRACT_BEGIN_MASK' configuration var"
 fi
 if [ -z "$END" ]; then
-    error "No mask defined to end matching ! (use the '--end' option or the 'DEFAULT_EXTRACT_END_MASK' configuration var)"
+    simple_error "No mask defined to end matching !\n\tuse the '--end' option or the 'DEFAULT_EXTRACT_END_MASK' configuration var"
 fi
 
 verecho "> extracting from '$_TARGET' between '${BEGIN}' and '${END}' ..."
