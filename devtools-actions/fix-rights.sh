@@ -18,8 +18,6 @@ ACTION_SYNOPSIS="[--files=chmod]  [--dirs=chmod]  [--bin=path]  [--bin-mask=mask
 ACTION_CFGVARS=( DEFAULT_FIXRIGHTS_BIN_MASK DEFAULT_FIXRIGHTS_BIN_DIR DEFAULT_FIXRIGHTS_FILES_CHMOD DEFAULT_FIXRIGHTS_DIRS_CHMOD )
 if $SCRIPTMAN; then return; fi
 
-targetdir_required
-
 if [ -z $DEFAULT_FIXRIGHTS_DIRS_CHMOD ]; then
     error "Configuration var 'DEFAULT_FIXRIGHTS_DIRS_CHMOD' not found !"
 fi
@@ -34,22 +32,22 @@ fi
 BIN_DIR=$DEFAULT_FIXRIGHTS_BIN_DIR
 
 BIN_MASK=""
-if [ ! -z $DEFAULT_FIXRIGHTS_BIN_MASK ]; then
+if [ ! -z $DEFAULT_FIXRIGHTS_BIN_MASK 2&> /dev/null ]; then
     BIN_MASK="$DEFAULT_FIXRIGHTS_BIN_MASK"
 fi
 
 OPTIND=1
-options=$(getscriptoptions "$@")
-while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
+while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
+                project*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libhelp|libvers|libdoc) ;;
                 dirs*) DIRS_CHMOD=$LONGOPTARG;;
                 files*) FILES_CHMOD=$LONGOPTARG;;
                 bin*) BIN_DIR=$LONGOPTARG;;
                 bin-mask*) BIN_MASK=$LONGOPTARG;;
-                \?) ;;
+                *) simple_error "Unkown option '${OPTARG#=*}'";;
             esac ;;
         \?) ;;
     esac

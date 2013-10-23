@@ -1,4 +1,4 @@
-Man:        dev-tools.sh Manual
+Man:        devtools.sh Manual
 Name:       Dev Tools
 Author:     Les Ateliers Pierrot
 Date: 2013-10-20
@@ -7,33 +7,37 @@ Version: 1.0.7
 
 ## NAME
 
-dev-tools - Packages development & deployment facilities
+devtools - Packages development & deployment facilities
 
 ## SYNOPSIS
 
-**bash-library-script [common options] [script options [=value]] action --**
+**devtools.sh action [common options] [script options [=value]] --**
 
-**dev-tools.sh**  [**-h**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  ... 
-    ... [**--var** *=name*]  [**--val** *=value*]  [**--filename**]  [**--full**]  config
-    ... [**--env** *=env*]  deploy
-    ... [**--begin** *=mask*]  [**--end** *=mask*]  [**--output** *=filename*]  [**--filename**]  extract
-    ... [**--files** *=chmod*]  [**--dirs** *=chmod*]  [**--bin** *=path*]  [**--bin-mask** *=mask*]  fix-rights
-    ... [**--source** *=path*]  [**--filename** *=filename*]  [**--type** *=type*]  [**--dir** *=dir path*]  [**--markdown** *=bin path*]  [**--whatis** *=bin path*]  [**--makewhatis** *=bin path*]  manpage
-    ... [**--env** *=env*]  [**--target** *=server*]  [**--options** *="rsync options"*]  sync
-    ... [**--name** *=version*]  [**--branch** *=name*]  [**--hook** *=path*]  [**--no-hook**]  version-tag
-    **-p | --project** *=path*  *<action> in* **cleanup | config | deploy | extract | fix-rights | manpage | sync | version-tag**  -- 
+**devtools.sh**  <action>  [**-h**|**--help**|**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p | --project** *=path*]  ...
+    ... cleanup
+    ... config  [**--var** *=name*]  [**--val** *=value*]  [**--filename**]  [**--full**] 
+    ... deploy  [**--env** *=env*] 
+    ... extract  [**--begin** *=mask*]  [**--end** *=mask*]  [**--output** *=filename*]  [**--filename**] 
+    ... fix-rights  [**--files** *=chmod*]  [**--dirs** *=chmod*]  [**--bin** *=path*]  [**--bin-mask** *=mask*] 
+    ... md2man  [**--source** *=path*]  [**--filename** *=filename*]  [**--markdown** *=bin path*]
+    ... manpage  [**--source** *=path*]  [**--filename** *=filename*]  [**--type** *=type*]  [**--dir** *=dir path*]  [**--markdown** *=bin path*]  [**--whatis** *=bin path*]  [**--makewhatis** *=bin path*] 
+    ... sync  [**--env** *=env*]  [**--target** *=server*]  [**--options** *="rsync options"*] 
+    ... version-tag  [**--name** *=version*]  [**--branch** *=name*]  [**--hook** *=path*]  [**--no-hook**] 
+    -- 
 
 ## DESCRIPTION
 
-The `dev-tools` is one single shell script that handles a set of available actions
+The `devtools` is one single shell script that handles a set of available actions
 (defined themselves as shell scripts) to execute something upon a package in development. The usage is
 quite simple as it just requires to understand the command line call of one single script.
 The global script always follows the same rules and acts like a dispatcher that distributes the
 options to an action. More, creating a new action (such as your own actions) is as simple
-as writing a new shell script in the `dev-tools-actions/` directory and call it with the global
-script.
+as writing a new shell script in the `devtools-actions/` directory and call it with the global
+script. The global synopsis usage of the script is something like:
 
-Run option `-h action` to see the help about a specific action and use option `--dry-run` to make dry runs.
+    devtools action-name [common options] [script options [=value]] --
+
+Run option `action -h` to see the help about a specific action and use option `--dry-run` to make dry runs.
 
 This package is based on the [Bash Library](https://github.com/atelierspierrot/bash-library).
 
@@ -43,9 +47,6 @@ This package is based on the [Bash Library](https://github.com/atelierspierrot/b
 
 **-p | --project** =path
 :    define the project directory path (default is `pwd` - `PATH` must exist)
-
-**-d | --working-dir** =path
-:    redefine the working directory (default is `pwd` - `PATH` must exist)
 
 **-h | --help**
 :    show this information message 
@@ -70,26 +71,20 @@ You can group short options like `-xc`, set an option argument like `-d(=)value`
 
 *The following actions are currently available:*
 
-### cleanup
+#### cleanup
 
 This will clean (remove) all OS or IDE specific files from the project
 (configuration variable: `DEFAULT_CLEANUP_NAMES`).
 
-#### Syntax
+devtools.sh  **cleanup**  -[*common options* ...]  [**--dry-run**]  --
 
-dev-tools.sh  -[*common options* ...]  [**--dry-run**]  **cleanup**  --
+#### config
 
-### config
-
-Manage the dev-tools configuration for a package, stored in `.devtools` dotfile ;
+Manage the devtools configuration for a package, stored in `.devtools` dotfile ;
 with no option, current configuration will be shown.
 
-#### Syntax
-
-dev-tools.sh  -[*common options* ...]  [**--dry-run**]
-    [**--var** *=name*]  [**--val** *=value*]  [**--filename**]  [**--full**]  **config**  --
-
-#### Options
+devtools.sh  **config**  -[*common options* ...]  [**--dry-run**]
+    [**--var** *=name*]  [**--val** *=value*]  [**--filename**]  [**--full**]  --
 
 **--var** =name
 :    select a configuration variable to read or define
@@ -103,33 +98,25 @@ dev-tools.sh  -[*common options* ...]  [**--dry-run**]
 **--full**
 :    see the full configuration entries for the project (defaults and custom)
 
-### deploy
+#### deploy
 
 Will search for files suffixed by `__ENV__` in the project path (recursively) and
 over-write the original ones (without suffix).
 
-#### Syntax
-
-dev-tools.sh  -[*common options* ...]  [**--dry-run**]
-    [**--env** *=env*]  **deploy**  --
-
-#### Options
+devtools.sh  **deploy**  -[*common options* ...]  [**--dry-run**]
+    [**--env** *=env*]  --
 
 **--env** =name
 :    the environment shortcut to deploy (default is `DEFAULT` - configuration variable: `DEFAULT_DEPLOY_ENV`)
 
-### extract
+#### extract
 
 Will search and extract strings from files contents recursively ; result is written on STDOUT
 but can be stored in a file.
 
-#### Syntax
-
-dev-tools.sh  -[*common options* ...]  [**--dry-run**]
+devtools.sh  **extract**  -[*common options* ...]  [**--dry-run**]
     [**--begin** *=mask*]  [**--end** *=mask*]  [**--output** *=filename*]
-    [**--filename**]  **extract**  --
-
-#### Options
+    [**--filename**]  --
 
 **--begin** =mask
 :   the mask to use to begin the matching (configuration variable: `DEFAULT_EXTRACT_BEGIN_MASK`) 
@@ -143,17 +130,13 @@ dev-tools.sh  -[*common options* ...]  [**--dry-run**]
 **--show-filename**
 :   write matching filenames before extracted content (configuration variable: `DEFAULT_EXTRACT_SHOW_FILENAME`)
 
-### fix-rights
+#### fix-rights
 
 This will fix files and directories UNIX rights recursively on the project.
 
-#### Syntax
-
-dev-tools.sh  -[*common options* ...]  [**--dry-run**]
+devtools.sh  **fix-rights**  -[*common options* ...]  [**--dry-run**]
     [**--files** *=chmod*]  [**--dirs** *=chmod*]  [**--bin** *=path*]
-    [**--bin-mask** *=mask*]  **fix-rights**  --
-
-#### Options
+    [**--bin-mask** *=mask*]  --
 
 **--dirs** =chmod
 :   the rights level setted for directories (default is `0755` - configuration variable: `DEFAULT_FIXRIGHTS_DIRS_CHMOD`) 
@@ -167,18 +150,31 @@ dev-tools.sh  -[*common options* ...]  [**--dry-run**]
 **--bin-mask** =mask
 :   mask to match binary files in 'bin' (default is empty - configuration variable: `DEFAULT_FIXRIGHTS_BIN_MASK`)
 
-### manpage
+#### md2man
+
+Build a manpage file based on a markdown content.
+
+devtools.sh  **manpage**  -[*common options* ...]  [**--dry-run**]
+    [**--source** *=path*]  [**--filename** *=filename*]  [**--markdown** *=bin*]  --
+
+**--source** =filename
+:   the manpage source file (default is `MANPAGE.md` - configuration variable: `DEFAULT_MANPAGE_SOURCE`) 
+
+**--filename** =filename
+:   the filename to use to create the manpage (configuration variable: `DEFAULT_MANPAGE_FILENAME`) 
+
+**--markdown** =bin path
+:   the binary to use for the 'markdown' command 
+    (default is installed MarkdownExtended package - configuration variable: `DEFAULT_MANPAGE_MARKDOWN_BIN`) 
+
+#### manpage
 
 Build a manpage file based on a markdown content ; the manpage is added in system manpages
 and can be referenced if the `whatis` and `makewhatis` binaries are found or defined.
 
-#### Syntax
-
-dev-tools.sh  -[*common options* ...]  [**--dry-run**]
+devtools.sh  **manpage**  -[*common options* ...]  [**--dry-run**]
     [**--source** *=path*]  [**--filename** *=filename*]  [**--type** *=type*]  [**--dir** *=path*]
-    [**--markdown** *=bin*]  [**--whatis** *=bin*]  [**--makewhatis** *=bin*]  **manpage**  --
-
-#### Options
+    [**--markdown** *=bin*]  [**--whatis** *=bin*]  [**--makewhatis** *=bin*]  --
 
 **--source** =filename
 :   the manpage source file (default is `MANPAGE.md` - configuration variable: `DEFAULT_MANPAGE_SOURCE`) 
@@ -202,17 +198,13 @@ dev-tools.sh  -[*common options* ...]  [**--dry-run**]
 **--makewhatis** =bin path
 :   the binary to use for the 'makewhatis' command (configuration variable: `DEFAULT_MANPAGE_MAKEWHATIS_BIN`)
 
-### sync
+#### sync
 
 Will `rsync` a project directory to a target, which can use SSH protocol if so ; use the
 `-x` option to process a `--dry-run` rsync.
 
-#### Syntax
-
-dev-tools.sh  -[*common options* ...]  [**--dry-run**]
-    [**--env** *=env*]  [**--target** *=server*]  [**--options** *="rsync options"*]  **sync**  --
-
-#### Options
+devtools.sh  **sync**  -[*common options* ...]  [**--dry-run**]
+    [**--env** *=env*]  [**--target** *=server*]  [**--options** *="rsync options"*]  --
 
 **--target** =server
 :   the server name to use for synchronization (configuration variable: `DEFAULT_SYNC_SERVER`) 
@@ -223,16 +215,12 @@ dev-tools.sh  -[*common options* ...]  [**--dry-run**]
 **--env** =env
 :   the environment shortcut to deploy if so (configuration variable: `DEFAULT_SYNC_ENV`)
 
-### version-tag
+#### version-tag
 
 This will create a new GIT version TAG according to the semantic versioning (see <http://semver.org/>).
 
-#### Syntax
-
-dev-tools.sh  -[*common options* ...]  [**--dry-run**]
-    [**--name** *=version*]  [**--branch** *=name*]  [**--hook** *=path*]  [**--no-hook**]  **version-tag**  --
-
-#### Options
+devtools.sh  **version-tag**  -[*common options* ...]  [**--dry-run**]
+    [**--name** *=version*]  [**--branch** *=name*]  [**--hook** *=path*]  [**--no-hook**]  --
 
 **--name** =version
 :   the name of the new tag ; default will be next increased version number 
@@ -250,7 +238,7 @@ dev-tools.sh  -[*common options* ...]  [**--dry-run**]
 
 The script doesn't really define environment variables but handles a set of configuration
 variables that can be overwritten or modified to fit your needs and special environment.
-If you want to define a configuration value globally, edit the `dev-tools.conf` file directly,
+If you want to define a configuration value globally, edit the `devtools.conf` file directly,
 which is loaded at any call of the script. You can also define "per project" configuration
 settings creating a `.devtools` file at the root of the project. The `config` action of
 the script can help you to manage this type of configuration.
@@ -302,26 +290,33 @@ DEFAULT_VERSIONTAG_HOOK
 
 ## FILES
 
-**dev-tools.sh**
+**devtools.sh**  |  **devtools**
 :   The library source file ; this is the script name to call in command line ; it can be
     stored anywhere in the file system ; its relevant place could be `$HOME/bin` for a user
     or, for a global installation, in a place like `/usr/local/bin` (be sure to put it in
     a directory included in the global `$PATH`).
 
-**dev-tools.conf**
+**devtools.conf**
 :   The global script configuration file ; this file is required and will be searched in
     the same directory as the script above, then in current user `$HOME`, then in system
     configurations `/etc`.
 
-**dev-tools-actions/**
+**devtools-actions/**  |  **devtools-[action]**
 :   This directory contains the actions currently available ; the directory and its contents
     are required to use script's actions ; they will be searched in the same directory as
     the script above, then in current user `$HOME`.
+:   When it is installed globally, each action is stored as a `devtools-action` binary file
+    in the same directory as the global script.
+
+**.devtools_globals**
+:   This is the specific dotfile to use for "user" configuration ; you may write your
+    configuration following the global `devtools.conf` rules ; this file is searched at the
+    root directory of user's `$HOME` and is loaded first.
 
 **.devtools**
 :   This is the specific dotfile to use for "per project" configuration ; you may write your
-    configuration following the global `dev-tools.conf` rules ; this file is searched at the
-    root directory of each project (defined by the '-p' option).
+    configuration following the global `devtools.conf` rules ; this file is searched at the
+    root directory of each project (defined by the '-p' option) and is loaded last.
 
 **bash-library/**
 :   This directory embeds the required third-party [Bash Library](https://github.com/atelierspierrot/bash-library).
@@ -333,26 +328,26 @@ DEFAULT_VERSIONTAG_HOOK
 
 A "classic" usage of the script would be:
 
-    dev-tools.sh -p ../relative/path/to/concerned/project action
+    devtools action -p ../relative/path/to/concerned/project
 
 To get an help string, run:
 
-    dev-tools.sh -h OR dev-tools.sh -h action
+    devtools -h OR devtools action -h OR devtools help action
 
 To make a dry run before really executing the actions, use:
 
-    dev-tools.sh --dry-run ... action
+    devtools action --dry-run ...
 
 ## LICENSE
 
 The library is licensed under GPL-3.0 - Copyleft (c) Les Ateliers Pierrot
 <http://www.ateliers-pierrot.fr/> - Some rights reserved. For documentation,
-sources & updates, see <http://github.com/atelierspierrot/dev-tools>. 
+sources & updates, see <http://github.com/atelierspierrot/devtools>. 
 To read GPL-3.0 license conditions, see <http://www.gnu.org/licenses/gpl-3.0.html>.
 
 ## BUGS
 
-To transmit bugs, see <http://github.com/atelierspierrot/dev-tools/issues>.
+To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 
 ## AUTHOR
 

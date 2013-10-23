@@ -17,7 +17,6 @@ ACTION_SYNOPSIS="[--env=env]  [--target=server]  [--options=\"rsync options\"]"
 ACTION_CFGVARS=( DEFAULT_SYNC_SERVER DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_ENV )
 if $SCRIPTMAN; then return; fi
 
-targetdir_required
 TARGETENV=false
 TARGETSERVER=""
 RSYNC_OPTIONS=""
@@ -33,16 +32,16 @@ if [ ! -z "$DEFAULT_SYNC_ENV" ]; then
 fi
 
 OPTIND=1
-options=$(getscriptoptions "$*")
-while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
+while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
+                project*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libhelp|libvers|libdoc) ;;
                 env*) TARGETENV=$LONGOPTARG;;
                 target*) TARGETSERVER=$LONGOPTARG;;
                 options*) RSYNC_OPTIONS=$LONGOPTARG;;
-                \?) ;;
+                *) simple_error "Unkown option '${OPTARG#=*}'";;
             esac ;;
         \?) ;;
     esac
