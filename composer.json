@@ -20,14 +20,14 @@
         "atelierspierrot/bash-library": "1.*" 
     },
     "bin": [
-        "dev-tools.sh",
-        "dev-tools.conf",
-        "dev-tools-actions",
+        "devtools.sh",
+        "devtools.conf",
+        "devtools-actions",
         "bash-library"
     ],
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "1.1-dev"
         }
     }
 }
