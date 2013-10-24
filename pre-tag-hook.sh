@@ -16,7 +16,7 @@ BRANCH_NAME="$3"
 _VERSION="${TAG_NAME/v/}"
 _DATE=$(git log -1 --format="%ci" --date=short | cut -s -f 1 -d ' ')
 _MANFILE="MANPAGE.md"
-_MANMANFILE="dev-tools.man"
+_MANMANFILE="devtools.man"
 _MDEBIN="vendor/bin/markdown-extended"
 
 if [ ! -f "$_MDEBIN" ]; then
