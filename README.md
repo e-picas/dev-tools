@@ -11,12 +11,12 @@ development and deployment: <http://github.com/atelierspierrot/atelierspierrot/b
 
 ## Presentation
 
-The `dev-tools` package is one single shell script that handles a set of available actions
+The `devtools` package is one single shell script that handles a set of available actions
 (defined themselves as shell scripts) to execute something upon a package in development. The usage is
 quite simple as it just requires to understand the command line call of one single script.
 The global script always follows the same rules and acts like a dispatcher that distributes the
 options to an action. More, creating a new action (such as your own actions) is as simple
-as writing a new shell script in the `dev-tools-actions/` directory and call it with the global
+as writing a new shell script in the `devtools-actions/` directory and call it with the global
 script.
 
 A simple set of rules are to be followed to construct a new action with a specific help string,
@@ -27,9 +27,9 @@ some specific command line options and configuration variables.
 
 The following files are required for the DevTools to work:
 
--   the original script `dev-tools.sh`;
--   the global configuration file `dev-tools.conf`;
--   the actions directory (and its contents) `dev-tools-actions/`;
+-   the original script `devtools.sh`;
+-   the global configuration file `devtools.conf`;
+-   the actions directory (and its contents) `devtools-actions/`;
 -   the [Bash Library](https://github.com/atelierspierrot/bash-library) directory
     (and its contents) `bash-library/`.
 
@@ -39,12 +39,12 @@ To install and use the package, you need to run something like:
 
     ~$ wget --no-check-certificate https://github.com/atelierspierrot/dev-tools/archive/master.tar.gz
     ~$ tar -xvf master.tar.gz
-    ~$ cp dev-tools-master/dev-tools.sh path/to/your/project/bin/ \
-        && cp -R dev-tools-master/dev-tools-actions path/to/your/project/bin \
+    ~$ cp dev-tools-master/devtools.sh path/to/your/project/bin/ \
+        && cp -R dev-tools-master/devtools-actions path/to/your/project/bin \
         && cp -R dev-tools-master/bash-library path/to/your/project/bin \
-        && cp dev-tools-master/dev-tools.conf path/to/your/project/
+        && cp dev-tools-master/devtools.conf path/to/your/project/
     // do not forget here to change "path/to/your/project" to fit your project ...
-    ~$ chmod a+x path/to/your/project/bin/dev-tools.sh
+    ~$ chmod a+x path/to/your/project/bin/devtools.sh
 
 If you already use the [Bash Library](https://github.com/atelierspierrot/bash-library) in your
 project, you can avoid duplicate following the configuration procedure described in next chapter.
@@ -54,15 +54,15 @@ project, you can avoid duplicate following the configuration procedure described
 If you plan to often use this package, you can install it globally in your `$HOME/bin/` directory.
 You can run something like the followings, assuming you are at the package root directory:
 
-    ~$ cp dev-tools.sh ~/bin/ \
-        && cp -R dev-tools-actions ~/bin/ \
+    ~$ cp devtools.sh ~/bin/ \
+        && cp -R devtools-actions ~/bin/ \
         && cp -R bash-library ~/bin/ \
-        && cp dev-tools.conf ~/bin/
-    ~$ chmod a+x ~/bin/dev-tools.sh
+        && cp devtools.conf ~/bin/
+    ~$ chmod a+x ~/bin/devtools.sh
 
-For facility, you can even rename `dev-tools.sh` to just `dev-tools`:
+For facility, you can even rename `devtools.sh` to just `devtools`:
 
-    ~$ mv dev-tools.sh dev-tools
+    ~$ mv devtools.sh devtools
 
 ### Using Composer
 
@@ -83,29 +83,29 @@ requirements and ensure to define a `bin` directory:
 
 For a first meet, run in a terminal:
 
-    sh ./dev-tools.sh
+    sh ./devtools.sh
 
 To see a full help info with the list of available actions, run:
 
-    sh ./dev-tools.sh -h
+    sh ./devtools.sh -h
 
 To see a specific help info for an action, run:
 
-    sh ./dev-tools.sh -h action
+    sh ./devtools.sh -h action
 
 To actually run an action, use:
 
-    sh ./dev-tools.sh [global options] [action options] action_name
+    sh ./devtools.sh [global options] [action options] action_name
 
 For any command line call, you can add the `--dry-run` option to debug what would be done
 by your script but not run it actually:
 
-    sh ./dev-tools.sh [global options] --dry-run [action options] action_name
+    sh ./devtools.sh [global options] --dry-run [action options] action_name
 
 
 ## Configuration & Dependencies
 
-The package is distributed with a configuration file named `dev-tools.conf` with default settings.
+The package is distributed with a configuration file named `devtools.conf` with default settings.
 You can define or re-define some settings in this file to fit your environment needs globally.
 If you use this package as a "standalone" tool to manage different projects, you can also
 over-write all configuration values in a specific `.devtools` file at the root directory
@@ -132,7 +132,7 @@ configuration file.
 
 ## Events triggering
 
-For each action of the `dev-tools.sh` script, an event will be triggered BEFORE and AFTER the
+For each action of the `devtools.sh` script, an event will be triggered BEFORE and AFTER the
 action is called. This allows user to define a special behavior for each action using the
 configuration values constructed like:
 
@@ -146,8 +146,8 @@ For instance, to print `done` after the `cleanup` action, we would write:
 
 ## Create a new action
 
-To create a new action handled by `dev-tools.sh`, just create a new shell script in the
-`dev-tools-actions/` directory.
+To create a new action handled by `devtools.sh`, just create a new shell script in the
+`devtools-actions/` directory.
 
 The best way to begin creating your own action is to make a copy of an existing one and
 update the code ...
@@ -155,7 +155,7 @@ update the code ...
 ### Action infos
 
 The first part of an action script will mostly be the information strings about this action.
-The `dev-tools.sh` accepts that any action defines the following variables:
+The `devtools.sh` accepts that any action defines the following variables:
 
 -   `ACTION_DESCRIPTION`: the description string of the action, shown when you see the global
     usage page of DevTools and for the action's specific help;
@@ -168,13 +168,13 @@ The `dev-tools.sh` accepts that any action defines the following variables:
 
 The second part of an action script is its work on the project. You can here use any kind of
 [Bash](http://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) and UNIX commands and use the 
-`dev-tools.sh` environment variables.
+`devtools.sh` environment variables.
 
 ### Note for development
 
 During development, you can call any file path as an action running:
 
-    sh ./dev-tools.sh [global options] [action options] ./action/path/from/package/root.sh
+    sh ./devtools.sh [global options] [action options] ./action/path/from/package/root.sh
 
 
 ## Sources & bugs report
