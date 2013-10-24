@@ -13,7 +13,7 @@ devtools - Packages development & deployment facilities
 
 **devtools.sh action [common options] [script options [=value]] --**
 
-**devtools.sh**  <action>  [**-h**|**--help**|**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p | --project** *=path*]  ...
+**devtools.sh**  <action>  [**-h**|**--help**|**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--project** *=path*]  ...
     ... cleanup
     ... config  [**--var** *=name*]  [**--val** *=value*]  [**--filename**]  [**--full**] 
     ... deploy  [**--env** *=env*] 
@@ -27,17 +27,27 @@ devtools - Packages development & deployment facilities
 
 ## DESCRIPTION
 
-The `devtools` is one single shell script that handles a set of available actions
-(defined themselves as shell scripts) to execute something upon a package in development. The usage is
-quite simple as it just requires to understand the command line call of one single script.
-The global script always follows the same rules and acts like a dispatcher that distributes the
-options to an action. More, creating a new action (such as your own actions) is as simple
-as writing a new shell script in the `devtools-actions/` directory and call it with the global
-script. The global synopsis usage of the script is something like:
+**DevTools** is a shell script that handles a set of actions (defined themselves as shell scripts)
+to execute something upon a package in development. The usage is quite simple as it just
+requires to understand the command line call of one single script. Examples and usage shown
+in this manual all use `devtools.sh` to designate this global script, which is its initial filename
+in a just downloaded package. If you installed the DevTools in your system (in your own `$HOME/bin/`
+directory or any global `/usr/*/bin/` directory), you may replace "devtools.sh" by "devtools"
+in each command line example. In this case, each action is a script installed in the same 
+directory as the global script and named something like `devtools-action_name`.
 
-    devtools action-name [common options] [script options [=value]] --
+The global script always follows the same rules and acts like a dispatcher that distributes
+the options to an action. More, creating a new action (such as your own actions) is as simple
+as writing a new shell script in the `devtools-actions/` directory (or naming it
+`devtools-myaction` for a global install) and call it with the global script.
 
-Run option `action -h` to see the help about a specific action and use option `--dry-run` to make dry runs.
+The synopsis usage of the script is something like: **devtools action-name
+[common options] [script options [=value]] --**. You can group short options like `-xc`,
+set an option argument like `-d(=)value` or `--long=value` and use `--` to explicitly specify
+the end of the script options.
+
+For a first start or a quick usage reminder, use option `-h` for a global script help,
+`action -h` to see the help about a specific action and use option `--dry-run` to make dry runs.
 
 This package is based on the [Bash Library](https://github.com/atelierspierrot/bash-library).
 
@@ -45,29 +55,27 @@ This package is based on the [Bash Library](https://github.com/atelierspierrot/b
 
 *The following common options are supported:*
 
-**-p | --project** =path
-:    define the project directory path (default is `pwd` - `PATH` must exist)
+**-p**, **--project** =path
+:   define the project directory path (default is `pwd` - the `path` argument must exist)
 
-**-h | --help**
-:    show this information message 
+**-h**, **--help**
+:   read an information message ; use `action -h` to read the information message about
+    a specific action
 
-**-v | --verbose**
-:    increase script verbosity 
+**-v**, **--verbose**
+:   increase script verbosity 
 
-**-q | --quiet**
-:    decrease script verbosity, nothing will be written unless errors 
+**-q**, **--quiet**
+:   decrease script verbosity, nothing will be written unless errors 
 
-**-f | --force**
-:    force some commands to not prompt confirmation 
+**-f**, **--force**
+:   force some commands to not prompt confirmation 
 
-**-i | --interactive**
-:    ask for confirmation before any action 
+**-i**, **--interactive**
+:   ask for confirmation before any action 
 
-**-x | --debug | --dry-run**
-:    see commands to run but do not run them actually 
-
-You can group short options like `-xc`, set an option argument like `-d(=)value` or
-`--long=value` and use `--` to explicitly specify the end of the script options.
+**-x**, **--debug**, **--dry-run**
+:   see commands to run but do not run them actually 
 
 *The following actions are currently available:*
 
@@ -154,7 +162,7 @@ devtools.sh  **fix-rights**  -[*common options* ...]  [**--dry-run**]
 
 Build a manpage file based on a markdown content.
 
-devtools.sh  **manpage**  -[*common options* ...]  [**--dry-run**]
+devtools.sh  **md2man**  -[*common options* ...]  [**--dry-run**]
     [**--source** *=path*]  [**--filename** *=filename*]  [**--markdown** *=bin*]  --
 
 **--source** =filename
@@ -290,35 +298,37 @@ DEFAULT_VERSIONTAG_HOOK
 
 ## FILES
 
-**devtools.sh**  |  **devtools**
+*devtools.sh*, *devtools*
 :   The library source file ; this is the script name to call in command line ; it can be
     stored anywhere in the file system ; its relevant place could be `$HOME/bin` for a user
     or, for a global installation, in a place like `/usr/local/bin` (be sure to put it in
-    a directory included in the global `$PATH`).
+    a directory included in the global `$PATH`) ; the script must be executable for its/all
+    user(s).
 
-**devtools.conf**
+*devtools.conf*
 :   The global script configuration file ; this file is required and will be searched in
     the same directory as the script above, then in current user `$HOME`, then in system
     configurations `/etc`.
 
-**devtools-actions/**  |  **devtools-[action]**
+*devtools-actions/*, *devtools-[action]*
 :   This directory contains the actions currently available ; the directory and its contents
     are required to use script's actions ; they will be searched in the same directory as
-    the script above, then in current user `$HOME`.
+    the script above, then in current user `$HOME` ; the scripts must be executable for its/all
+    user(s).
 :   When it is installed globally, each action is stored as a `devtools-action` binary file
     in the same directory as the global script.
 
-**.devtools_globals**
-:   This is the specific dotfile to use for "user" configuration ; you may write your
+*.devtools_globals*
+:   This is the specific dotfile to use for "per user" configuration ; you may write your
     configuration following the global `devtools.conf` rules ; this file is searched at the
     root directory of user's `$HOME` and is loaded first.
 
-**.devtools**
+*.devtools*
 :   This is the specific dotfile to use for "per project" configuration ; you may write your
     configuration following the global `devtools.conf` rules ; this file is searched at the
     root directory of each project (defined by the '-p' option) and is loaded last.
 
-**bash-library/**
+*bash-library/*
 :   This directory embeds the required third-party [Bash Library](https://github.com/atelierspierrot/bash-library).
     If you already have a version of the library installed in your system, you can over-write
     the library loaded (and skip the embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH`
