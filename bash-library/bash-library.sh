@@ -109,8 +109,8 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 # LIBRARY INFOS #####################################################################
 
 declare -rx LIB_NAME="Bash shell library"
-declare -rx LIB_VERSION="1.0.3"
-declare -rx LIB_DATE="2013-10-20"
+declare -rx LIB_VERSION="1.0.4"
+declare -rx LIB_DATE="2013-10-24"
 declare -rx LIB_PRESENTATION="The open source bash library of Les Ateliers Pierrot"
 declare -rx LIB_AUTHOR="Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>"
 declare -rx LIB_LICENSE="GPL-3.0"
@@ -708,16 +708,16 @@ simple_error () {
     local ERRSTATUS="${2:-${E_ERROR}}"
     if [ ! -z "$3" ]; then
         if [ "$3" == 'lib' ]; then
-            ERRSYNOPSIS=$(echo "$LIB_SYNOPSIS")
+            ERRSYNOPSIS=$(_echo "$LIB_SYNOPSIS")
         elif [ "$3" == 'action' ]; then
-            ERRSYNOPSIS=$(echo "$LIB_SYNOPSIS_ACTION")
+            ERRSYNOPSIS=$(_echo "$LIB_SYNOPSIS_ACTION")
         else
-            ERRSYNOPSIS=$(echo "$3")
+            ERRSYNOPSIS=$(_echo "$3")
         fi
     elif [ -n "$SYNOPSIS_ERROR" ]; then
-        ERRSYNOPSIS=$(echo "$SYNOPSIS_ERROR")
+        ERRSYNOPSIS=$(_echo "$SYNOPSIS_ERROR")
     else
-        ERRSYNOPSIS=$(echo "$LIB_SYNOPSIS_ERROR")
+        ERRSYNOPSIS=$(_echo "$LIB_SYNOPSIS_ERROR")
     fi
     if [ -n "$LOGFILEPATH" ]; then log "${ERRSTRING}" "error:${ERRSTATUS}"; fi
     if $DEBUG; then
@@ -1054,10 +1054,10 @@ getlastargument () {
     return 1
 }
 
-#### parsecomonoptions ( "$@" )
+#### parsecommonoptions ( "$@" )
 ## parse common script options as described in $LIB_OPTIONS
 ## this will stop options treatment at '--'
-parsecomonoptions () {
+parsecommonoptions () {
     local oldoptind=$OPTIND
     local options=$(getscriptoptions "$@")
 #    export LASTARG=$(getscriptoptions "${options[@]}")
@@ -1342,6 +1342,15 @@ libdoc () {
 
 ##@ LIBRARY_REALPATH
 declare -rx LIBRARY_REALPATH=$(realpath ${BASH_SOURCE[0]})
+
+##@ COMPATIBILITY
+# to be deleted in next major version !!
+
+#### parsecomonoptions ( "$@" )
+parsecomonoptions () {
+    parsecommonoptions "$@"
+    return 0
+}
 
 ##@!@##
 # Endfile
