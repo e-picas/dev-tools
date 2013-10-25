@@ -157,8 +157,13 @@ for i in ${!ACTIONS_LIST[*]}; do
     fi
 done
 declare -x DESCRIPTION="${SHORT_DESCRIPTION}\n\n<bold>AVAILABLE ACTIONS</bold>${actionsdescription}"
-declare -x OPTIONS="Below is a list of common options available ; each action can accepts other options.\n\n\
-\t<bold>-p | --project=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
+declare -x OPTIONS="Internal actions are:\n\n\
+\t<bold>install</bold>\t\tinstall the package somewhere in your sytem\n\
+\t<bold>uninstall</bold>\tuninstall an installed package\n\
+\t<bold>self-check</bold>\tcheck if an installed package needs to be updated\n\
+\t<bold>self-update</bold>\tupdate an installed package\n\n\
+\tBelow is a list of common options available ; each action can accepts other options.\n\n\
+\t<bold>-p | --path=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
 \t<bold>-h | --help</bold>\t\tshow this information message \n\
 \t<bold>-v | --verbose</bold>\t\tincrease script verbosity \n\
 \t<bold>-q | --quiet</bold>\t\tdecrease script verbosity, nothing will be written unless errors \n\
@@ -291,10 +296,12 @@ action_usage () {
 
 #### show_help ()
 show_help () {
+    local tmp_file=$(gettempfilepath devtoolsusage)
     if [ -z $ACTION ]
-        then usage;
-        else action_exists "$ACTION"; action_usage $ACTION $ACTION_FILE;
+        then usage > "$tmp_file";
+        else action_exists "$ACTION"; action_usage "$ACTION" "$ACTION_FILE" > "$tmp_file";
     fi
+    cat "$tmp_file" | less -cfre~;
     exit 0
 }
 
@@ -362,6 +369,33 @@ load_target_config () {
     done
 }
 
+#### find_next_action ( load_it )
+## find next action in $SCRIPT_OPTS and unset it
+## load it in $ACTION if $1='true' (string)
+find_next_action () {
+    local load_it="${1:-false}"
+    local tmp_arg=''
+    local tmp_action=''
+    for i in "${!SCRIPT_OPTS[@]}"; do
+        tmp_arg="${SCRIPT_OPTS[${i}]}"
+        if [ "${tmp_arg:0:1}" != '-' ]; then
+            unset SCRIPT_OPTS[$i]
+            tmp_action=$tmp_arg
+            break
+        fi
+    done
+    if [ ! -z $tmp_action ]; then
+        if [ "$load_it" == 'true' ]; then
+            ACTION="${tmp_action}"
+            load_action "$ACTION"
+        else
+            echo $tmp_action
+        fi
+    fi
+    export ACTION SCRIPT_OPTS
+    return 0
+}
+
 #### parseoptions ()
 ## parse script options $SCRIPT_OPTS with $ALLOWED_OPTIONS
 parseoptions () {
@@ -382,7 +416,7 @@ parseoptions () {
             -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
                 case $OPTARG in
         # common options
-                    project*) export _TARGET=$LONGOPTARG;;
+                    path*) export _TARGET=$LONGOPTARG;;
                     help|man|usage) show_help;;
                     vers*) script_version; exit 0;;
                     interactive) export INTERACTIVE=true; export QUIET=false;;
@@ -404,26 +438,50 @@ parseoptions () {
     return 0
 }
 
+#### internal actions ##########################
+
+helpAction () {
+    export ACTION=''
+    find_next_action true
+    show_help
+}
+
+installAction () {
+    echo "todo"
+    exit 0
+}
+
+uninstallAction () {
+    echo "todo"
+    exit 0
+}
+
+selfCheckAction () {
+    echo "todo"
+    exit 0
+}
+
+selfUpdateAction () {
+    echo "todo"
+    exit 0
+}
+
 #### first setup & options treatment ##########################
 
 # transform options and get action
 SCRIPT_OPTS=( $(getscriptoptions "$@") )
-tmp_action="${SCRIPT_OPTS[0]}"
-if [ "${tmp_action:0:1}" != '-' ]; then
-    unset SCRIPT_OPTS[0]
-    ACTION="${tmp_action}"
-    load_action "$ACTION"
-fi
+find_next_action true
 
 # special help option
-if [ ! -z "$ACTION" -a "$ACTION" == "help" ]; then
-    tmp_action="${SCRIPT_OPTS[1]}"
-    if [ "${tmp_action:0:1}" != '-' ]; then
-        unset SCRIPT_OPTS[0]
-        ACTION="${tmp_action}"
-        load_action "$ACTION"
-    fi
-    show_help
+if [ ! -z "$ACTION" ]; then
+    case "$ACTION" in
+        help)  helpAction;;
+        install) installAction;;
+        uninstall) uninstallAction;;
+        self-update) selfUpdateAction;;
+        self-check) selfCheckAction;;
+        *) ;;
+    esac
 fi
 
 # common options parsing
