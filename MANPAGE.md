@@ -13,7 +13,15 @@ devtools - Packages development & deployment facilities
 
 **devtools.sh action [common options] [script options [=value]] --**
 
-**devtools.sh**  <action>  [**-h**|**--help**|**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--project** *=path*]  ...
+**devtools.sh**  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
+    ... help  <action>  [**--less**]  [**--more**]
+    ... install
+    ... uninstall
+    ... self-check
+    ... self-update
+    -- 
+
+**devtools.sh**  <action>  [**-h**|**--help**|**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
     ... cleanup
     ... config  [**--var** *=name*]  [**--val** *=value*]  [**--filename**]  [**--full**] 
     ... deploy  [**--env** *=env*] 
@@ -88,6 +96,15 @@ This package is based on the [Bash Library](https://github.com/atelierspierrot/b
 :   see commands to run but do not run them actually 
 
 *The following internal actions are available:*
+
+**help / usage**
+:   See the help information about the script or an action.
+
+:        devtools.sh  help  -[common options ...]  <action>  [--less]  [--more]  --
+
+:   The `--less` option shows the help information using the `less` program. The `--more`
+    option shows the help information using the `more` program. If both options are used,
+    the 'less' program will be choosed preferabily.
 
 **install**
 :   install the DevTools in your system

@@ -175,6 +175,10 @@ declare -x OPTIONS="Internal actions are:\n\n\
 declare -x SYNOPSIS_ERROR="${0}  [${COMMON_OPTIONS_GLOBAL}]  [${COMMON_OPTIONS_INTERACT}]  [-x|--dry-run]  [-p|--project=path] ...\
 ${actionssynopsis}";
 
+## Internal actions options
+declare -x HELP_LESS=false
+declare -x HELP_MORE=false
+
 #### internal lib ##########################
 
 #### script_version ( lib = false )
@@ -296,12 +300,25 @@ action_usage () {
 
 #### show_help ()
 show_help () {
-    local tmp_file=$(gettempfilepath devtoolsusage)
-    if [ -z $ACTION ]
-        then usage > "$tmp_file";
-        else action_exists "$ACTION"; action_usage "$ACTION" "$ACTION_FILE" > "$tmp_file";
+    if $HELP_LESS || $HELP_MORE; then
+        local tmp_file=$(gettempfilepath devtoolsusage)
     fi
-    cat "$tmp_file" | less -cfre~;
+    if [ -z $ACTION ]
+    then
+        if $HELP_LESS || $HELP_MORE
+        then usage > "$tmp_file"
+        else usage
+        fi
+    else
+        action_exists "$ACTION"
+        if $HELP_LESS || $HELP_MORE
+        then action_usage "$ACTION" "$ACTION_FILE" > "$tmp_file";
+        else action_usage "$ACTION" "$ACTION_FILE";
+        fi
+    fi
+    if $HELP_LESS; then cat "$tmp_file" | less -cfre~;
+    elif $HELP_MORE; then cat "$tmp_file" | more -cf;
+    fi
     exit 0
 }
 
@@ -428,6 +445,9 @@ parseoptions () {
                     libhelp) clear; library_usage; exit 0;;
                     libvers*) library_version; exit 0;;
                     libdoc*) libdoc; exit 0;;
+        # internal actions options
+                    less) export HELP_LESS=true;;
+                    more) export HELP_MORE=true;;
         # no error for others
                     *) ;;
                 esac ;;
@@ -472,6 +492,9 @@ selfUpdateAction () {
 SCRIPT_OPTS=( $(getscriptoptions "$@") )
 find_next_action true
 
+# common options parsing
+parseoptions
+
 # special help option
 if [ ! -z "$ACTION" ]; then
     case "$ACTION" in
@@ -483,9 +506,6 @@ if [ ! -z "$ACTION" ]; then
         *) ;;
     esac
 fi
-
-# common options parsing
-parseoptions
 
 # target project
 targetdir_required
