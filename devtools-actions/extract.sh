@@ -34,7 +34,7 @@ if [ ! -z "$DEFAULT_EXTRACT_SHOW_FILENAME" ]; then
 fi
 
 OPTIND=1
-while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
+while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"

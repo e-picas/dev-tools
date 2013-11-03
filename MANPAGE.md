@@ -67,7 +67,7 @@ considered as an action name.
 For a first start or a quick usage reminder, use option `-h` for a global script help,
 `action -h` to see the help about a specific action and use option `--dry-run` to make dry runs.
 
-This package is based on the [Bash Library](https://github.com/atelierspierrot/bash-library).
+This package is based on the [Piwi Bash Library](http://github.com/atelierspierrot/piwi-bash-library).
 
 ## OPTIONS
 
@@ -75,10 +75,6 @@ This package is based on the [Bash Library](https://github.com/atelierspierrot/b
 
 **-p**, **--path** =path
 :   define the project directory path (default is `pwd` - the `path` argument must exist)
-
-**-h**, **--help**
-:   read an information message ; use `action -h` to read the information message about
-    a specific action
 
 **-v**, **--verbose**
 :   increase script verbosity 
@@ -92,7 +88,10 @@ This package is based on the [Bash Library](https://github.com/atelierspierrot/b
 **-i**, **--interactive**
 :   ask for confirmation before any action 
 
-**-x**, **--debug**, **--dry-run**
+**-x**, **--debug**
+:   see debug infos
+
+**--dry-run**
 :   see commands to run but do not run them actually 
 
 *The following internal actions are available:*

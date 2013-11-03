@@ -94,7 +94,6 @@ load_actions_infos () {
 
 # bash-lib settings
 MANPAGE_NODEPEDENCY=true
-COMMON_OPTIONS_ARGS=":hVfiqvxp:-:"
 
 # paths
 declare -x _BACKUP_DIR="${_BASEDIR}/backup/"
@@ -105,7 +104,8 @@ declare -x SCRIPTMAN=false
 declare -x ACTION
 declare -x ACTION_FILE
 declare -x ACTION_INDEX
-declare -x ALLOWED_OPTIONS="${COMMON_OPTIONS_ARGS}"
+declare -x OPTIONS_ALLOWED="p:${COMMON_OPTIONS_ALLOWED}"
+declare -x LONG_OPTIONS_ALLOWED="${COMMON_LONG_OPTIONS_ALLOWED}"
 declare -xa SCRIPT_OPTS=()
 
 # all actions vars
@@ -122,7 +122,7 @@ declare -x SYNOPSIS="~\$ <bold>${0}</bold>  [<underline>ACTION</underline>]  -[<
 declare -x DEPLOY_HELP="Run option '-h' for help.";
 declare -x DEPLOY_ACTIONS_HELP="Run option '-h action' for help about a specific action.";
 declare -x SHORT_DESCRIPTION="This helper script will assist you to execute various common actions on a project and its environment dependencies during development.\n\
-\tRun option '<bold>action -h</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
+\tRun option '<bold>help action</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
 declare -x SEE_ALSO="This tool is an open source stuff licensed under GNU/GPL v3: <http://github.com/atelierspierrot/devtools>\n\
 \tTo transmit a bug or an evolution: <http://github.com/atelierspierrot/devtools/issues>\n\
 \tThis tool is base on the Bash Library: <http://github.com/atelierspierrot/bash-library>"
@@ -175,10 +175,6 @@ declare -x OPTIONS="Internal actions are:\n\n\
 declare -x SYNOPSIS_ERROR="${0}  [${COMMON_OPTIONS_GLOBAL}]  [${COMMON_OPTIONS_INTERACT}]  [-x|--dry-run]  [-p|--project=path] ...\
 ${actionssynopsis}";
 
-## Internal actions options
-declare -x HELP_LESS=false
-declare -x HELP_MORE=false
-
 #### internal lib ##########################
 
 #### script_version ( lib = false )
@@ -188,7 +184,7 @@ script_version () {
     local TITLE="${NAME}"
     if [ "x$VERSION" != 'x' ]; then TITLE="${TITLE} ${VERSION}"; fi    
     _echo "${TITLE}"
-    if isgitclone; then
+    if ! $QUIET && isgitclone; then
         local gitcmd=$(which git)
         if [ -n "$gitcmd" ]; then
             _echo "[git: `git rev-parse --abbrev-ref HEAD` `git rev-parse HEAD`]"
@@ -316,9 +312,17 @@ show_help () {
         else action_usage "$ACTION" "$ACTION_FILE";
         fi
     fi
-    if $HELP_LESS; then cat "$tmp_file" | less -cfre~;
-    elif $HELP_MORE; then cat "$tmp_file" | more -cf;
+    local _done=false
+    if [ "${#SCRIPT_PROGRAMS[@]}" -gt 0 ]; then
+        if $(in_array "less" "${SCRIPT_PROGRAMS[@]}"); then
+            cat "$tmp_file" | less -cfre~
+            _done=true
+        elif $(in_array "more" "${SCRIPT_PROGRAMS[@]}"); then
+            cat "$tmp_file" | more -cf
+            _done=true
+        fi
     fi
+    if ! $_done; then cat "$tmp_file"; fi
     exit 0
 }
 
@@ -386,83 +390,15 @@ load_target_config () {
     done
 }
 
-#### find_next_action ( load_it )
-## find next action in $SCRIPT_OPTS and unset it
-## load it in $ACTION if $1='true' (string)
-find_next_action () {
-    local load_it="${1:-false}"
-    local tmp_arg=''
-    local tmp_action=''
-    for i in "${!SCRIPT_OPTS[@]}"; do
-        tmp_arg="${SCRIPT_OPTS[${i}]}"
-        if [ "${tmp_arg:0:1}" != '-' ]; then
-            unset SCRIPT_OPTS[$i]
-            tmp_action=$tmp_arg
-            break
-        fi
-    done
-    if [ ! -z $tmp_action ]; then
-        if [ "$load_it" == 'true' ]; then
-            ACTION="${tmp_action}"
-            load_action "$ACTION"
-        else
-            echo $tmp_action
-        fi
-    fi
-    export ACTION SCRIPT_OPTS
-    return 0
-}
-
-#### parseoptions ()
-## parse script options $SCRIPT_OPTS with $ALLOWED_OPTIONS
-parseoptions () {
-    local oldoptind=$OPTIND
-    local options=$(getscriptoptions "$@")
-    while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
-        OPTARG="${OPTARG#=}"
-        case $OPTION in
-        # common options
-            h) show_help;;
-            i) export INTERACTIVE=true; export QUIET=false;;
-            v) export VERBOSE=true; export QUIET=false;;
-            f) export FORCED=true;;
-            x) export DEBUG=true; verecho "- debug option enabled: commands shown as 'debug >> \"cmd\"' are not executed";;
-            q) export VERBOSE=false; export INTERACTIVE=false; export QUIET=true;;
-            V) script_version; exit 0;;
-            p) export _TARGET=$OPTARG;;
-            -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
-                case $OPTARG in
-        # common options
-                    path*) export _TARGET=$LONGOPTARG;;
-                    help|man|usage) show_help;;
-                    vers*) script_version; exit 0;;
-                    interactive) export INTERACTIVE=true; export QUIET=false;;
-                    verbose) export VERBOSE=true; export QUIET=false;;
-                    force) export FORCED=true;;
-                    debug | dry-run*) export DEBUG=true; verecho "- debug option enabled: commands shown as 'debug >> \"cmd\"' are not executed";;
-                    quiet) export VERBOSE=false; export INTERACTIVE=false; export QUIET=true;;
-        # library options
-                    libhelp) clear; library_usage; exit 0;;
-                    libvers*) library_version; exit 0;;
-                    libdoc*) libdoc; exit 0;;
-        # internal actions options
-                    less) export HELP_LESS=true;;
-                    more) export HELP_MORE=true;;
-        # no error for others
-                    *) ;;
-                esac ;;
-            \?) simple_error "unknown option '${OPTION}'";;
-        esac
-    done
-    export OPTIND=$oldoptind
-    return 0
-}
-
 #### internal actions ##########################
 
 helpAction () {
-    export ACTION=''
-    find_next_action true
+    getnextargument
+    if [ $ARGIND -gt 1 ]; then
+        export ACTION="$ARGUMENT"
+        load_action "$ACTION"
+    else export ACTION=''
+    fi
     show_help
 }
 
@@ -489,11 +425,32 @@ selfUpdateAction () {
 #### first setup & options treatment ##########################
 
 # transform options and get action
-SCRIPT_OPTS=( $(getscriptoptions "$@") )
-find_next_action true
+rearrangescriptoptions "$@"
+[ "${#SCRIPT_OPTS[@]}" -gt 0 ] && set -- "${SCRIPT_OPTS[@]}";
+[ "${#SCRIPT_ARGS[@]}" -gt 0 ] && set -- "${SCRIPT_ARGS[@]}";
+[ "${#SCRIPT_OPTS[@]}" -gt 0 -a "${#SCRIPT_ARGS[@]}" -gt 0 ] && set -- "${SCRIPT_OPTS[@]}" -- "${SCRIPT_ARGS[@]}";
+
+# action requested
+getnextargument
+ACTION="$ARGUMENT"
+if [ -n "$ACTION" ]; then load_action "$ACTION"; fi
 
 # common options parsing
-parseoptions
+parsecommonoptions_strict
+if $DEBUG; then library_debug "$*"; fi
+OPTIND=1
+while getopts ":at:${OPTIONS_ALLOWED}" OPTION; do
+    OPTARG="${OPTARG#=}"
+    case $OPTION in
+        p) export _TARGET=$OPTARG;;
+        -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
+            case $OPTARG in
+                project*) export _TARGET=$LONGOPTARG;;
+                ?) ;;
+            esac ;;
+        ?);;
+    esac
+done
 
 # special help option
 if [ ! -z "$ACTION" ]; then
