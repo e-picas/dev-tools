@@ -445,7 +445,7 @@ while getopts ":at:${OPTIONS_ALLOWED}" OPTION; do
         p) export _TARGET=$OPTARG;;
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
-                project*) export _TARGET=$LONGOPTARG;;
+                path*) export _TARGET=$LONGOPTARG;;
                 ?) ;;
             esac ;;
         ?);;
