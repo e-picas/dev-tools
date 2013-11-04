@@ -17,13 +17,13 @@
     "support": { "issues": "http://github.com/atelierspierrot/dev-tools/issues" },
     "require-dev": {
         "atelierspierrot/markdown-extended": "dev-master",
-        "atelierspierrot/bash-library": "1.*" 
+        "atelierspierrot/piwi-bash-library": "1.*" 
     },
     "bin": [
         "devtools.sh",
         "devtools.conf",
         "devtools-actions",
-        "bash-library"
+        "piwi-bash-library"
     ],
     "extra": {
         "branch-alias": {

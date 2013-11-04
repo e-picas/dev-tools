@@ -37,7 +37,7 @@ if [ ! -z $DEFAULT_FIXRIGHTS_BIN_MASK 2&> /dev/null ]; then
 fi
 
 OPTIND=1
-while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
+while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"

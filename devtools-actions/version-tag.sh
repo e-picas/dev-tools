@@ -36,7 +36,7 @@ if [ ! -z $DEFAULT_VERSIONTAG_HOOK ]; then
 fi
 
 OPTIND=1
-while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
+while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
@@ -46,13 +46,14 @@ while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
                 branch*) BRANCH_NAME=$LONGOPTARG;;
                 hook*) HOOK_PATH=$LONGOPTARG;;
                 no-hook) declare -rx HOOK_PATH="";;
-                *) simple_error "Unkown option '${OPTARG#=*}'";;
+                *) ;;
             esac ;;
         \?) ;;
     esac
 done
 
 _TARGET=$(realpath "$_TARGET")
+HOOK_PATH=$(realpath "${_TARGET}/${HOOK_PATH}")
 
 if [ -z "$TAG_NAME" ]; then
     gittags=( $(cd $_TARGET && git tag | sort -n) )
@@ -83,7 +84,7 @@ if [ ! -z "$BRANCH_NAME" ]; then
     if [ "$exists" == '' ]; then
         error "Branch '$BRANCH_NAME' doesn't exist !"
     fi
-    iexec "set -e && cd $_TARGET && git checkout $BRANCH_NAME 1>&2"
+    iexec "cd $_TARGET && git checkout $BRANCH_NAME 1>&2"
 fi
 
 if $VERBOSE; then

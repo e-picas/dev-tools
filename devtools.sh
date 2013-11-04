@@ -94,7 +94,6 @@ load_actions_infos () {
 
 # bash-lib settings
 MANPAGE_NODEPEDENCY=true
-COMMON_OPTIONS_ARGS=":hVfiqvxp:-:"
 
 # paths
 declare -x _BACKUP_DIR="${_BASEDIR}/backup/"
@@ -105,7 +104,8 @@ declare -x SCRIPTMAN=false
 declare -x ACTION
 declare -x ACTION_FILE
 declare -x ACTION_INDEX
-declare -x ALLOWED_OPTIONS="${COMMON_OPTIONS_ARGS}"
+declare -x OPTIONS_ALLOWED="p:${COMMON_OPTIONS_ALLOWED}"
+declare -x LONG_OPTIONS_ALLOWED="${COMMON_LONG_OPTIONS_ALLOWED}"
 declare -xa SCRIPT_OPTS=()
 
 # all actions vars
@@ -122,10 +122,10 @@ declare -x SYNOPSIS="~\$ <bold>${0}</bold>  [<underline>ACTION</underline>]  -[<
 declare -x DEPLOY_HELP="Run option '-h' for help.";
 declare -x DEPLOY_ACTIONS_HELP="Run option '-h action' for help about a specific action.";
 declare -x SHORT_DESCRIPTION="This helper script will assist you to execute various common actions on a project and its environment dependencies during development.\n\
-\tRun option '<bold>action -h</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
+\tRun option '<bold>help action</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
 declare -x SEE_ALSO="This tool is an open source stuff licensed under GNU/GPL v3: <http://github.com/atelierspierrot/devtools>\n\
 \tTo transmit a bug or an evolution: <http://github.com/atelierspierrot/devtools/issues>\n\
-\tThis tool is base on the Bash Library: <http://github.com/atelierspierrot/bash-library>"
+\tThis tool is based on the Piwi Bash Library: <http://github.com/atelierspierrot/piwi-bash-library>";
 declare -x COMMON_OPTIONS_GLOBAL="-h|-V"
 declare -x COMMON_OPTIONS_INTERACT="-f|-i|-q|-v"
 
@@ -157,8 +157,13 @@ for i in ${!ACTIONS_LIST[*]}; do
     fi
 done
 declare -x DESCRIPTION="${SHORT_DESCRIPTION}\n\n<bold>AVAILABLE ACTIONS</bold>${actionsdescription}"
-declare -x OPTIONS="Below is a list of common options available ; each action can accepts other options.\n\n\
-\t<bold>-p | --project=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
+declare -x OPTIONS="Internal actions are:\n\n\
+\t<bold>install</bold>\t\tinstall the package somewhere in your sytem\n\
+\t<bold>uninstall</bold>\tuninstall an installed package\n\
+\t<bold>self-check</bold>\tcheck if an installed package needs to be updated\n\
+\t<bold>self-update</bold>\tupdate an installed package\n\n\
+\tBelow is a list of common options available ; each action can accepts other options.\n\n\
+\t<bold>-p | --path=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
 \t<bold>-h | --help</bold>\t\tshow this information message \n\
 \t<bold>-v | --verbose</bold>\t\tincrease script verbosity \n\
 \t<bold>-q | --quiet</bold>\t\tdecrease script verbosity, nothing will be written unless errors \n\
@@ -179,7 +184,7 @@ script_version () {
     local TITLE="${NAME}"
     if [ "x$VERSION" != 'x' ]; then TITLE="${TITLE} ${VERSION}"; fi    
     _echo "${TITLE}"
-    if isgitclone; then
+    if ! $QUIET && isgitclone; then
         local gitcmd=$(which git)
         if [ -n "$gitcmd" ]; then
             _echo "[git: `git rev-parse --abbrev-ref HEAD` `git rev-parse HEAD`]"
@@ -291,10 +296,33 @@ action_usage () {
 
 #### show_help ()
 show_help () {
-    if [ -z $ACTION ]
-        then usage;
-        else action_exists "$ACTION"; action_usage $ACTION $ACTION_FILE;
+    if $HELP_LESS || $HELP_MORE; then
+        local tmp_file=$(gettempfilepath devtoolsusage)
     fi
+    if [ -z $ACTION ]
+    then
+        if $HELP_LESS || $HELP_MORE
+        then usage > "$tmp_file"
+        else usage
+        fi
+    else
+        action_exists "$ACTION"
+        if $HELP_LESS || $HELP_MORE
+        then action_usage "$ACTION" "$ACTION_FILE" > "$tmp_file";
+        else action_usage "$ACTION" "$ACTION_FILE";
+        fi
+    fi
+    local _done=false
+    if [ "${#SCRIPT_PROGRAMS[@]}" -gt 0 ]; then
+        if $(in_array "less" "${SCRIPT_PROGRAMS[@]}"); then
+            cat "$tmp_file" | less -cfre~
+            _done=true
+        elif $(in_array "more" "${SCRIPT_PROGRAMS[@]}"); then
+            cat "$tmp_file" | more -cf
+            _done=true
+        fi
+    fi
+    if ! $_done; then cat "$tmp_file"; fi
     exit 0
 }
 
@@ -362,72 +390,79 @@ load_target_config () {
     done
 }
 
-#### parseoptions ()
-## parse script options $SCRIPT_OPTS with $ALLOWED_OPTIONS
-parseoptions () {
-    local oldoptind=$OPTIND
-    local options=$(getscriptoptions "$@")
-    while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
-        OPTARG="${OPTARG#=}"
-        case $OPTION in
-        # common options
-            h) show_help;;
-            i) export INTERACTIVE=true; export QUIET=false;;
-            v) export VERBOSE=true; export QUIET=false;;
-            f) export FORCED=true;;
-            x) export DEBUG=true; verecho "- debug option enabled: commands shown as 'debug >> \"cmd\"' are not executed";;
-            q) export VERBOSE=false; export INTERACTIVE=false; export QUIET=true;;
-            V) script_version; exit 0;;
-            p) export _TARGET=$OPTARG;;
-            -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
-                case $OPTARG in
-        # common options
-                    project*) export _TARGET=$LONGOPTARG;;
-                    help|man|usage) show_help;;
-                    vers*) script_version; exit 0;;
-                    interactive) export INTERACTIVE=true; export QUIET=false;;
-                    verbose) export VERBOSE=true; export QUIET=false;;
-                    force) export FORCED=true;;
-                    debug | dry-run*) export DEBUG=true; verecho "- debug option enabled: commands shown as 'debug >> \"cmd\"' are not executed";;
-                    quiet) export VERBOSE=false; export INTERACTIVE=false; export QUIET=true;;
-        # library options
-                    libhelp) clear; library_usage; exit 0;;
-                    libvers*) library_version; exit 0;;
-                    libdoc*) libdoc; exit 0;;
-        # no error for others
-                    *) ;;
-                esac ;;
-            \?) simple_error "unknown option '${OPTION}'";;
-        esac
-    done
-    export OPTIND=$oldoptind
-    return 0
+#### internal actions ##########################
+
+helpAction () {
+    getnextargument
+    if [ $ARGIND -gt 1 ]; then
+        export ACTION="$ARGUMENT"
+        load_action "$ACTION"
+    else export ACTION=''
+    fi
+    show_help
+}
+
+installAction () {
+    echo "todo"
+    exit 0
+}
+
+uninstallAction () {
+    echo "todo"
+    exit 0
+}
+
+selfCheckAction () {
+    echo "todo"
+    exit 0
+}
+
+selfUpdateAction () {
+    echo "todo"
+    exit 0
 }
 
 #### first setup & options treatment ##########################
 
 # transform options and get action
-SCRIPT_OPTS=( $(getscriptoptions "$@") )
-tmp_action="${SCRIPT_OPTS[0]}"
-if [ "${tmp_action:0:1}" != '-' ]; then
-    unset SCRIPT_OPTS[0]
-    ACTION="${tmp_action}"
-    load_action "$ACTION"
-fi
+rearrangescriptoptions "$@"
+[ "${#SCRIPT_OPTS[@]}" -gt 0 ] && set -- "${SCRIPT_OPTS[@]}";
+[ "${#SCRIPT_ARGS[@]}" -gt 0 ] && set -- "${SCRIPT_ARGS[@]}";
+[ "${#SCRIPT_OPTS[@]}" -gt 0 -a "${#SCRIPT_ARGS[@]}" -gt 0 ] && set -- "${SCRIPT_OPTS[@]}" -- "${SCRIPT_ARGS[@]}";
 
-# special help option
-if [ ! -z "$ACTION" -a "$ACTION" == "help" ]; then
-    tmp_action="${SCRIPT_OPTS[1]}"
-    if [ "${tmp_action:0:1}" != '-' ]; then
-        unset SCRIPT_OPTS[0]
-        ACTION="${tmp_action}"
-        load_action "$ACTION"
-    fi
-    show_help
-fi
+# action requested
+getnextargument
+ACTION="$ARGUMENT"
+if [ -n "$ACTION" ]; then load_action "$ACTION"; fi
 
 # common options parsing
-parseoptions
+parsecommonoptions_strict
+if $DEBUG; then library_debug "$*"; fi
+OPTIND=1
+while getopts ":at:${OPTIONS_ALLOWED}" OPTION; do
+    OPTARG="${OPTARG#=}"
+    case $OPTION in
+        p) export _TARGET=$OPTARG;;
+        -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
+            case $OPTARG in
+                project*) export _TARGET=$LONGOPTARG;;
+                ?) ;;
+            esac ;;
+        ?);;
+    esac
+done
+
+# special help option
+if [ ! -z "$ACTION" ]; then
+    case "$ACTION" in
+        help)  helpAction;;
+        install) installAction;;
+        uninstall) uninstallAction;;
+        self-update) selfUpdateAction;;
+        self-check) selfCheckAction;;
+        *) ;;
+    esac
+fi
 
 # target project
 targetdir_required

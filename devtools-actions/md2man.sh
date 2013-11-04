@@ -40,7 +40,7 @@ fi
 
 # options
 OPTIND=1
-while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
+while getopts ":${OPTIONS_ALLOWED}"; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
@@ -49,7 +49,7 @@ while getopts "${ALLOWED_OPTIONS}" OPTION "${SCRIPT_OPTS[@]}"; do
                 source*) MANPAGE_SOURCE=$LONGOPTARG;;
                 filename*) MANPAGE_FILENAME=$LONGOPTARG;;
                 markdown*) MARKDOWN_BIN=$LONGOPTARG;;
-                *) simple_error "Unkown option '${OPTARG#=*}'";;
+                *) ;;
             esac ;;
         \?) ;;
     esac
