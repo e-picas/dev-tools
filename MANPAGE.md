@@ -296,7 +296,7 @@ the script can help you to manage this type of configuration.
 #### global
 
 DEFAULT_BASHLIBRARY_PATH
-:   relative path from your project dir to 'bash-library.sh' ; default is `bash-library/bash-library.sh`
+:   relative path from your project dir to 'piwi-bash-library.sh' ; default is `piwi-bash-library/piwi-bash-library.sh`
 
 DEFAULT_USER_CONFIG_FILE
 :   default project config file (DO NOT CHANGE after a first usage) ; default is `.devtools_globals`
@@ -410,8 +410,8 @@ DEFAULT_VERSIONTAG_HOOK
     configuration following the global `devtools.conf` rules ; this file is searched at the
     root directory of each project (defined by the '-p' option) and is loaded last.
 
-*bash-library/*
-:   This directory embeds the required third-party [Bash Library](https://github.com/atelierspierrot/bash-library).
+*piwi-bash-library/*
+:   This directory embeds the required third-party [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library).
     If you already have a version of the library installed in your system, you can over-write
     the library loaded (and skip the embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH`
     of the global configuration file.
@@ -447,5 +447,5 @@ To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 
 ## SEE ALSO
 
-bash-library(3)
+piwi-bash-library(3)
 

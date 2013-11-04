@@ -125,7 +125,7 @@ declare -x SHORT_DESCRIPTION="This helper script will assist you to execute vari
 \tRun option '<bold>help action</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
 declare -x SEE_ALSO="This tool is an open source stuff licensed under GNU/GPL v3: <http://github.com/atelierspierrot/devtools>\n\
 \tTo transmit a bug or an evolution: <http://github.com/atelierspierrot/devtools/issues>\n\
-\tThis tool is base on the Bash Library: <http://github.com/atelierspierrot/bash-library>"
+\tThis tool is based on the Piwi Bash Library: <http://github.com/atelierspierrot/piwi-bash-library>"
 declare -x COMMON_OPTIONS_GLOBAL="-h|-V"
 declare -x COMMON_OPTIONS_INTERACT="-f|-i|-q|-v"
 

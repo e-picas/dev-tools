@@ -30,8 +30,8 @@ The following files are required for the DevTools to work:
 -   the original script `devtools.sh`;
 -   the global configuration file `devtools.conf`;
 -   the actions directory (and its contents) `devtools-actions/`;
--   the [Bash Library](https://github.com/atelierspierrot/bash-library) directory
-    (and its contents) `bash-library/`.
+-   the [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library) directory
+    (and its contents) `piwi-bash-library/`.
 
 ### Classic install
 
@@ -41,13 +41,14 @@ To install and use the package, you need to run something like:
     ~$ tar -xvf master.tar.gz
     ~$ cp dev-tools-master/devtools.sh path/to/your/project/bin/ \
         && cp -R dev-tools-master/devtools-actions path/to/your/project/bin \
-        && cp -R dev-tools-master/bash-library path/to/your/project/bin \
+        && cp -R dev-tools-master/piwi-bash-library path/to/your/project/bin \
         && cp dev-tools-master/devtools.conf path/to/your/project/
     // do not forget here to change "path/to/your/project" to fit your project ...
     ~$ chmod a+x path/to/your/project/bin/devtools.sh
 
-If you already use the [Bash Library](https://github.com/atelierspierrot/bash-library) in your
-project, you can avoid duplicate following the configuration procedure described in next chapter.
+If you already use the [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library)
+in your project, you can avoid duplicate following the configuration procedure described
+in next chapter.
 
 ### Global install
 
@@ -56,7 +57,7 @@ You can run something like the followings, assuming you are at the package root 
 
     ~$ cp devtools.sh ~/bin/ \
         && cp -R devtools-actions ~/bin/ \
-        && cp -R bash-library ~/bin/ \
+        && cp -R piwi-bash-library ~/bin/ \
         && cp devtools.conf ~/bin/
     ~$ chmod a+x ~/bin/devtools.sh
 
@@ -124,8 +125,8 @@ Configuration variables are named following some simple rules:
 -   a global configuration variable is named like `DEFAULT_VARIABLE`
 -   an action specific configuration variable is named like `DEFAULT_ACTIONNAME_VARIABLE`
 
-This package is based on the [Bash Library](https://github.com/atelierspierrot/bash-library)
-which is embedded by default in `bash-library/`. You can over-write the library loaded
+This package is based on the [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library)
+which is embedded by default in `piwi-bash-library/`. You can over-write the library loaded
 (and skip the embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH` of the
 configuration file.
 
