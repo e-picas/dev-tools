@@ -41,6 +41,7 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
+                path*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libvers) ;;
                 name*) TAG_NAME=$LONGOPTARG;;
                 branch*) BRANCH_NAME=$LONGOPTARG;;
                 hook*) HOOK_PATH=$LONGOPTARG;;

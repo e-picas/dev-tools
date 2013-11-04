@@ -30,7 +30,7 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     case $OPTION in
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
-                project*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libhelp|libvers|libdoc) ;;
+                path*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libvers) ;;
                 global)
                     CFG_FILE="$DEFAULT_USER_CONFIG_FILE"
                     CFG_FILEPATH="${HOME}/${DEFAULT_USER_CONFIG_FILE}"
