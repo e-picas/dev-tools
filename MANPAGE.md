@@ -13,14 +13,6 @@ devtools - Packages development & deployment facilities
 
 **devtools.sh action [common options] [script options [=value]] --**
 
-**devtools.sh**  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
-    ... help  <action>  [**--less**]  [**--more**]
-    ... install
-    ... uninstall
-    ... self-check
-    ... self-update
-    -- 
-
 **devtools.sh**  <action>  [**-h**|**--help**|**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
     ... cleanup
     ... config  [**--var** *=name*]  [**--val** *=value*]  [**--filename**]  [**--full**] 
@@ -104,18 +96,6 @@ This package is based on the [Piwi Bash Library](http://github.com/atelierspierr
 :   The `--less` option shows the help information using the `less` program. The `--more`
     option shows the help information using the `more` program. If both options are used,
     the 'less' program will be choosed preferabily.
-
-**install**
-:   install the DevTools in your system
-
-**uninstall**
-:   uninstall the DevTools from your system
-
-**self-check**
-:   check if installed DevTools are up-to-date
-
-**self-update**
-:   actually update DevTools
 
 *The following actions are currently available:*
 

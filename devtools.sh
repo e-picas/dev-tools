@@ -157,12 +157,7 @@ for i in ${!ACTIONS_LIST[*]}; do
     fi
 done
 declare -x DESCRIPTION="${SHORT_DESCRIPTION}\n\n<bold>AVAILABLE ACTIONS</bold>${actionsdescription}"
-declare -x OPTIONS="Internal actions are:\n\n\
-\t<bold>install</bold>\t\tinstall the package somewhere in your sytem\n\
-\t<bold>uninstall</bold>\tuninstall an installed package\n\
-\t<bold>self-check</bold>\tcheck if an installed package needs to be updated\n\
-\t<bold>self-update</bold>\tupdate an installed package\n\n\
-\tBelow is a list of common options available ; each action can accepts other options.\n\n\
+declare -x OPTIONS="Below is a list of common options available ; each action can accepts other options.\n\n\
 \t<bold>-p | --path=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
 \t<bold>-h | --help</bold>\t\tshow this information message \n\
 \t<bold>-v | --verbose</bold>\t\tincrease script verbosity \n\
