@@ -1,6 +1,6 @@
 .\" author: Les Ateliers Pierrot
 
-.TH  "Dev Tools" "3" "2013-11-04" "Version 1.2.0" "devtools.sh Manual"
+.TH  "Dev Tools" "3" "2013-11-05" "Version 1.2.1" "devtools.sh Manual"
 
 .SH NAME
 
