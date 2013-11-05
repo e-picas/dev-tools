@@ -51,8 +51,10 @@ if [ ! $TARGETSERVER 2&> /dev/null ] || [ -z "$TARGETSERVER" ]; then
     error "No target defined for the synchronization ! (use the '--target' option or the 'DEFAULT_SYNC_SERVER' configuration var)"
 fi
 
+_TARGET="${_TARGET%/}/"
+
 verecho "> syncing '$_TARGET' to '${TARGETSERVER}' ..."
-if $DEBUG; then
+if $DRYRUN; then
     iexec "rsync --dry-run $RSYNC_OPTIONS $_TARGET $TARGETSERVER"
     rsync --dry-run $RSYNC_OPTIONS $_TARGET $TARGETSERVER
 else
@@ -61,7 +63,7 @@ fi
 if [ ! -z "$TARGETENV" ]; then
     SUFFIX="__`echo ${TARGETENV} | tr '[:lower:]' '[:upper:]'`__"
     verecho "> deploying files with '$SUFFIX' suffix ..."
-    if $DEBUG; then
+    if $DRYRUN; then
         iexec "find \"$_TARGET\" -name \"*${SUFFIX}\" -exec sh -c 'destfile=\"\${1%%\$2}\" && destfilepath=\$(echo \"\$destfile\" | sed \"s!${_TARGET}!${TARGETSERVER}!\") && rsync $RSYNC_OPTIONS --dry-run --no-R --no-implied-dirs \"\$1\" \"\$destfilepath\"' _ {} \"$SUFFIX\" \;"
     else
         iexec "find \"$_TARGET\" -name \"*${SUFFIX}\" -exec sh -c 'destfile=\"\${1%%\$2}\" && destfilepath=\$(echo \"\$destfile\" | sed \"s!${_TARGET}!${TARGETSERVER}!\") && rsync $RSYNC_OPTIONS --no-R --no-implied-dirs \"\$1\" \"\$destfilepath\"' _ {} \"$SUFFIX\" \;"
