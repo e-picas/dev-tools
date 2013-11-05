@@ -177,9 +177,9 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 
 ##@ LIB_NAME LIB_VERSION LIB_DATE LIB_GITVERSION
 declare -rx LIB_NAME="Piwi Bash library"
-declare -rx LIB_VERSION="1.0.0-test"
+declare -rx LIB_VERSION="1.0.0"
 declare -rx LIB_DATE="2013-11-03"
-declare -rx LIB_GITVERSION="master@c05254d4e4b58b3b4a2c9a4c5dcad0449ca3cac9"
+declare -rx LIB_GITVERSION="master@f06c50d7cf51379451edb014883903aaad9ee42a"
 declare -rx LIB_PRESENTATION="The open source bash library of Les Ateliers Pierrot"
 declare -rx LIB_LICENSE="GPL-3.0"
 declare -rx LIB_LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
@@ -1871,7 +1871,7 @@ for pres in "${INTLIB_PRESET_ALLOWED[@]}"; do
 done
 DESCRIPTION="<bold>Bash</bold>, the \"<${COLOR_NOTICE}>Bourne-Again-SHell</${COLOR_NOTICE}>\", is a <underline>Unix shell</underline> written for the GNU Project as a free software replacement for the original Bourne shell (sh). \n\
 \tThe present library is a tool for Bash scripts facilities.\n\
-\tTo use the library, just include its source file using: \`<bold>source path/to/bash-library.sh</bold>\` and call its methods.\n\n\
+\tTo use the library, just include its source file using: \`<bold>source path/to/piwi-bash-library.sh</bold>\` and call its methods.\n\n\
 \tA direct call of the library is an interface to manage a copy of this script using one of the following actions:\n\
 \t<bold>install</bold>\t\t\t\tinstall a copy locally or in your system\n\
 \t<bold>version</bold>\t\t\t\tget a copy version infos ; use option '-q' to get only the version number\n\
