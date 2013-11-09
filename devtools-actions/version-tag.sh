@@ -53,7 +53,9 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
 done
 
 _TARGET=$(realpath "$_TARGET")
-HOOK_PATH=$(realpath "${_TARGET}/${HOOK_PATH}")
+if [ ! -z $HOOK_PATH ]; then
+    HOOK_PATH=$(realpath "${_TARGET}/${HOOK_PATH}")
+fi
 
 if [ -z "$TAG_NAME" ]; then
     gittags=( $(cd $_TARGET && git tag | sort -n) )
