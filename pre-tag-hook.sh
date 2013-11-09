@@ -15,6 +15,7 @@ BRANCH_NAME="$3"
 
 _VERSION="${TAG_NAME/v/}"
 _DATE=$(git log -1 --format="%ci" --date=short | cut -s -f 1 -d ' ')
+_BINFILE="devtools.sh"
 _MANFILE="MANPAGE.md"
 _MANMANFILE="devtools.man"
 _MDEBIN="vendor/bin/markdown-extended"
@@ -24,6 +25,13 @@ if [ ! -f "$_MDEBIN" ]; then
     echo "If you want to install the markdown tool, run 'composer update --dev' ..."
     prompt 'Do you want to continue' 'Y/n' 'y'
     if [ "$USERRESPONSE" != 'y' ]; then exit 0; fi
+fi
+
+if [ -f "$_BINFILE" ]; then
+    sed -i '' -e "s|^declare -rx VERSION=\".*\"$|declare -rx VERSION=\"${_VERSION}\"|" "$_BINFILE";
+    git add "$_BINFILE"
+else
+    verecho "!! > Binary file '${_BINFILE}' not found! (can't update version number and date)"
 fi
 
 if [ -f "$_MANFILE" ]; then
