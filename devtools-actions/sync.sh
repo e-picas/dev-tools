@@ -17,7 +17,7 @@ ACTION_SYNOPSIS="[--env=env]  [--target=server]  [--options=\"rsync options\"]"
 ACTION_CFGVARS=( DEFAULT_SYNC_SERVER DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_ENV )
 if $SCRIPTMAN; then return; fi
 
-TARGETENV=false
+TARGETENV=""
 TARGETSERVER=""
 RSYNC_OPTIONS=""
 
