@@ -13,7 +13,7 @@
 
 ###### Current version
 declare -x NAME="DevTools"
-declare -rx VERSION="1.0.0"
+declare -rx VERSION="1.2.3"
 
 ###### First paths
 declare -rx _REALPATH="$0"
