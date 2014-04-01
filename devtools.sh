@@ -1,10 +1,24 @@
 #!/bin/bash
 #
-# DevTools - Packages development & deployment facilities
-# Copyleft (c) 2013 Pierre Cassat and contributors
+# Dev-Tools - Packages development & deployment facilities
+# Copyleft (C) 2013-2014 Pierre Cassat & contributors
+# <http://github.com/atelierspierrot/dev-tools>
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
-# License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <http://github.com/atelierspierrot/devtools>
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# 
+# ------------------
 #
 # Global help : `devtools.sh -h` OR `devtools.sh help`
 # Action help : `devtools.sh action -h` OR `devtools.sh help action`
@@ -123,7 +137,8 @@ declare -x DEPLOY_HELP="Run option '-h' for help.";
 declare -x DEPLOY_ACTIONS_HELP="Run option 'help action' for help about a specific action.";
 declare -x SHORT_DESCRIPTION="This helper script will assist you to execute various common actions on a project and its environment dependencies during development.\n\
 \tRun option '<bold>help action</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
-declare -x SEE_ALSO="This tool is an open source stuff licensed under GNU/GPL v3: <http://github.com/atelierspierrot/devtools>\n\
+declare -x SEE_ALSO="This is free software: you are free to change and redistribute it ; there is NO WARRANTY, to the extent permitted by law.\n\
+\tThis tool is an open source stuff licensed under GNU/GPL v3: <http://github.com/atelierspierrot/devtools>\n\
 \tTo transmit a bug or an evolution: <http://github.com/atelierspierrot/devtools/issues>\n\
 \tThis tool is based on the Piwi Bash Library: <http://github.com/atelierspierrot/piwi-bash-library>";
 declare -x COMMON_OPTIONS_GLOBAL="-h|-V"

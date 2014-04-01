@@ -447,7 +447,21 @@ To make a dry run before really executing the actions, use:
 
 ## LICENSE
 
-The library is licensed under GPL-3.0 - Copyleft (c) Les Ateliers Pierrot
+Copyleft (C) 2013-2014 Pierre Cassat & contributors
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
 <http://www.ateliers-pierrot.fr/> - Some rights reserved. For documentation,
 sources & updates, see <http://github.com/atelierspierrot/devtools>. 
 To read GPL-3.0 license conditions, see <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -458,7 +472,9 @@ To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 
 ## AUTHOR
 
-**Les Ateliers Pierrot** <http://www.ateliers-pierrot.fr/>.
+**Les Ateliers Pierrot** <http://www.ateliers-pierrot.fr/> - Paris, France.
+
+Created and maintained by **Pierre Cassat** & contributors.
 
 ## SEE ALSO
 

@@ -190,18 +190,22 @@ To report a bug, please create a ticket at <http://github.com/php-carteblanche/d
 
 ## Author & License
 
->    Dev Tools
+    Dev-Tools - Packages development & deployment facilities
+    Copyleft (C) 2013-2014 Pierre Cassat & contributors
+    <http://github.com/atelierspierrot/dev-tools>
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
 
->    http://github.com/atelierspierrot/dev-tools
-
->    Copyleft 2013-2014, Pierre Cassat and contributors
-
->    Licensed under the GPL Version 3 license.
-
->    http://opensource.org/licenses/GPL-3.0
-
->    ----
-
->    Les Ateliers Pierrot - Paris, France
-
->    <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
+    Les Ateliers Pierrot - Paris, France
+    <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
