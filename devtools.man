@@ -13,15 +13,25 @@ devtools - Packages development & deployment facilities
 \fBdevtools.sh action [common options] [script options [=value]] --\fP
 
 .PP
+\fBdevtools.sh\fP  [\fB-f\fP|\fB-i\fP|\fB-q\fP|\fB-v\fP]  [\fB-x\fP|\fB--dry-run\fP]  [\fB-p\fP | \fB--path\fP \fI=path\fP]  ...
+    ... help  <action>  [\fB--less\fP]  [\fB--more\fP]
+    ... install
+    ... uninstall
+    ... self-check
+    ... self-update
+    --
+
+.PP
 \fBdevtools.sh\fP  <action>  [\fB-h\fP|\fB--help\fP|\fB-V\fP]  [\fB-f\fP|\fB-i\fP|\fB-q\fP|\fB-v\fP]  [\fB-x\fP|\fB--dry-run\fP]  [\fB-p\fP | \fB--path\fP \fI=path\fP]  ...
     ... cleanup
+    ... flush
     ... config  [\fB--var\fP \fI=name\fP]  [\fB--val\fP \fI=value\fP]  [\fB--filename\fP]  [\fB--full\fP] 
     ... deploy  [\fB--env\fP \fI=env\fP] 
     ... extract  [\fB--begin\fP \fI=mask\fP]  [\fB--end\fP \fI=mask\fP]  [\fB--output\fP \fI=filename\fP]  [\fB--filename\fP] 
     ... fix-rights  [\fB--files\fP \fI=chmod\fP]  [\fB--dirs\fP \fI=chmod\fP]  [\fB--bin\fP \fI=path\fP]  [\fB--bin-mask\fP \fI=mask\fP] 
     ... md2man  [\fB--source\fP \fI=path\fP]  [\fB--filename\fP \fI=filename\fP]  [\fB--markdown\fP \fI=bin path\fP]
     ... manpage  [\fB--source\fP \fI=path\fP]  [\fB--filename\fP \fI=filename\fP]  [\fB--type\fP \fI=type\fP]  [\fB--dir\fP \fI=dir path\fP]  [\fB--markdown\fP \fI=bin path\fP]  [\fB--whatis\fP \fI=bin path\fP]  [\fB--makewhatis\fP \fI=bin path\fP] 
-    ... sync  [\fB--env\fP \fI=env\fP]  [\fB--target\fP \fI=server\fP]  [\fB--options\fP \fI="rsync options"\fP] 
+    ... sync  [\fB--env\fP \fI=env\fP]  [\fB--target\fP \fI=server\fP]  [\fB--options\fP \fI="rsync options"\fP]  [\fB--env-options\fP \fI="rsync options"\fP]  [\fB--no-env\fP] 
     ... version-tag  [\fB--name\fP \fI=version\fP]  [\fB--branch\fP \fI=name\fP]  [\fB--hook\fP \fI=path\fP]  [\fB--no-hook\fP] 
     --
 
@@ -116,6 +126,18 @@ See the help information about the script or an action.
 The `\fS--less\fP` option shows the help information using the `\fSless\fP` program. The `\fS--more\fP`
 option shows the help information using the `\fSmore\fP` program. If both options are used,
 the 'less' program will be choosed preferabily.
+.TP
+\fBinstall\fP
+install the DevTools in your system
+.TP
+\fBuninstall\fP
+uninstall the DevTools from your system
+.TP
+\fBself-check\fP
+check if installed DevTools are up-to-date
+.TP
+\fBself-update\fP
+actually update DevTools
 .PP
 \fIThe following actions are currently available:\fP
 
@@ -129,6 +151,20 @@ This will clean (remove) all OS or IDE specific files from the project
 
 .EX
 devtools.sh  cleanup  -[common options ...]  [--dry-run]  --
+.EE
+.RE
+
+.RE
+.RS
+.IP \fBFlush\fP
+
+.PP
+This will clean (remove) all contents recursively from temporary directories
+(configuration variable: `\fSDEFAULT_FLUSH_DIRNAMES\fP`).
+.RS
+
+.EX
+devtools.sh  flush  -[common options ...]  [--dry-run]  --
 .EE
 .RE
 
@@ -321,6 +357,13 @@ an options string used for the 'rsync' command (configuration variable: `\fSDEFA
 .TP
 \fB--env\fP =env
 the environment shortcut to deploy if so (configuration variable: `\fSDEFAULT_SYNC_ENV\fP`)
+.TP
+\fB--no-env\fP
+skip any configured environment deployment
+.TP
+\fB--env-options\fP ="rsync opts"
+an options string used for the 'rsync' command when deploying the environment files
+(configuration variable: `\fSDEFAULT_SYNC_RSYNC_ENV_OPTIONS\fP`)
 .RE
 .RS
 .IP \fBVersion-tag\fP
@@ -367,7 +410,7 @@ the script can help you to manage this type of configuration.
 .IP \fBGlobal\fP
 .TP
 DEFAULT_BASHLIBRARY_PATH
-relative path from your project dir to 'bash-library.sh' ; default is `\fSbash-library/bash-library.sh\fP`
+relative path from your project dir to 'piwi-bash-library.sh' ; default is `\fSpiwi-bash-library/piwi-bash-library.sh\fP`
 .TP
 DEFAULT_USER_CONFIG_FILE
 default project config file (DO NOT CHANGE after a first usage) ; default is `\fS.devtools_globals\fP`
@@ -443,7 +486,7 @@ the `\fSwhich\fP` command
 DEFAULT_SYNC_SERVER DEFAULT_SYNC_ENV
 default distant server and environment to synchronize when using action `\fSsync\fP`
 .TP
-DEFAULT_SYNC_RSYNC_OPTIONS
+DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_RSYNC_ENV_OPTIONS
 default options to use with the `\fSrysnc\fP` command when using action `\fSsync\fP` ; default is
 `\fSavrlzh\fP` which may be used for a default synchronization keeping files permissions
 .RE
@@ -546,5 +589,5 @@ To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 .SH SEE ALSO
 
 .PP
-bash-library(3)
+piwi-bash-library(3)
 
