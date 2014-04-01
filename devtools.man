@@ -15,6 +15,7 @@ devtools - Packages development & deployment facilities
 .PP
 \fBdevtools.sh\fP  <action>  [\fB-h\fP|\fB--help\fP|\fB-V\fP]  [\fB-f\fP|\fB-i\fP|\fB-q\fP|\fB-v\fP]  [\fB-x\fP|\fB--dry-run\fP]  [\fB-p\fP | \fB--path\fP \fI=path\fP]  ...
     ... cleanup
+    ... flush
     ... config  [\fB--var\fP \fI=name\fP]  [\fB--val\fP \fI=value\fP]  [\fB--filename\fP]  [\fB--full\fP] 
     ... deploy  [\fB--env\fP \fI=env\fP] 
     ... extract  [\fB--begin\fP \fI=mask\fP]  [\fB--end\fP \fI=mask\fP]  [\fB--output\fP \fI=filename\fP]  [\fB--filename\fP] 
@@ -74,7 +75,7 @@ For a first start or a quick usage reminder, use option `\fS-h\fP` for a global 
 `\fSaction -h\fP` to see the help about a specific action and use option `\fS--dry-run\fP` to make dry runs.
 
 .PP
-This package is based on the <Piwi Bash Library>.
+This package is based on the Piwi Bash Library <http://github.com/atelierspierrot/piwi-bash-library>.
 
 .SH OPTIONS
 
@@ -129,6 +130,20 @@ This will clean (remove) all OS or IDE specific files from the project
 
 .EX
 devtools.sh  cleanup  -[common options ...]  [--dry-run]  --
+.EE
+.RE
+
+.RE
+.RS
+.IP \fBFlush\fP
+
+.PP
+This will clean (remove) all contents recursively from temporary directories
+(configuration variable: `\fSDEFAULT_FLUSH_DIRNAMES\fP`).
+.RS
+
+.EX
+devtools.sh  flush  -[common options ...]  [--dry-run]  --
 .EE
 .RE
 
@@ -492,7 +507,7 @@ configuration following the global `\fSdevtools.conf\fP` rules ; this file is se
 root directory of each project (defined by the '-p' option) and is loaded last.
 .TP
 \fIpiwi-bash-library/\fP
-This directory embeds the required third-party <Piwi Bash Library>.
+This directory embeds the required third-party Piwi Bash Library <https://github.com/atelierspierrot/piwi-bash-library>.
 If you already have a version of the library installed in your system, you can over-write
 the library loaded (and skip the embedded version) re-defining the `\fSDEFAULT_BASHLIBRARY_PATH\fP`
 of the global configuration file.
@@ -528,7 +543,25 @@ devtools.sh action --dry-run ...
 .SH LICENSE
 
 .PP
-The library is licensed under GPL-3.0 - Copyleft (c) Les Ateliers Pierrot
+Copyleft (C) 2013-2014 Pierre Cassat & contributors
+
+.PP
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+.PP
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+.PP
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+.PP
 <http://www.ateliers-pierrot.fr/> - Some rights reserved. For documentation,
 sources & updates, see <http://github.com/atelierspierrot/devtools>. 
 To read GPL-3.0 license conditions, see <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -541,7 +574,10 @@ To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 .SH AUTHOR
 
 .PP
-\fBLes Ateliers Pierrot\fP <http://www.ateliers-pierrot.fr/>.
+\fBLes Ateliers Pierrot\fP <http://www.ateliers-pierrot.fr/> - Paris, France.
+
+.PP
+Created and maintained by \fBPierre Cassat\fP & contributors.
 
 .SH SEE ALSO
 
