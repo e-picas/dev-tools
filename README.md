@@ -92,7 +92,7 @@ To see a full help info with the list of available actions, run:
 
 To see a specific help info for an action, run:
 
-    sh ./devtools.sh -h action
+    sh ./devtools.sh help action
 
 To actually run an action, use:
 
@@ -192,9 +192,9 @@ To report a bug, please create a ticket at <http://github.com/php-carteblanche/d
 
 >    Dev Tools
 
->    http://github.com/php-carteblanche/dev-tools
+>    http://github.com/atelierspierrot/dev-tools
 
->    Copyleft 2013, Pierre Cassat and contributors
+>    Copyleft 2013-2014, Pierre Cassat and contributors
 
 >    Licensed under the GPL Version 3 license.
 

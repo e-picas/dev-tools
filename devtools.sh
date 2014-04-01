@@ -120,7 +120,7 @@ load_actions_infos
 declare -x PRESENTATION="Packages development & deployment facilities"
 declare -x SYNOPSIS="~\$ <bold>${0}</bold>  [<underline>ACTION</underline>]  -[<underline>COMMON OPTIONS</underline>]  -[<underline>SCRIPT OPTIONS</underline> [=<underline>VALUE</underline>]]  --"
 declare -x DEPLOY_HELP="Run option '-h' for help.";
-declare -x DEPLOY_ACTIONS_HELP="Run option '-h action' for help about a specific action.";
+declare -x DEPLOY_ACTIONS_HELP="Run option 'help action' for help about a specific action.";
 declare -x SHORT_DESCRIPTION="This helper script will assist you to execute various common actions on a project and its environment dependencies during development.\n\
 \tRun option '<bold>help action</bold>' to see the help about a specific action and use option '<bold>--dry-run</bold>' to make dry runs.";
 declare -x SEE_ALSO="This tool is an open source stuff licensed under GNU/GPL v3: <http://github.com/atelierspierrot/devtools>\n\
@@ -397,6 +397,11 @@ helpAction () {
     show_help
 }
 
+usageAction () {
+    echo "${SYNOPSIS_ERROR}"
+    exit 0
+}
+
 installAction () {
     echo "todo"
     exit 0
@@ -451,6 +456,7 @@ done
 if [ ! -z "$ACTION" ]; then
     case "$ACTION" in
         help)  helpAction;;
+        usage)  usageAction;;
         install) installAction;;
         uninstall) uninstallAction;;
         self-update) selfUpdateAction;;
