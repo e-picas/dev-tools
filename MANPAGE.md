@@ -29,7 +29,7 @@ devtools - Packages development & deployment facilities
     ... fix-rights  [**--files** *=chmod*]  [**--dirs** *=chmod*]  [**--bin** *=path*]  [**--bin-mask** *=mask*] 
     ... md2man  [**--source** *=path*]  [**--filename** *=filename*]  [**--markdown** *=bin path*]
     ... manpage  [**--source** *=path*]  [**--filename** *=filename*]  [**--type** *=type*]  [**--dir** *=dir path*]  [**--markdown** *=bin path*]  [**--whatis** *=bin path*]  [**--makewhatis** *=bin path*] 
-    ... sync  [**--env** *=env*]  [**--target** *=server*]  [**--options** *="rsync options"*] 
+    ... sync  [**--env** *=env*]  [**--target** *=server*]  [**--options** *="rsync options"*]  [**--env-options** *="rsync options"*]  [**--no-env**] 
     ... version-tag  [**--name** *=version*]  [**--branch** *=name*]  [**--hook** *=path*]  [**--no-hook**] 
     -- 
 
@@ -263,6 +263,13 @@ Will `rsync` a project directory to a target, which can use SSH protocol if so ;
 **--env** =env
 :   the environment shortcut to deploy if so (configuration variable: `DEFAULT_SYNC_ENV`)
 
+**--no-env**
+:   skip any configured environment deployment
+
+**--env-options** ="rsync opts"
+:   an options string used for the 'rsync' command when deploying the environment files
+(configuration variable: `DEFAULT_SYNC_RSYNC_ENV_OPTIONS`) 
+
 #### version-tag
 
 This will create a new GIT version TAG according to the semantic versioning (see <http://semver.org/>).
@@ -365,7 +372,7 @@ DEFAULT_MANPAGE_WHATIS_BIN DEFAULT_MANPAGE_MAKEWHATIS_BIN DEFAULT_MANPAGE_MARKDO
 DEFAULT_SYNC_SERVER DEFAULT_SYNC_ENV
 :   default distant server and environment to synchronize when using action `sync`
 
-DEFAULT_SYNC_RSYNC_OPTIONS
+DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_RSYNC_ENV_OPTIONS
 :   default options to use with the `rysnc` command when using action `sync` ; default is
     `avrlzh` which may be used for a default synchronization keeping files permissions
 

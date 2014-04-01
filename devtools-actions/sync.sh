@@ -12,14 +12,17 @@
 ACTION_DESCRIPTION="Will 'rsync' a project directory to a target, which can use SSH protocol if so ; use the '-x' option to process a '--dry-run' rsync.";
 ACTION_OPTIONS="<bold>--target=SERVER</bold>\t\t\tthe server name to use for synchronization (config var: 'DEFAULT_SYNC_SERVER') \n\
 \t<bold>--options=\"RSYNC OPTIONS\"</bold>\tan options string used for the 'rsync' command (config var: 'DEFAULT_SYNC_RSYNC_OPTIONS') \n\
-\t<bold>--env=ENV</bold>\t\t\tthe environment shortcut to deploy if so (config var: 'DEFAULT_SYNC_ENV')";
-ACTION_SYNOPSIS="[--env=env]  [--target=server]  [--options=\"rsync options\"]"
-ACTION_CFGVARS=( DEFAULT_SYNC_SERVER DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_ENV )
+\t<bold>--env=ENV</bold>\t\t\tthe environment shortcut to deploy if so (config var: 'DEFAULT_SYNC_ENV') \n\
+\t<bold>--no-env</bold>\t\t\tskip environment deployment \n\
+\t<bold>--env-options=\"RSYNC OPTIONS\"</bold>\tan options string used for the 'rsync' command deploying env (config var: 'DEFAULT_SYNC_RSYNC_ENV_OPTIONS')";
+ACTION_SYNOPSIS="[--env=env]  [--target=server]  [--options=\"rsync options\"]  [--env-options=\"rsync options\"]  [--no-env]"
+ACTION_CFGVARS=( DEFAULT_SYNC_SERVER DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_RSYNC_ENV_OPTIONS DEFAULT_SYNC_ENV )
 if $SCRIPTMAN; then return; fi
 
 TARGETENV=""
 TARGETSERVER=""
 RSYNC_OPTIONS=""
+RSYNC_ENV_OPTIONS=""
 
 if [ ! -z "$DEFAULT_SYNC_SERVER" ]; then
     TARGETSERVER="$DEFAULT_SYNC_SERVER"
@@ -30,6 +33,9 @@ fi
 if [ ! -z "$DEFAULT_SYNC_ENV" ]; then
     TARGETENV="$DEFAULT_SYNC_ENV"
 fi
+if [ ! -z "$DEFAULT_SYNC_RSYNC_ENV_OPTIONS" ]; then
+    RSYNC_ENV_OPTIONS="$DEFAULT_SYNC_RSYNC_ENV_OPTIONS"
+fi
 
 OPTIND=1
 while getopts ":${OPTIONS_ALLOWED}" OPTION; do
@@ -39,8 +45,10 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
             case $OPTARG in
                 path*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libvers) ;;
                 env*) TARGETENV=$LONGOPTARG;;
+                no-env) TARGETENV="";;
                 target*) TARGETSERVER=$LONGOPTARG;;
                 options*) RSYNC_OPTIONS=$LONGOPTARG;;
+                env-options*) RSYNC_ENV_OPTIONS=$LONGOPTARG;;
                 *) simple_error "Unkown option '${OPTARG#=*}'";;
             esac ;;
         \?) ;;
@@ -64,9 +72,9 @@ if [ ! -z "$TARGETENV" ]; then
     SUFFIX="__`echo ${TARGETENV} | tr '[:lower:]' '[:upper:]'`__"
     verecho "> deploying files with '$SUFFIX' suffix ..."
     if $DRYRUN; then
-        iexec "find \"$_TARGET\" -name \"*${SUFFIX}\" -exec sh -c 'destfile=\"\${1%%\$2}\" && destfilepath=\$(echo \"\$destfile\" | sed \"s!${_TARGET}!${TARGETSERVER}!\") && rsync $RSYNC_OPTIONS --dry-run --no-R --no-implied-dirs \"\$1\" \"\$destfilepath\"' _ {} \"$SUFFIX\" \;"
+        iexec "find \"$_TARGET\" -name \"*${SUFFIX}\" -exec sh -c 'destfile=\"\${1%%\$2}\" && destfilepath=\$(echo \"\$destfile\" | sed \"s!${_TARGET}!${TARGETSERVER}!\") && rsync $RSYNC_ENV_OPTIONS --dry-run --no-R --no-implied-dirs \"\$1\" \"\$destfilepath\"' _ {} \"$SUFFIX\" \;"
     else
-        iexec "find \"$_TARGET\" -name \"*${SUFFIX}\" -exec sh -c 'destfile=\"\${1%%\$2}\" && destfilepath=\$(echo \"\$destfile\" | sed \"s!${_TARGET}!${TARGETSERVER}!\") && rsync $RSYNC_OPTIONS --no-R --no-implied-dirs \"\$1\" \"\$destfilepath\"' _ {} \"$SUFFIX\" \;"
+        iexec "find \"$_TARGET\" -name \"*${SUFFIX}\" -exec sh -c 'destfile=\"\${1%%\$2}\" && destfilepath=\$(echo \"\$destfile\" | sed \"s!${_TARGET}!${TARGETSERVER}!\") && rsync $RSYNC_ENV_OPTIONS --no-R --no-implied-dirs \"\$1\" \"\$destfilepath\"' _ {} \"$SUFFIX\" \;"
     fi
 fi
 verecho "_ ok"
