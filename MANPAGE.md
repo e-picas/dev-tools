@@ -15,6 +15,7 @@ devtools - Packages development & deployment facilities
 
 **devtools.sh**  <action>  [**-h**|**--help**|**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
     ... cleanup
+    ... flush
     ... config  [**--var** *=name*]  [**--val** *=value*]  [**--filename**]  [**--full**] 
     ... deploy  [**--env** *=env*] 
     ... extract  [**--begin** *=mask*]  [**--end** *=mask*]  [**--output** *=filename*]  [**--filename**] 
@@ -105,6 +106,13 @@ This will clean (remove) all OS or IDE specific files from the project
 (configuration variable: `DEFAULT_CLEANUP_NAMES`).
 
     devtools.sh  cleanup  -[common options ...]  [--dry-run]  --
+
+#### flush
+
+This will clean (remove) all contents recursively from temporary directories
+(configuration variable: `DEFAULT_FLUSH_DIRNAMES`).
+
+    devtools.sh  flush  -[common options ...]  [--dry-run]  --
 
 #### config
 
