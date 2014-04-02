@@ -64,7 +64,13 @@ if [ -f "$CFGFILE" ]; then source "$CFGFILE"; else echo "$CFGFILE"; exit 1; fi
 
 ######## Inclusion of the lib
 declare -rx LIBFILE=`findRequirements "${DEFAULT_BASHLIBRARY_PATH}" "bash library"`
-if [ -f "$LIBFILE" ]; then source "$LIBFILE"; else echo "$LIBFILE"; exit 1; fi
+declare -rx USERBINLIBFILE=`findRequirements "${HOME}/bin/piwi-bash-library.sh" "bash library"`
+declare -rx BINLIBFILE=`findRequirements "/usr/local/bin/piwi-bash-library.sh" "bash library"`
+if [ -f "$LIBFILE" ]; then source "$LIBFILE"; 
+elif [ -f "$USERBINLIBFILE" ]; then source "$USERBINLIBFILE"; 
+elif [ -f "$BINLIBFILE" ]; then source "$BINLIBFILE"; 
+else echo "$LIBFILE"; exit 1;
+fi
 
 ######## Path of the actions
 declare -rx _BASEDIR=`findRequirements "${_DEVTOOLS_ACTIONSDIR}" "actions directory"`
@@ -112,6 +118,7 @@ MANPAGE_NODEPEDENCY=true
 # paths
 declare -x _BACKUP_DIR="${_BASEDIR}/backup/"
 declare -x _TARGET=`pwd`
+declare -x _PATHARG
 declare -x SCRIPTMAN=false
 
 # per action vars
@@ -197,7 +204,7 @@ script_version () {
     if ! $QUIET && isgitclone; then
         local gitcmd=$(which git)
         if [ -n "$gitcmd" ]; then
-            _echo "[git: `git rev-parse --abbrev-ref HEAD` `git rev-parse HEAD`]"
+            _echo "[git clone: `git rev-parse --abbrev-ref HEAD`@`git rev-parse HEAD`]"
         fi
     fi
     return 0
@@ -414,27 +421,80 @@ helpAction () {
 
 usageAction () {
     echo "${SYNOPSIS_ERROR}"
-    exit 0
 }
 
 installAction () {
-    echo "todo"
-    exit 0
+    local _info=${1:-true}
+    local _gitversion=$(gitversion)
+    _PWD=`pwd`
+    _BIN=${_PATHARG}
+    if [ -z ${_BIN} ]; then
+        _BIN=${HOME}/bin
+    fi
+    if [ ! -d ${_BIN} ]; then mkdir ${_BIN}; fi
+    if [ "$_info" == 'true' ]; then
+        verecho "> installing ${NAME} to \"${_BIN}\""
+    fi
+    iexec "cp ${_PWD}/devtools.sh ${_BIN} \
+        && cp -R ${_PWD}/devtools-actions ${_BIN} \
+        && cp ${_PWD}/devtools.conf ${_BIN} \
+        && cp ${_PWD}/devtools.man ${_BIN} \
+        && chmod a+x ${_BIN}/devtools.sh \
+        && echo $_gitversion > ${_BIN}/devtools.version";
+    local _libdir=${_BIN}/piwi-bash-library
+    if [ ! -d $_libdir ]; then
+        iexec "cp -R ${_PWD}/piwi-bash-library ${_BIN}"
+    fi
+    if [ "$_info" == 'true' ]; then
+        quietecho "OK - ${NAME} version [${_gitversion}] installed in \"${_BIN}\""
+    fi
 }
 
 uninstallAction () {
-    echo "todo"
-    exit 0
+    _BIN=${_PATHARG}
+    if [ -z ${_BIN} ]; then
+        _BIN=${HOME}/bin
+    fi
+    verecho "> uninstalling ${NAME} from \"${_BIN}\""
+    iexec "for FILE in \$(find ${_BIN} -name \"devtools*\"); do rm -rf \${FILE}; done"
+    local _libdir=${_BIN}/piwi-bash-library
+    if [ -d $_libdir ]; then
+        iexec "rm -rf $_libdir"
+    fi
+    quietecho "OK - ${NAME} un-installed from \"${_BIN}\""
 }
 
 selfCheckAction () {
-    echo "todo"
-    exit 0
+    _BIN=${_PATHARG}
+    if [ -z ${_BIN} ]; then
+        _BIN=${HOME}/bin
+    fi
+    local target_vers=$(gitversion)
+    local target_sha=$(gitversion_extract_sha "${target_vers}")
+    local target_branch=$(gitversion_extract_branch "${target_vers}")
+    if [ "${target_branch}" == 'master' ]; then target_branch='HEAD'; fi;
+    local remote_vers=$(git fetch --all 1> /dev/null; git ls-remote | awk "/${target_branch}/ {print \$1}")
+    local remote_sha=$(gitversion_extract_sha "${remote_vers}")
+    local remote_branch=$(gitversion_extract_branch "${remote_vers}")
+    if [ "${target_sha}" != "${remote_sha}" ]
+        then echo "A new version is available ...  You should run '$0 self-update [opts]' to get last version."; return 1;
+        else
+            echo "OK - ${NAME} is up-to-date"
+            if [ -f ${_BIN}/devtools.sh ]; then touch "${_BIN}/devtools.sh";
+            elif [ -f ${_BIN}/devtools ]; then touch "${_BIN}/devtools";
+            fi
+    fi
 }
 
 selfUpdateAction () {
-    echo "todo"
-    exit 0
+    _BIN=${_PATHARG}
+    if [ -z ${_BIN} ]; then
+        _BIN=${HOME}/bin
+    fi
+    verecho "> updating ${NAME} in \"${_BIN}\""
+    installAction false
+    local _gitversion=$(gitversion)
+    quietecho "OK - ${NAME} updated to version [${_gitversion}] in \"${_BIN}\""
 }
 
 #### first setup & options treatment ##########################
@@ -457,10 +517,10 @@ OPTIND=1
 while getopts ":at:${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
-        p) export _TARGET=$OPTARG;;
+        p) export _PATHARG=$OPTARG; export _TARGET=$_PATHARG;;
         -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
             case $OPTARG in
-                path*) export _TARGET=$LONGOPTARG;;
+                path*) export _PATHARG=$OPTARG; export _TARGET=$_PATHARG;;
                 ?) ;;
             esac ;;
         ?);;
@@ -470,12 +530,12 @@ done
 # special help option
 if [ ! -z "$ACTION" ]; then
     case "$ACTION" in
-        help)  helpAction;;
-        usage)  usageAction;;
-        install) installAction;;
-        uninstall) uninstallAction;;
-        self-update) selfUpdateAction;;
-        self-check) selfCheckAction;;
+        help)  helpAction; exit 0;;
+        usage)  usageAction; exit 0;;
+        install) installAction; exit 0;;
+        uninstall) uninstallAction; exit 0;;
+        self-update) selfUpdateAction; exit 0;;
+        self-check) selfCheckAction; exit 0;;
         *) ;;
     esac
 fi

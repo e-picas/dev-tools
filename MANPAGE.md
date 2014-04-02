@@ -13,6 +13,15 @@ devtools - Packages development & deployment facilities
 
 **devtools.sh action [common options] [script options [=value]] --**
 
+**devtools.sh**  [**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
+    ... help  <action>  [**--less**]  [**--more**]
+    ... usage
+    ... install  [<path> = ~/bin/]
+    ... uninstall  [<path> = ~/bin/]
+    ... self-check  [<path> = ~/bin/]
+    ... self-update  [<path> = ~/bin/]
+    -- 
+
 **devtools.sh**  <action>  [**-h**|**--help**|**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
     ... cleanup
     ... flush
@@ -64,6 +73,8 @@ This package is based on the [Piwi Bash Library](http://github.com/atelierspierr
 
 ## OPTIONS
 
+Use special option `-V` to get script's version.
+
 *The following common options are supported:*
 
 **-p**, **--path** =path
@@ -97,6 +108,23 @@ This package is based on the [Piwi Bash Library](http://github.com/atelierspierr
 :   The `--less` option shows the help information using the `less` program. The `--more`
     option shows the help information using the `more` program. If both options are used,
     the 'less' program will be choosed preferabily.
+
+**install**
+:   Install the DevTools in your system.
+
+:        devtools.sh  install  -[common options ...]  --
+
+:   The `-p=... / --path=...` option can be defined to choose the installation path. It
+    default to current user's `$HOME/bin/` directory.
+
+**uninstall**
+:   uninstall the DevTools from your system
+
+**self-check**
+:   check if installed DevTools are up-to-date
+
+**self-update**
+:   actually update DevTools
 
 *The following actions are currently available:*
 
@@ -447,7 +475,8 @@ To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 
 **Les Ateliers Pierrot** <http://www.ateliers-pierrot.fr/> - Paris, France.
 
-Created and maintained by **Pierre Cassat** & contributors.
+Created and maintained by **Pierre Cassat** (*piwi* - <http://github.com/pierowbmstr>)
+& contributors.
 
 ## SEE ALSO
 
