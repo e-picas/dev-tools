@@ -16,6 +16,7 @@ devtools - Packages development & deployment facilities
 **devtools.sh**  [**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
     ... help  <action>  [**--less**]  [**--more**]
     ... usage
+    ... list-actions
     ... install  [<path> = ~/bin/]
     ... uninstall  [<path> = ~/bin/]
     ... self-check  [<path> = ~/bin/]
@@ -108,6 +109,9 @@ Use special option `-V` to get script's version.
 :   The `--less` option shows the help information using the `less` program. The `--more`
     option shows the help information using the `more` program. If both options are used,
     the 'less' program will be choosed preferabily.
+
+**list-actions**
+:   See available actions list.
 
 **install**
 :   Install the DevTools in your system.

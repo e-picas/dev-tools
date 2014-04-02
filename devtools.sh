@@ -179,11 +179,13 @@ for i in ${!ACTIONS_LIST[*]}; do
     fi
 done
 declare -x DESCRIPTION="${SHORT_DESCRIPTION}\n\n<bold>AVAILABLE ACTIONS</bold>${actionsdescription}"
+declare -x DESCRIPTION_LISTACTIONS="${actionsdescription}"
 declare -x OPTIONS="Internal actions are:\n\n\
 \t<bold>install</bold>\t\tinstall the package somewhere in your sytem\n\
 \t<bold>uninstall</bold>\tuninstall an installed package\n\
 \t<bold>self-check</bold>\tcheck if an installed package needs to be updated\n\
-\t<bold>self-update</bold>\tupdate an installed package\n\n\
+\t<bold>self-update</bold>\tupdate an installed package\n\
+\t<bold>list-actions</bold>\tsee available actions list\n\n\
 \tBelow is a list of common options available ; each action can accepts other options.\n\n\
 \t<bold>-p | --path=PATH</bold>\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
 \t<bold>-h | --help</bold>\t\tshow this information message \n\
@@ -502,6 +504,11 @@ selfUpdateAction () {
     quietecho "OK - ${NAME} updated to version [${_gitversion}] in \"${_BIN}\""
 }
 
+listActions () {
+	local tmp=$(parsecolortags "${DESCRIPTION_LISTACTIONS}\n")
+	_echo "${tmp}"
+}
+
 #### first setup & options treatment ##########################
 
 # transform options and get action
@@ -541,6 +548,7 @@ if [ ! -z "$ACTION" ]; then
         uninstall) uninstallAction; exit 0;;
         self-update) selfUpdateAction; exit 0;;
         self-check) selfCheckAction; exit 0;;
+        list-actions) listActions; exit 0;;
         *) ;;
     esac
 fi
