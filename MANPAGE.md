@@ -13,12 +13,13 @@ devtools - Packages development & deployment facilities
 
 **devtools.sh action [common options] [script options [=value]] --**
 
-**devtools.sh**  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
+**devtools.sh**  [**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
     ... help  <action>  [**--less**]  [**--more**]
-    ... install
-    ... uninstall
-    ... self-check
-    ... self-update
+    ... usage
+    ... install  [<path> = ~/bin/]
+    ... uninstall  [<path> = ~/bin/]
+    ... self-check  [<path> = ~/bin/]
+    ... self-update  [<path> = ~/bin/]
     -- 
 
 **devtools.sh**  <action>  [**-h**|**--help**|**-V**]  [**-f**|**-i**|**-q**|**-v**]  [**-x**|**--dry-run**]  [**-p** | **--path** *=path*]  ...
@@ -72,6 +73,8 @@ This package is based on the [Piwi Bash Library](http://github.com/atelierspierr
 
 ## OPTIONS
 
+Use special option `-V` to get script's version.
+
 *The following common options are supported:*
 
 **-p**, **--path** =path
@@ -107,7 +110,12 @@ This package is based on the [Piwi Bash Library](http://github.com/atelierspierr
     the 'less' program will be choosed preferabily.
 
 **install**
-:   install the DevTools in your system
+:   Install the DevTools in your system.
+
+:        devtools.sh  install  -[common options ...]  --
+
+:   The `-p=... / --path=...` option can be defined to choose the installation path. It
+    default to current user's `$HOME/bin/` directory.
 
 **uninstall**
 :   uninstall the DevTools from your system
@@ -474,7 +482,8 @@ To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 
 **Les Ateliers Pierrot** <http://www.ateliers-pierrot.fr/> - Paris, France.
 
-Created and maintained by **Pierre Cassat** & contributors.
+Created and maintained by **Pierre Cassat** (*piwi* - <http://github.com/pierowbmstr>)
+& contributors.
 
 ## SEE ALSO
 
