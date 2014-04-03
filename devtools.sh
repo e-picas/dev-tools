@@ -1,7 +1,8 @@
 #!/bin/bash
 #
 # Dev-Tools - Packages development & deployment facilities
-# Copyleft (C) 2013-2014 Pierre Cassat & contributors
+# Copyright (C) 2013-2014 "Les Ateliers Pierrot"
+# Created & maintained by Pierre Cassat & contributors
 # <http://github.com/atelierspierrot/dev-tools>
 # <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # 
@@ -427,7 +428,7 @@ helpAction () {
 }
 
 usageAction () {
-    echo "${SYNOPSIS_ERROR}"
+    _echo "${SYNOPSIS_ERROR}"
 }
 
 installAction () {
