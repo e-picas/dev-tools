@@ -36,7 +36,7 @@ devtools - Packages development & deployment facilities
     ... version-tag  [**--name** *=version*]  [**--branch** *=name*]  [**--hook** *=path*]  [**--no-hook**] 
     -- 
 
-## DESCRIPTION
+## DESCRIPTION_MANPAGE
 
 **DevTools** is a shell script that handles a set of actions (defined themselves as shell scripts)
 to execute something upon a package in development. The usage is quite simple as it just

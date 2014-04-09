@@ -21,23 +21,27 @@
 # action for Dev-Tools
 #
 
-ACTION_DESCRIPTION="This will clean all OS or IDE specific files from the project (config var: 'DEFAULT_CLEANUP_NAMES').";
+ACTION_NAME="Clean-Up"
+ACTION_VERSION="1.0.0-alpha"
+ACTION_DESCRIPTION_MANPAGE="This will clean all OS or IDE specific files from the project (config var: 'DEFAULT_CLEANUP_NAMES').";
 ACTION_OPTIONS="Current settings are <bold>${DEFAULT_CLEANUP_NAMES[@]}</bold>";
 ACTION_CFGVARS=( DEFAULT_CLEANUP_NAMES )
-if $SCRIPTMAN; then return; fi
+if ${SCRIPTMAN}; then return; fi
 
-if [ -z $DEFAULT_CLEANUP_NAMES ]; then
+if [ -z ${DEFAULT_CLEANUP_NAMES} ]; then
     error "Configuration var 'DEFAULT_CLEANUP_NAMES' not found !"
 fi
 
-_TARGET=$(realpath "$_TARGET")
+_TARGET=$(realpath "${_TARGET}")
 
-verecho "> cleaning files in '$_TARGET' ..."
+verecho "> cleaning files in '${_TARGET}' ..."
 for FNAME in "${DEFAULT_CLEANUP_NAMES[@]}"; do
-    if $VERBOSE; then
-        iexec "find $_TARGET -type f -name $FNAME -exec rm -v {} \;"
+    if ${VERBOSE}; then
+        iexec "find ${_TARGET} -type f -name ${FNAME} -exec rm -v {} \;"
+    elif ${FORCED}; then
+        iexec "find ${_TARGET} -type f -name ${FNAME} -exec rm -f {} \;"
     else
-        iexec "find $_TARGET -type f -name $FNAME -exec rm {} \;"
+        iexec "find ${_TARGET} -type f -name ${FNAME} -exec rm {} \;"
     fi
 done
 verecho "_ ok"
