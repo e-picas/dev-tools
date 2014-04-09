@@ -23,7 +23,7 @@
 
 ACTION_NAME="Configuration tool"
 ACTION_VERSION="1.0.0-alpha"
-ACTION_DESCRIPTION_MANPAGE="Manage the deploy facilities configuration for a package (stored in '${DEFAULT_PROJECT_CONFIG_FILE}' or '${DEFAULT_USER_CONFIG_FILE}') ; with no option, current config will be shown.";
+ACTION_DESCRIPTION="Manage the deploy facilities configuration for a package (stored in '${DEFAULT_PROJECT_CONFIG_FILE}' or '${DEFAULT_USER_CONFIG_FILE}') ; with no option, current config will be shown.";
 ACTION_OPTIONS="--global\twork with the global user configuration (in 'HOME/$DEFAULT_USER_CONFIG_FILE' file)\n\
 \t--var\t=NAME\tselect a configuration variable to read or define\n\
 \t--val\t=VALUE\tdefine a configuration variable value (requires the '--var' option to be defined)\n\

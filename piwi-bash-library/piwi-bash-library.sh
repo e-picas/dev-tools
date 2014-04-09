@@ -33,22 +33,22 @@
 
 #### ENVIRONMENT #############################################################################
 
-##@ SCRIPT_VARS = ( NAME VERSION DATE DESCRIPTION_MANPAGE LICENSE HOMEPAGE SYNOPSIS OPTIONS ) (read-only)
-declare -rxa SCRIPT_VARS=(NAME VERSION DATE DESCRIPTION_MANPAGE LICENSE HOMEPAGE SYNOPSIS OPTIONS)
+##@ SCRIPT_VARS = ( NAME VERSION DATE DESCRIPTION LICENSE HOMEPAGE SYNOPSIS OPTIONS ) (read-only)
+declare -rxa SCRIPT_VARS=(NAME VERSION DATE DESCRIPTION LICENSE HOMEPAGE SYNOPSIS OPTIONS)
 
-##@ USAGE_VARS = ( NAME VERSION DATE DESCRIPTION_MANPAGE_USAGE SYNOPSIS_USAGE OPTIONS_USAGE ) (read-only)
+##@ USAGE_VARS = ( NAME VERSION DATE DESCRIPTION_USAGE SYNOPSIS_USAGE OPTIONS_USAGE ) (read-only)
 ##@ USAGE_SUFFIX = "_USAGE"
-declare -rxa USAGE_VARS=(NAME VERSION DATE DESCRIPTION_MANPAGE_USAGE SYNOPSIS_USAGE OPTIONS_USAGE)
+declare -rxa USAGE_VARS=(NAME VERSION DATE DESCRIPTION_USAGE SYNOPSIS_USAGE OPTIONS_USAGE)
 declare -rx USAGE_SUFFIX="_USAGE"
 
-##@ VERSION_VARS = ( NAME VERSION DATE DESCRIPTION_MANPAGE COPYRIGHT LICENSE HOMEPAGE SOURCES ADDITIONAL_INFO ) (read-only)
+##@ VERSION_VARS = ( NAME VERSION DATE DESCRIPTION COPYRIGHT LICENSE HOMEPAGE SOURCES ADDITIONAL_INFO ) (read-only)
 # see http://www.gnu.org/prep/standards/standards.html#g_t_002d_002dversion
-declare -rxa VERSION_VARS=(NAME VERSION DATE DESCRIPTION_MANPAGE COPYRIGHT LICENSE HOMEPAGE SOURCES ADDITIONAL_INFO)
+declare -rxa VERSION_VARS=(NAME VERSION DATE DESCRIPTION COPYRIGHT LICENSE HOMEPAGE SOURCES ADDITIONAL_INFO)
 
-##@ MANPAGE_VARS = ( NAME VERSION DATE DESCRIPTION_MANPAGE_MANPAGE SYNOPSIS_MANPAGE OPTIONS_MANPAGE EXAMPLES_MANPAGE EXIT_STATUS_MANPAGE FILES_MANPAGE ENVIRONMENT_MANPAGE COPYRIGHT_MANPAGE HOMEPAGE_MANPAGE BUGS_MANPAGE AUTHOR_MANPAGE SEE_ALSO_MANPAGE ) (read-only)
+##@ MANPAGE_VARS = ( NAME VERSION DATE DESCRIPTION_MANPAGE SYNOPSIS_MANPAGE OPTIONS_MANPAGE EXAMPLES_MANPAGE EXIT_STATUS_MANPAGE FILES_MANPAGE ENVIRONMENT_MANPAGE COPYRIGHT_MANPAGE HOMEPAGE_MANPAGE BUGS_MANPAGE AUTHOR_MANPAGE SEE_ALSO_MANPAGE ) (read-only)
 ##@ MANPAGE_SUFFIX = "_MANPAGE"
 # see http://en.wikipedia.org/wiki/Man_page
-declare -rxa MANPAGE_VARS=(NAME VERSION DATE DESCRIPTION_MANPAGE_MANPAGE SYNOPSIS_MANPAGE OPTIONS_MANPAGE EXAMPLES_MANPAGE EXIT_STATUS_MANPAGE FILES_MANPAGE ENVIRONMENT_MANPAGE COPYRIGHT_MANPAGE HOMEPAGE_MANPAGE BUGS_MANPAGE AUTHOR_MANPAGE SEE_ALSO_MANPAGE)
+declare -rxa MANPAGE_VARS=(NAME VERSION DATE DESCRIPTION_MANPAGE SYNOPSIS_MANPAGE OPTIONS_MANPAGE EXAMPLES_MANPAGE EXIT_STATUS_MANPAGE FILES_MANPAGE ENVIRONMENT_MANPAGE COPYRIGHT_MANPAGE HOMEPAGE_MANPAGE BUGS_MANPAGE AUTHOR_MANPAGE SEE_ALSO_MANPAGE)
 declare -rx MANPAGE_SUFFIX="_MANPAGE"
 
 ##@ LIB_FLAGS = ( VERBOSE QUIET DEBUG INTERACTIVE FORCED ) (read-only)
@@ -152,12 +152,12 @@ declare -x COMMON_LONG_OPTIONS_ALLOWED_MASK="working-dir|force|help|interactive|
 ##@ ORIGINAL_SCRIPT_OPTS="$@" (read-only)
 ##@ SCRIPT_OPTS=() | SCRIPT_ARGS=() | SCRIPT_PROGRAMS=()
 ##@ OPTIONS_ALLOWED | LONG_OPTIONS_ALLOWED : to be defined by the script
+declare -rx ORIGINAL_SCRIPT_OPTS="$@"
 declare -xa SCRIPT_OPTS=()
 declare -xa SCRIPT_ARGS=()
 declare -xa SCRIPT_PROGRAMS=()
 declare -x OPTIONS_ALLOWED="${COMMON_OPTIONS_ALLOWED}"
 declare -x LONG_OPTIONS_ALLOWED="${COMMON_LONG_OPTIONS_ALLOWED}"
-declare -rx ORIGINAL_SCRIPT_OPTS="$@"
 declare -xi ARGIND=0
 declare -x ARGUMENT=""
 
@@ -208,8 +208,8 @@ declare -rx COMMON_OPTIONS_USAGE="\n\
 \t\t\t\ta 'manpage-like' output will be guessed otherwise\n\
 \t--libvers\t\tsee the library version";
 
-##@ COMMON_OPTIONS_FULLINFO_MANPAGE_MANPAGE : concatenation of COMMON_OPTIONS_MANPAGE & OPTIONS_ADDITIONAL_INFOS_MANPAGE (read-only)
-declare -rx COMMON_OPTIONS_FULLINFO_MANPAGE_MANPAGE="${COMMON_OPTIONS_MANPAGE}\n\n${OPTIONS_ADDITIONAL_INFOS_MANPAGE}";
+##@ COMMON_OPTIONS_FULLINFO_MANPAGE : concatenation of COMMON_OPTIONS_MANPAGE & OPTIONS_ADDITIONAL_INFOS_MANPAGE (read-only)
+declare -rx COMMON_OPTIONS_FULLINFO_MANPAGE="${COMMON_OPTIONS_MANPAGE}\n\n${OPTIONS_ADDITIONAL_INFOS_MANPAGE}";
 
 
 #### LOREM IPSUM #############################################################################
@@ -226,32 +226,31 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 
 #### LIBRARY SETUP #######################################################################
 
-##@ LIB_NAME LIB_VERSION LIB_DATE LIB_VCSVERSION
+##@ LIB_NAME LIB_VERSION LIB_DATE LIB_VCSVERSION LIB_VCSVERSION
+##@ LIB_COPYRIGHT LIB_LICENSE_TYPE LIB_LICENSE_URL LIB_SOURCES_URL
 declare -rx LIB_NAME="Piwi Bash library"
 declare -rx LIB_VERSION="1.0.1"
 declare -rx LIB_DATE="2014-04-04"
 declare -rx LIB_VCSVERSION="master@fb34ed425a494bbe22f5e47f6a6a3d735c27e2ee"
-declare -rx LIB_DESCRIPTION_MANPAGE="An open source day-to-day bash library"
+declare -rx LIB_DESCRIPTION="An open source day-to-day bash library"
 declare -rx LIB_LICENSE_TYPE="GPL-3.0"
 declare -rx LIB_LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
 declare -rx LIB_COPYRIGHT="Copyright (c) 2013-2014 Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>"
 declare -rx LIB_PACKAGE="atelierspierrot/piwi-bash-library"
 declare -rx LIB_SCRIPT_VCS='git'
-declare -rx LIB_HOME="https://github.com/atelierspierrot/piwi-bash-library"
+declare -rx LIB_SOURCES_URL="https://github.com/atelierspierrot/piwi-bash-library"
 
 declare -rx LIB_LICENSE="License ${LIB_LICENSE_TYPE}: <${LIB_LICENSE_URL}>"
-declare -rx LIB_SOURCES="Sources & updates: <${LIB_HOME}>"
+declare -rx LIB_SOURCES="Sources & updates: <${LIB_SOURCES_URL}>"
 declare -rx LIB_ADDITIONAL_INFO="This is free software: you are free to change and redistribute it ; there is NO WARRANTY, to the extent permitted by law.";
 
-declare -rx LIB_COPYRIGHT_MANPAGE="${LIB_COPYRIGHT} - Some rights reserved. \n\
+declare -rx LIB_DEPEDENCY_MANPAGE_INFO="This script is based on the <bold>${LIB_NAME}</bold>, \"${LIB_DESCRIPTION}\". \n\
+\t${LIB_COPYRIGHT} - Some rights reserved. \n\
 \tPackage [<${COLOR_NOTICE}>${LIB_PACKAGE}</${COLOR_NOTICE}>] version [<${COLOR_NOTICE}>${LIB_VERSION}</${COLOR_NOTICE}>].\n\
 \t${LIB_LICENSE}.\n\
 \t${LIB_SOURCES}.\n\
 \tBug reports: <http://github.com/atelierspierrot/piwi-bash-library/issues>.\n\
 \t${LIB_ADDITIONAL_INFO}";
-
-declare -rx LIB_DEPEDENCY_MANPAGE_INFO="This script is based on the <bold>${LIB_NAME}</bold>, \"${LIB_DESCRIPTION_MANPAGE}\". \n\
-\t${LIB_COPYRIGHT_MANPAGE}";
 
 
 #### SYSTEM #############################################################################
@@ -430,9 +429,9 @@ string_length () {
     echo ${#1}; return 0;
 }
 
-#### / string_length ( string )
+#### / strlen ( string )
 ## alias of 'string_length'
-string_length () { string_length "$*"; }
+strlen () { string_length "$*"; }
 
 #### string_to_upper ( string )
 string_to_upper () {
@@ -442,9 +441,9 @@ string_to_upper () {
     return 1
 }
 
-#### / string_to_upper ( string )
+#### / strtoupper ( string )
 ## alias of 'string_to_upper'
-string_to_upper () { string_to_upper "$*"; }
+strtoupper () { string_to_upper "$*"; }
 
 #### string_to_lower ( string )
 string_to_lower () {
@@ -454,9 +453,9 @@ string_to_lower () {
     return 1
 }
 
-#### / string_to_lower ( string )
+#### / strtolower ( string )
 ## alias of 'string_to_lower'
-string_to_lower () { string_to_lower "$*"; }
+strtolower () { string_to_lower "$*"; }
 
 #### upper_case_first ( string )
 upper_case_first () {
@@ -466,9 +465,9 @@ upper_case_first () {
     return 1
 }
 
-#### / upper_case_first ( string )
+#### / ucfirst ( string )
 ## alias of 'upper_case_first'
-upper_case_first () { upper_case_first "$*"; }
+ucfirst () { upper_case_first "$*"; }
 
 #### explode ( str , delim = ' ' )
 # explode a string in an array using a delimiter
@@ -483,8 +482,23 @@ explode () {
     return 1
 }
 
+##@ MAX_LINE_LENGTH = 80 : default max line length for word wrap (integer)
+declare -xi MAX_LINE_LENGTH=80
+##@ LINE_ENDING = \n : default line ending character for word wrap
+declare -x LINE_ENDING="\n"
+
+#### word_wrap ( text )
+# wrap a text in MAX_LINE_LENGTH max lengthes lines
+word_wrap () {
+    if [ $# -gt 0 ]; then
+        echo "$*" | sed -e "s/.\{${MAX_LINE_LENGTH}\} /&${LINE_ENDING}/g"
+        return 0
+    fi
+    return 1
+}
+
 #### implode ( array[@] , delim = ' ' )
-# imple an array in a string using a delimiter
+# implode an array in a string using a delimiter
 implode () {
     if [ -n "$1" ]; then
         declare -a _array=("${!1}")
@@ -614,6 +628,16 @@ interactive_exec () {
 #### / iexec ( command , debug_exec = true )
 ## alias of 'interactive_exec'
 iexec () { interactive_exec "$*"; }
+
+#### debug_echo ( string )
+## echoes the string if "debug" is "on"
+debug_echo () {
+    if ${DEBUG}; then _echo "$*"; fi; return 0;
+}
+
+#### / debecho ( string )
+## alias of 'debug_echo'
+debecho () { debug_echo "$*"; }
 
 #### debug_exec ( command )
 ## execute the command if "dryrun" is "off", just write it on screen otherwise
@@ -1873,7 +1897,7 @@ script_title () {
         _echo "[${DATE}]"
     fi
     if [ ! -z "$1" ]; then
-        _echo "[using `library_version` - ${LIB_HOME}]"
+        _echo "[using `library_version` - ${LIB_SOURCES_URL}]"
     fi
     return 0
 }
@@ -1904,10 +1928,10 @@ script_usage () {
 ## writes a long synopsis usage info
 script_long_usage () {
     local TMP_USAGE=$(parse_color_tags  "<bold>`script_short_title`</bold>")
-    if [ -n "${DESCRIPTION_MANPAGE_USAGE}" ]; then
-        TMP_USAGE+="\n${DESCRIPTION_MANPAGE_USAGE}";
-    elif [ -n "${DESCRIPTION_MANPAGE}" ]; then
-        TMP_USAGE+="\n${DESCRIPTION_MANPAGE}";
+    if [ -n "${DESCRIPTION_USAGE}" ]; then
+        TMP_USAGE+="\n${DESCRIPTION_USAGE}";
+    elif [ -n "${DESCRIPTION}" ]; then
+        TMP_USAGE+="\n${DESCRIPTION}";
     fi
     local SYNOPSIS_STR=""
     if [ ! -z "$1" ]; then
@@ -2238,9 +2262,9 @@ library_short_version () {
         return 0
     fi
     local TMP_VERS="${LIB_NAME} ${LIB_VERSION}"
-    local LIB_MODULE="`dirname $LIBRARY_REALPATH`/.."
+    local LIB_MODULE="`dirname ${LIBRARY_REALPATH}`/.."
     local _done=false
-    if $(git_is_clone "$LIB_MODULE" "$LIB_HOME"); then
+    if $(git_is_clone "${LIB_MODULE}" "${LIB_SOURCES_URL}"); then
         add=$(git_get_version)
         if [ -n "${add}" ]; then
             _done=true
@@ -2344,6 +2368,9 @@ clean_library_cachedir () {
 #### INSTALLATION WIZARD #################################################################
 #! All internal installation methods are prefixed with 'instwiz_'
 #! All internal installation constants are prefixed with 'LIBINST_'
+
+##@ INSTALLATION_VARS = ( SCRIPT_VCS VCSVERSION SCRIPT_REPOSITORY_URL SCRIPT_FILES SCRIPT_FILES_BIN SCRIPT_FILES_MAN SCRIPT_FILES_CONF ) (read-only)
+declare -rxa INSTALLATION_VARS=(SCRIPT_VCS VCSVERSION SCRIPT_REPOSITORY_URL SCRIPT_FILES SCRIPT_FILES_BIN SCRIPT_FILES_MAN SCRIPT_FILES_CONF)
 
 ##@ SCRIPT_REPOSITORY_URL = url of your distant repository
 declare -x SCRIPT_REPOSITORY_URL=""
@@ -2535,20 +2562,19 @@ declare -rxa INTLIB_ACTION_ALLOWED=( install uninstall check update version help
 
 # script man infos
 MANPAGE_NODEPEDENCY=true
-SCRIPT_VCS="${LIB_SCRIPT_VCS}"
-VCSVERSION="${LIB_VCSVERSION}"
-SCRIPT_REPOSITORY_URL="${LIB_HOME}"
-for section in "${MANPAGE_VARS[@]}"; do eval "$section=\$LIB_$section"; done
-for section in "${SCRIPT_VARS[@]}"; do eval "$section=\$LIB_$section"; done
-for section in "${VERSION_VARS[@]}"; do eval "$section=\$LIB_$section"; done
+for section in "${MANPAGE_VARS[@]}";        do eval "${section}=\$LIB_${section}"; done
+for section in "${SCRIPT_VARS[@]}";         do eval "${section}=\$LIB_${section}"; done
+for section in "${VERSION_VARS[@]}";        do eval "${section}=\$LIB_${section}"; done
+for section in "${USAGE_VARS[@]}";          do eval "${section}=\$LIB_${section}"; done
+for section in "${INSTALLATION_VARS[@]}";   do eval "${section}=\$LIB_${section}"; done
+SCRIPT_REPOSITORY_URL="${LIB_SOURCES_URL}"
 OPTIONS_ALLOWED="b:t:p:${COMMON_OPTIONS_ALLOWED}"
 LONG_OPTIONS_ALLOWED="branch:,target:,preset:,${COMMON_LONG_OPTIONS_ALLOWED}"
 INTLIB_PRESET_INFO=""
 for pres in "${INTLIB_PRESET_ALLOWED[@]}"; do
     INTLIB_PRESET_INFO+=" '${pres}'"
 done
-DESCRIPTION_MANPAGE="${LIB_DESCRIPTION_MANPAGE}"
-DESCRIPTION_MANPAGE_USAGE="${LIB_DESCRIPTION_MANPAGE}\n\n\
+DESCRIPTION_USAGE="${LIB_DESCRIPTION}\n\n\
 To use the library, just include its source file using: \`source path/to/piwi-bash-library.sh\` and call its methods.\n\
 Try option '--man' for the library full manpage.";
 OPTIONS_USAGE="\n\
@@ -2595,14 +2621,14 @@ ${LIB_ADDITIONAL_INFO}";
 
 # -> check preset validity
 intlib_preset_valid () {
-    in_array "$INTLIB_PRESET" "${INTLIB_PRESET_ALLOWED[@]}" || simple_error "unknown preset '$INTLIB_PRESET'!";
+    in_array "${INTLIB_PRESET}" "${INTLIB_PRESET_ALLOWED[@]}" || simple_error "unknown preset '${INTLIB_PRESET}'!";
     SCRIPT_FILES=( ${INTLIB_BIN_FILENAME} ${INTLIB_MAN_FILENAME} )
     SCRIPT_FILES_BIN=( ${INTLIB_BIN_FILENAME} )
     SCRIPT_FILES_MAN=( ${INTLIB_MAN_FILENAME} )
-    if [ "$INTLIB_PRESET" = 'dev' -o "$INTLIB_PRESET" = 'full' ]; then
+    if [ "${INTLIB_PRESET}" = 'dev' -o "${INTLIB_PRESET}" = 'full' ]; then
         SCRIPT_FILES=( "${SCRIPT_FILES[@]}" ${INTLIB_DEVDOC_FILENAME} )
     fi
-    if [ "$INTLIB_PRESET" = 'user' -o "$INTLIB_PRESET" = 'full' ]; then
+    if [ "${INTLIB_PRESET}" = 'user' -o "${INTLIB_PRESET}" = 'full' ]; then
         SCRIPT_FILES=( "${SCRIPT_FILES[@]}" ${INTLIB_README_FILENAME} )
     fi
     export SCRIPT_FILES SCRIPT_FILES_BIN SCRIPT_FILES_MAN
@@ -2680,7 +2706,7 @@ intlibaction_uninstall () {
     export QUIET=true
     local result=$(script_uninstall)
     export QUIET=${oldquiet}
-    if $result
+    if ${result}
     then quietecho ">> ok, library deleted from '${LIBINST_TARGET}'"
     else quietecho "nothing to un-install"
     fi
@@ -2688,7 +2714,7 @@ intlibaction_uninstall () {
 }
 intlibaction_version () {
     script_installation_target ${INTLIB_TARGET}
-    library_version $QUIET
+    library_version ${QUIET}
     return 0
 }
 intlibaction_help () {
@@ -2711,13 +2737,13 @@ intlib_check_uptodate () {
     if [ ${checkdiff} -gt ${ts_limit} ]; then
         export INTLIB_TARGET="`dirname $0`"
         if ! `intlibaction_check 1> /dev/null`; then
-            info "This library version is more than ${INTLIB_OUTDATED_CHECK} days old and a newer version is available ... You should run '$0 selfupdate' to update it.";
+            info "This library version is more than ${INTLIB_OUTDATED_CHECK} days old and a newer version is available ... You should run '$0 update' to update it.";
         fi
     fi
     # forced check
     local ts_limit_forced=$((${INTLIB_OUTDATED_FORCE}*24*60*60))
     if [ ${checkdiff} -gt ${ts_limit_forced} ]; then
-        info "This library version is more than ${INTLIB_OUTDATED_FORCE} days old ... You should run '$0 selfupdate' to get last version.";
+        info "This library version is more than ${INTLIB_OUTDATED_FORCE} days old ... You should run '$0 update' to get last version.";
     fi
     return 0
 }
@@ -2750,7 +2776,7 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     esac
 done
 get_next_argument
-ACTION="$ARGUMENT"
+ACTION="${ARGUMENT}"
 
 # checking env
 # -> action is required

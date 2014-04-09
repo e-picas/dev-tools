@@ -27,14 +27,19 @@
 #
 
 ###### Current version
-declare -x NAME="DevTools"
-declare -rx VERSION="1.2.4"
+NAME="DevTools"
+VERSION="1.2.4"
+VCSVERSION="@vcsversion@"
 
 ###### First paths
+##@ _REALPATH _REALDIRPATH _DEVTOOLS_CONFIGFILE _DEVTOOLS_ACTIONSDIR
 declare -rx _REALPATH="$0"
 declare -rx _REALDIRPATH="`dirname ${_REALPATH}`"
-declare -rx _DEVTOOLS_CONFIGFILE="devtools.conf"
-declare -rx _DEVTOOLS_ACTIONSDIR="devtools-actions"
+declare -rx _DEVTOOLS_CONFIGFILE="${_REALDIRPATH}/devtools.conf"
+declare -rx _DEVTOOLS_ACTIONSDIR="${_REALDIRPATH}/devtools-actions"
+
+##@ ACTION_VARS = ( ACTION_NAME ACTION_VERSION ACTION_SYNOPSIS ACTION_DESCRIPTION ACTION_OPTIONS ACTION_CFGVARS ACTION_ADDITIONAL_INFO ) (read-only)
+declare -rxa ACTION_VARS=(ACTION_NAME ACTION_VERSION ACTION_SYNOPSIS ACTION_DESCRIPTION ACTION_OPTIONS ACTION_CFGVARS ACTION_ADDITIONAL_INFO)
 
 #### findRequirements ( path , info string )
 # search for a relative or root path
@@ -55,7 +60,7 @@ findRequirements() {
             "Unable to find required ${REQINFO} '${REQFILE}'!" \
             "Sent in '$0' line '${LINENO}' by '`whoami`' - pwd is '`pwd`'" \
             0 $(tput cols) "${PADDER}";
-        exit 1
+        return 1
     fi
 }
 
@@ -77,19 +82,23 @@ fi
 declare -rx _BASEDIR=`findRequirements "${_DEVTOOLS_ACTIONSDIR}" "actions directory"`
 if [ ! -d "${_BASEDIR}" ]; then echo "${_BASEDIR}"; exit 1; fi
 
+#### init_action ()
+# initialize all action's variables to empty string
+init_action () {
+    for section in "${ACTION_VARS[@]}"; do
+        eval export ${section}=''
+    done
+}
+
 #### load_actions_infos ()
 # load the available actions in $ACTIONS_LIST
 # load the available actions synopsis in $ACTIONS_SYNOPSIS
-# load the available actions synopsis in $ACTIONS_DESCRIPTION_MANPAGES
+# load the available actions synopsis in $ACTIONS_DESCRIPTION
 # this needs to be defined here as it is used for strings below
 load_actions_infos () {
     export SCRIPTMAN=true
     for action in ${_BASEDIR}/*.sh; do
-        ACTION_SYNOPSIS=''
-        ACTION_DESCRIPTION_MANPAGE=''
-        ACTION_OPTIONS_ARGS=''
-        ACTION_LONGDESCRIPTION_MANPAGE=''
-        ACTION_CFGVARS=''
+        init_action
         myaction=${action##$_BASEDIR/}
         pos=${#ACTIONS_LIST[@]}
         source "${action}"
@@ -97,18 +106,45 @@ load_actions_infos () {
         if [ -n "${ACTION_SYNOPSIS}" ]; then
             ACTIONS_SYNOPSIS[${pos}]="${ACTION_SYNOPSIS}"
         fi
-        if [ -n "${ACTION_DESCRIPTION_MANPAGE}" ]; then
-            ACTIONS_DESCRIPTION_MANPAGES[${pos}]="${ACTION_DESCRIPTION_MANPAGE}"
+        if [ -n "${ACTION_DESCRIPTION}" ]; then
+            ACTIONS_DESCRIPTION[${pos}]="${ACTION_DESCRIPTION}"
         fi
         if [ -n "${ACTION_CFGVARS}" ]; then
             ACTIONS_CFGVARS=("${ACTIONS_CFGVARS[@]}" "${ACTION_CFGVARS[@]}")
         fi
-        if [ -n "${ACTION_OPTIONS_ARGS}" ]; then
-            ACTION_OPTIONS_ARGS[${pos}]="${ACTION_OPTIONS_ARGS}"
+        if [ -n "${ACTION_OPTIONS}" ]; then
+            ACTIONS_OPTIONS[${pos}]="${ACTION_OPTIONS}"
         fi
     done
-    export ACTIONS_LIST ACTIONS_SYNOPSIS ACTIONS_DESCRIPTION_MANPAGES ACTIONS_CFGVARS ACTION_OPTIONS_ARGS
+    for section in "${ACTION_VARS[@]}"; do
+        eval "export ${section}"
+    done
     export SCRIPTMAN=false
+}
+
+#### prepare_actionslist_strings ()
+# parse all actions and prepare required information strings
+prepare_actionslist_strings () {
+    local itemstr
+    local itemdesc
+    local itemsyn
+    for i in ${!ACTIONS_LIST[*]}; do
+        itemstr=${ACTIONS_LIST[$i]}
+        ACTIONS_DESCRIPTION_STR+="\n<bold>${itemstr}</bold>\n"
+        itemdesc=${ACTIONS_DESCRIPTION[$i]}
+        if [ -n "${itemdesc}" ]; then
+            ACTIONS_DESCRIPTION_STR+="\t${itemdesc}";
+        fi
+        itemsyn=${ACTIONS_SYNOPSIS[$i]}
+        if [ -n "${itemsyn}" ]; then
+            ACTIONS_DESCRIPTION_STR+="\n\tusage: `printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemstr}\" \"${itemsyn}\"`";
+            ACTIONS_SYNOPSIS_STR+="\n\t... ${itemstr} ${itemsyn}"
+        else
+            ACTIONS_DESCRIPTION_STR+="\n\tusage: `printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemstr}\" ''`";
+            ACTIONS_SYNOPSIS_STR+="\n\t... ${itemstr}"
+        fi
+    done
+    export ACTIONS_DESCRIPTION_STR ACTIONS_SYNOPSIS_STR
 }
 
 #### script settings ##########################
@@ -116,73 +152,57 @@ load_actions_infos () {
 # bash-lib settings
 MANPAGE_NODEPEDENCY=true
 
+##@ _BACKUP_DIR _TARGET _PATHARG
 # paths
 declare -x _BACKUP_DIR="${_BASEDIR}/backup/"
 declare -x _TARGET=`pwd`
 declare -x _PATHARG
+
+##@ SCRIPTMAN : bool to enable when an action file is loaded just for "usage" infos
 declare -x SCRIPTMAN=false
 
+##@ ACTION ACTION_FILE ACTION_INDEX
 # per action vars
 declare -x ACTION
 declare -x ACTION_FILE
-declare -x ACTION_INDEX
-declare -x OPTIONS_ALLOWED="p:${COMMON_OPTIONS_ALLOWED}"
-declare -x LONG_OPTIONS_ALLOWED="${COMMON_LONG_OPTIONS_ALLOWED}"
-declare -xa SCRIPT_OPTS=()
+declare -xi ACTION_INDEX
 
+##@ ACTION_LIST ACTIONS_SYNOPSIS ACTIONS_OPTIONS ACTIONS_DESCRIPTION
 # all actions vars
 declare -xa ACTIONS_LIST=()
 declare -xa ACTIONS_SYNOPSIS=()
-declare -xa ACTIONS_OPTIONS_ARGS=()
-declare -xa ACTIONS_DESCRIPTION_MANPAGES=()
-declare -xa ACTIONS_CFGVARS=( DEFAULT_USER_CONFIG_FILE DEFAULT_PROJECT_CONFIG_FILE DEFAULT_BASHLIBRARY_PATH )
+declare -xa ACTIONS_OPTIONS=()
+declare -xa ACTIONS_DESCRIPTION=()
+
+##@ ACTIONS_CFGVARS =( DEFAULT_USER_CONFIG_FILE DEFAULT_PROJECT_CONFIG_FILE DEFAULT_BASHLIBRARY_PATH )
+declare -xa ACTIONS_CFGVARS=(DEFAULT_USER_CONFIG_FILE DEFAULT_PROJECT_CONFIG_FILE DEFAULT_BASHLIBRARY_PATH)
 load_actions_infos
 
 # script infos
 declare -rx LICENSE_TYPE="GPL-3.0"
 declare -rx LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
-declare -rx COPYRIGHT="Copyright (c) 2013-2014 Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>"
-declare -rx SCRIPT_VCS='git'
 declare -rx SOURCES_HOME="https://github.com/atelierspierrot/dev-tools"
-declare -rx LICENSE="License ${LICENSE_TYPE}: <${LICENSE_URL}>"
-declare -rx SOURCES="Sources & updates: <${SOURCES_HOME}>"
-declare -rx ADDITIONAL_INFO="This is free software: you are free to change and redistribute it ; there is NO WARRANTY, to the extent permitted by law.";
-declare -x DESCRIPTION="Packages development & deployment facilities"
-declare -x DEPLOY_HELP="Run option '-h' for help.";
-declare -x DEPLOY_ACTIONS_HELP="Run 'help action' to get help about a specific action.";
-declare -x DESCRIPTION_MANPAGE="This helper script will assist you to execute various common actions on a project and its environment dependencies during development.\n\
-Run option 'help <action>' to see the help about a specific action and use option '--dry-run' to make dry runs.";
 declare -x COMMON_OPTIONS_GLOBAL="-h|-V"
 declare -x COMMON_OPTIONS_INTERACT="-f|-i|-q|-v"
+OPTIONS_ALLOWED="p:${COMMON_OPTIONS_ALLOWED}"
+LONG_OPTIONS_ALLOWED="${COMMON_LONG_OPTIONS_ALLOWED}"
+COPYRIGHT="Copyright (c) 2013-2014 Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>"
+SCRIPT_VCS='git'
+LICENSE="License ${LICENSE_TYPE}: <${LICENSE_URL}>"
+SOURCES="Sources & updates: <${SOURCES_HOME}>"
+ADDITIONAL_INFO="This is free software: you are free to change and redistribute it ; there is NO WARRANTY, to the extent permitted by law.";
+DESCRIPTION="Packages development & deployment facilities"
+DESCRIPTION_MANPAGE="This helper script will assist you to execute various common actions on a project and its environment dependencies during development.\n\
+Run option 'help <action>' to see the help about a specific action and use option '--dry-run' to make dry runs.";
 
 # actions infos
-declare -rx ACTION_PRESENTATION_MASK="## Help for action \"<bold>%s</bold>\" (%s)";
+declare -x DEPLOY_ACTIONS_HELP="Run 'help action' to get help about a specific action.";
+declare -rx ACTION_PRESENTATION_MASK="## Help for action \"<bold>%s</bold>\" (version %s)";
 declare -rx ACTION_SYNOPSIS_MASK="${0}  %s  [common options]  %s  --";
-actionsstr=""
-actionsdescription=""
-actionssynopsis=""
-for i in ${!ACTIONS_LIST[*]}; do
-    itemstr=${ACTIONS_LIST[$i]}
-    if [ "${#actionsstr}" == 0 ]; then
-        actionsstr+="${itemstr}"
-    else
-        actionsstr+=" | ${itemstr}"
-    fi
-    actionsdescription+="\n<bold>${itemstr}</bold>\n"
-    itemdesc=${ACTIONS_DESCRIPTION_MANPAGES[$i]}
-    if [ -n "${itemdesc}" ]; then
-        actionsdescription+="\t${itemdesc}";
-    fi
-    itemsyn=${ACTIONS_SYNOPSIS[$i]}
-    if [ -n "${itemsyn}" ]; then
-        actionsdescription+="\n\tusage: `printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemstr}\" \"${itemsyn}\"`";
-        actionssynopsis+="\n\t... ${itemstr} ${itemsyn}"
-    else
-        actionsdescription+="\n\tusage: `printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemstr}\" ''`";
-        actionssynopsis+="\n\t... ${itemstr}"
-    fi
-done
-declare -x DESCRIPTION_MANPAGE_LISTACTIONS="`script_short_title`\n${actionsdescription}\n\n${DEPLOY_ACTIONS_HELP}"
+declare -x ACTIONS_DESCRIPTION_STR=""
+declare -x ACTIONS_SYNOPSIS_STR=""
+prepare_actionslist_strings
+declare -x DESCRIPTION_LISTACTIONS="${ACTIONS_DESCRIPTION_STR}\n\n${DEPLOY_ACTIONS_HELP}"
 declare -x OPTIONS="\n\
 \tinstall\t\t\tinstall the package somewhere in your sytem\n\
 \tuninstall\t\tuninstall an installed package\n\
@@ -198,14 +218,13 @@ declare -x OPTIONS="\n\
 \t-x, --debug\t\tsee commands to run but not run them actually\n\
 \t--dry-run\t\talias of '-x'";
 declare -x SYNOPSIS_MANPAGE="~\$ <bold>${0}</bold>  [<underline>ACTION</underline>]  -[<underline>COMMON OPTIONS</underline>]  -[<underline>SCRIPT OPTIONS</underline> [=<underline>VALUE</underline>]]  --"
-declare -x SYNOPSIS_ERROR="${0}  [${COMMON_OPTIONS_GLOBAL}]  [${COMMON_OPTIONS_INTERACT}]  [-x|--dry-run]  [-p|--project=path] ...\
-${actionssynopsis}";
+declare -x SYNOPSIS_ERROR="${0}  [${COMMON_OPTIONS_GLOBAL}]  [${COMMON_OPTIONS_INTERACT}]  [-x|--dry-run]  [-p|--project=path] ...${ACTIONS_SYNOPSIS_STR}";
 declare -x SYNOPSIS="${SYNOPSIS_ERROR}"
 
 #### internal lib ##########################
 
 #### action_file ( action name )
-# find action file
+# find action file and its filename in ACTION_FILE
 action_file () {
     local ACTION="$1"
     if [ ! -z "${ACTION}" ]; then
@@ -227,7 +246,7 @@ action_exists () {
     local ACTION="$1"
     local THROWERROR="${2:-true}"
     action_file "${ACTION}"
-    if [ -z "${ACTION_FILE}" -o ! -f "${ACTION_FILE}" ]; then
+    if [ -z "${ACTION_FILE}" -o ! -f "${ACTION_FILE}" ]&& $THROWERROR; then
         simple_error "unknown action '${ACTION}'"
     fi
     return 0
@@ -236,12 +255,12 @@ action_exists () {
 #### load_action ( action name )
 load_action () {
     local ACTION="$1"
-    find_action ${ACTION}
+    find_action "${ACTION}"
     # which options are allowed
     if [ ! -z "${ACTION_INDEX}" ]; then
-        action_file ${ACTION}
-        if [ ! -z "${ACTIONS_OPTIONS_ARGS[$ACTION_INDEX]}" ]; then
-            ALLOWED_OPTIONS="${COMMON_OPTIONS_ARGS}${ACTIONS_OPTIONS_ARGS[$ACTION_INDEX]}"
+        action_file "${ACTION}"
+        if [ ! -z "${ACTIONS_OPTIONS[$ACTION_INDEX]}" ]; then
+            ALLOWED_OPTIONS="${COMMON_OPTIONS_ARGS}${ACTIONS_OPTIONS[$ACTION_INDEX]}"
         fi
         if [ ! -z "${ACTIONS_SYNOPSIS[$ACTION_INDEX]}" ]
             then SYNOPSIS_ERROR="${0}  ${ACTION}  ...\n\t[${COMMON_OPTIONS_GLOBAL}]  [${COMMON_OPTIONS_INTERACT}]  [-x|--dry-run]  [-p|--project=path] ...\n\t${ACTIONS_SYNOPSIS[$ACTION_INDEX]}";
@@ -266,24 +285,24 @@ find_action () {
     return 0
 }
 
-#### action_usage ( action name, action file )
+#### action_usage ( action name , action file )
 # usage string per action
 action_usage () {
     local ACTION_FILENAME="$1"
     local ACTION_FILE="$2"
-    local TMP_USAGE="`script_short_title`\n"
+    local TMP_USAGE=$(parse_color_tags  "`script_short_title`")
     export SCRIPTMAN=true
     if [ -f ${ACTION_FILE} ]; then
-        ACTION_SYNOPSIS=''
-        ACTION_DESCRIPTION_MANPAGE=''
-        ACTION_OPTIONS=''
-        ACTION_CFGVARS=''
+        init_action
         source "${ACTION_FILE}"
-        TMP_USAGE+="`printf \"${ACTION_PRESENTATION_MASK}\" \
+        TMP_USAGE+="\n\n`printf \"${ACTION_PRESENTATION_MASK}\" \
             \"${ACTION_NAME:-${ACTION_FILENAME}}\" \
-            \"${ACTION_VERSION:-}\"`";
-        if [ -n "${ACTION_DESCRIPTION_MANPAGE}" ]; then
-            TMP_USAGE+="\n\n${ACTION_DESCRIPTION_MANPAGE}";
+            \"${ACTION_VERSION:-?}\"`";
+        if [ -n "${ACTION_DESCRIPTION}" ]; then
+            TMP_USAGE+="\n${ACTION_DESCRIPTION}";
+        fi
+        if [ -n "${ACTION_ADDITIONAL_INFO}" ]; then
+            TMP_USAGE+="\n${ACTION_ADDITIONAL_INFO}";
         fi
         TMP_USAGE+="\n\n<bold>usage:</bold>\
 \t`printf \"${ACTION_SYNOPSIS_MASK}\" \"${ACTION_FILENAME}\" \"${ACTION_SYNOPSIS}\"`";
@@ -296,8 +315,7 @@ action_usage () {
         if [ -n "${ACTION_FILE}" ]; then
             TMP_USAGE+="\n\n<bold>file:</bold>\t${ACTION_FILE}";
         fi
-        local TMP_VERS="`library_info`"
-        TMP_USAGE+="\n\n<${COLOR_COMMENT}>${TMP_VERS}</${COLOR_COMMENT}>";
+        TMP_USAGE+="\n\n<${COLOR_COMMENT}>`library_info`</${COLOR_COMMENT}>";
         parse_color_tags "${TMP_USAGE}"
     else
         simple_error "Action file ${ACTION_FILE} not found!"
@@ -418,7 +436,6 @@ helpAction () {
 
 usageAction () {
     script_usage
-#    _echo "${SYNOPSIS_ERROR}"
 }
 
 installAction () {
@@ -496,7 +513,8 @@ selfUpdateAction () {
 }
 
 listActions () {
-    parse_color_tags "${DESCRIPTION_MANPAGE_LISTACTIONS}"
+    parse_color_tags  "<bold>`script_short_title`</bold>"
+    parse_color_tags "${DESCRIPTION_LISTACTIONS}"
 }
 
 #### first setup & options treatment ##########################

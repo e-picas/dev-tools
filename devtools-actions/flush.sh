@@ -23,7 +23,7 @@
 
 ACTION_NAME="Flush files"
 ACTION_VERSION="1.0.0-alpha"
-ACTION_DESCRIPTION_MANPAGE="This will clean contents of temporary directories (config var: 'DEFAULT_FLUSH_DIRNAMES').";
+ACTION_DESCRIPTION="This will clean contents of temporary directories (config var: 'DEFAULT_FLUSH_DIRNAMES').";
 ACTION_OPTIONS="Current settings are : ${DEFAULT_FLUSH_DIRNAMES[@]}";
 ACTION_CFGVARS=( DEFAULT_FLUSH_DIRNAMES )
 if ${SCRIPTMAN}; then return; fi

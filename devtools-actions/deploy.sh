@@ -23,7 +23,8 @@
 
 ACTION_NAME="Deploy"
 ACTION_VERSION="1.0.0-alpha"
-ACTION_DESCRIPTION_MANPAGE="Will search for files suffixed by '__ENV__' in the project path and over-write the original ones (without suffix).";
+ACTION_DESCRIPTION="Will search for files suffixed by '__ENV__' in the project path and over-write the original ones (without suffix).";
+ACTION_ADDITIONAL_INFO="The 'env' argument will be transformed in upper case.";
 ACTION_OPTIONS="--env =ENV\tthe environment shortcut to deploy (default is 'DEFAULT' - config var: 'DEFAULT_DEPLOY_ENV')";
 ACTION_SYNOPSIS="[--env=env]"
 ACTION_CFGVARS=( DEFAULT_DEPLOY_ENV )

@@ -23,7 +23,7 @@
 
 ACTION_NAME="Fix rights"
 ACTION_VERSION="1.0.0-alpha"
-ACTION_DESCRIPTION_MANPAGE="This will fix files and directories UNIX rights recursively on the project.";
+ACTION_DESCRIPTION="This will fix files and directories UNIX rights recursively on the project.";
 ACTION_OPTIONS="--dirs\t\t=CHMOD\t\tthe rights level setted for directories\n\t\t\t\t\tconfig var: 'DEFAULT_FIXRIGHTS_DIRS_CHMOD' ; default is '0755'\n\
 \t--files\t\t=CHMOD\t\tthe rights level setted for files\n\t\t\t\t\tconfig var: 'DEFAULT_FIXRIGHTS_FILES_CHMOD' ; default is '0644'\n\
 \t--bin\t\t=PATH\t\tdirname of the binaries, to define their rights on 'a+x'\n\t\t\t\t\tconfig var: 'DEFAULT_FIXRIGHTS_BIN_DIR' ; default is 'bin/'\n\

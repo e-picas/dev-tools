@@ -23,13 +23,13 @@
 
 ACTION_NAME="MD2Man"
 ACTION_VERSION="1.0.0-alpha"
-ACTION_DESCRIPTION_MANPAGE="Build a manpage file based on a markdown content.";
-ACTION_OPTIONS="--source=FILENAME\tthe manpage source file (default is 'MANPAGE.md' - config var: 'DEFAULT_MD2MAN_SOURCE') \n\
-\t--filename=FILENAME\tthe filename to use to create the manpage (config var: 'DEFAULT_MD2MAN_FILENAME') \n\
-\t--markdown=BIN_PATH\tthe binary to use for the 'markdown' command (default is installed MarkdownExtended package - config var: 'DEFAULT_MD2MAN_MARKDOWN_BIN')";
+ACTION_DESCRIPTION="Build a manpage file based on a markdown content.";
+ACTION_OPTIONS="--source\t=FILENAME\tthe manpage source file (default is 'MANPAGE.md' - config var: 'DEFAULT_MD2MAN_SOURCE') \n\
+\t--filename\t=FILENAME\tthe filename to use to create the manpage (config var: 'DEFAULT_MD2MAN_FILENAME') \n\
+\t--markdown\t=BIN_PATH\tthe binary to use for the 'markdown' command (default is installed MarkdownExtended package - config var: 'DEFAULT_MD2MAN_MARKDOWN_BIN')";
 ACTION_SYNOPSIS="[--source=path]  [--filename=filename]  [--markdown=bin path]"
 ACTION_CFGVARS=( DEFAULT_MD2MAN_SOURCE DEFAULT_MD2MAN_FILENAME DEFAULT_MD2MAN_MARKDOWN_BIN )
-if $SCRIPTMAN; then return; fi
+if ${SCRIPTMAN}; then return; fi
 
 MANPAGE_FILENAME=""
 MANPAGE_SOURCE=""
@@ -37,55 +37,55 @@ MARKDOWN_BIN=`which markdown-extended`
 
 # internal MarkdownExtended path
 _vendor_mde="vendor/bin/markdown-extended"
-if [ -f $_vendor_mde ]; then MARKDOWN_BIN="$_vendor_mde"; fi
+if [ -f ${_vendor_mde} ]; then MARKDOWN_BIN="${_vendor_mde}"; fi
 _mde="bin/markdown_extended"
-if [ -f $_mde ]; then MARKDOWN_BIN="$_mde"; fi
+if [ -f ${_mde} ]; then MARKDOWN_BIN="${_mde}"; fi
 
 # config values
-if [ ! -z $DEFAULT_MD2MAN_SOURCE ]; then
-    MANPAGE_SOURCE=$DEFAULT_MD2MAN_SOURCE
+if [ ! -z ${DEFAULT_MD2MAN_SOURCE} ]; then
+    MANPAGE_SOURCE=${DEFAULT_MD2MAN_SOURCE}
 fi
-if [ ! -z $DEFAULT_MD2MAN_FILENAME ]; then
-    MANPAGE_FILENAME=$DEFAULT_MD2MAN_FILENAME
+if [ ! -z ${DEFAULT_MD2MAN_FILENAME} ]; then
+    MANPAGE_FILENAME=${DEFAULT_MD2MAN_FILENAME}
 fi
-if [ ! -z $DEFAULT_MD2MAN_MARKDOWN_BIN ]; then
-    MARKDOWN_BIN=$DEFAULT_MD2MAN_MARKDOWN_BIN
+if [ ! -z ${DEFAULT_MD2MAN_MARKDOWN_BIN} ]; then
+    MARKDOWN_BIN=${DEFAULT_MD2MAN_MARKDOWN_BIN}
 fi
 
 # options
 OPTIND=1
 while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
-    case $OPTION in
+    case ${OPTION} in
         -) LONGOPTARG="`get_long_option_arg \"${OPTARG}\"`"
-            case $OPTARG in
+            case ${OPTARG} in
                 path*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libvers) ;;
-                source*) MANPAGE_SOURCE=$LONGOPTARG;;
-                filename*) MANPAGE_FILENAME=$LONGOPTARG;;
-                markdown*) MARKDOWN_BIN=$LONGOPTARG;;
+                source*) MANPAGE_SOURCE=${LONGOPTARG};;
+                filename*) MANPAGE_FILENAME=${LONGOPTARG};;
+                markdown*) MARKDOWN_BIN=${LONGOPTARG};;
                 *) ;;
             esac ;;
         \?) ;;
     esac
 done
 
-_TARGET=$(realpath "$_TARGET")
+_TARGET=$(realpath "${_TARGET}")
 MANPAGE_SOURCE_RP="${_TARGET}/${MANPAGE_SOURCE}"
 MANPAGE_FILENAME_RP="${_TARGET}/${MANPAGE_FILENAME}"
-MANPAGE_NAME=$(basename "$MANPAGE_FILENAME")
+MANPAGE_NAME=$(basename "${MANPAGE_FILENAME}")
 
-if [ -z $MARKDOWN_BIN ]; then
+if [ -z ${MARKDOWN_BIN} ]; then
     error "Markdown binary not defined!"
-elif [ ! -f "$MARKDOWN_BIN" ]; then
-    error "The binary '$MARKDOWN_BIN' can't be found!"
+elif [ ! -f "${MARKDOWN_BIN}" ]; then
+    error "The binary '${MARKDOWN_BIN}' can't be found!"
 fi
 
-if [ ! -f $MANPAGE_SOURCE_RP ]; then
+if [ ! -f ${MANPAGE_SOURCE_RP} ]; then
     error "source file '${MANPAGE_SOURCE_RP}' not found"
 fi
 
 verecho "> parsing markdown source '${MANPAGE_SOURCE_RP}' to '${MANPAGE_FILENAME_RP}' ..."
-if $QUIET
+if ${QUIET}
 then
     iexec "${MARKDOWN_BIN} -f man -o ${MANPAGE_FILENAME_RP} ${MANPAGE_SOURCE_RP} > /dev/null"
 else
