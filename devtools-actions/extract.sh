@@ -23,7 +23,7 @@
 
 ACTION_NAME="Extract"
 ACTION_VERSION="1.0.0-dev"
-ACTION_DESCRIPTION_MANPAGE="Will search and extract strings from files contents recursively ; result is written on STDOUT but can be stored in a file.";
+ACTION_DESCRIPTION="Will search and extract strings from files contents recursively ; result is written on STDOUT but can be stored in a file.";
 ACTION_OPTIONS="--begin\t\t=MASK\t\tthe mask to use to begin the matching\n\t\t\t\t\tconfig var: 'DEFAULT_EXTRACT_BEGIN_MASK'\n\
 \t--end\t\t=MASK\t\tthe mask to use to end the matching\n\t\t\t\t\tconfig var: 'DEFAULT_EXTRACT_END_MASK'\n\
 \t--output\t=FILENAME\ta filename to write results in (this will overwrite any existing file)\n\

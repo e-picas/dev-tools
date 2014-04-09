@@ -160,7 +160,7 @@ The `devtools.sh` accepts that any action defines the following variables:
 
 -   `ACTION_NAME`: the name of the action
 -   `ACTION_VERSION`: the current version number of the action
--   `ACTION_DESCRIPTION_MANPAGE`: the description string of the action, shown when you see the global
+-   `ACTION_DESCRIPTION`: the description string of the action, shown when you see the global
     usage page of DevTools and for the action's specific help;
 -   `ACTION_OPTIONS`: an information about action's command line options and configuration
     variables;

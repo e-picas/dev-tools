@@ -23,7 +23,7 @@
 
 ACTION_NAME="Manpage"
 ACTION_VERSION="1.0.0-alpha"
-ACTION_DESCRIPTION_MANPAGE="Build a manpage file based on a markdown content.\n\
+ACTION_DESCRIPTION="Build a manpage file based on a markdown content.\n\
 The manpage is added in system manpages and can be referenced if the 'whatis' and 'makewhatis' binaries are found or defined.";
 ACTION_OPTIONS="--source\t=FILENAME\tthe manpage source file\n\t\t\t\t\tconfig var: 'DEFAULT_MANPAGE_SOURCE' ; default is 'MANPAGE.md'\n\
 \t--filename\t=FILENAME\tthe filename to use to create the manpage\n\t\t\t\t\tconfig var: 'DEFAULT_MANPAGE_FILENAME'\n\

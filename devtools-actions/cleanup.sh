@@ -23,8 +23,8 @@
 
 ACTION_NAME="Clean-Up"
 ACTION_VERSION="1.0.0-alpha"
-ACTION_DESCRIPTION_MANPAGE="This will clean all OS or IDE specific files from the project (config var: 'DEFAULT_CLEANUP_NAMES').";
-ACTION_OPTIONS="Current settings are <bold>${DEFAULT_CLEANUP_NAMES[@]}</bold>";
+ACTION_DESCRIPTION="This will clean all OS or IDE specific files from the project (config var: 'DEFAULT_CLEANUP_NAMES').";
+ACTION_OPTIONS="Current settings are: ${DEFAULT_CLEANUP_NAMES[@]}";
 ACTION_CFGVARS=( DEFAULT_CLEANUP_NAMES )
 if ${SCRIPTMAN}; then return; fi
 
