@@ -9,7 +9,7 @@
 # action for Dev-Tools
 #
 
-ACTION_DESCRIPTION="Build a manpage file based on script help string.";
+ACTION_DESCRIPTION_MANPAGE="Build a manpage file based on script help string.";
 ACTION_OPTIONS="<bold>--type=TYPE</bold>\t\tthe action name to create manpage from, or 'lib' to create global dev tools manpage (default is 'lib' - config var: 'DEFAULT_MANPAGE_TYPE') \n\
 \t<bold>--filename</bold>\t\tthe filename to use to create the manpage (default is 'TYPE.man')";
 ACTION_SYNOPSIS="[--type=action | lib]  [--filename=filename]"
@@ -57,19 +57,19 @@ format_options() {
 #### library_usage ()
 ## this function must echo the usage information of the library itself (with option "--libhelp")
 manpage_library_usage () {
-    for section in "${MANPAGE_INFOS[@]}"; do
+    for section in "${MANPAGE_VARS[@]}"; do
         eval "old_$section=\$$section"
         eval "$section=\$LIB_$section"
     done
-    for section in "${SCRIPT_INFOS[@]}"; do
+    for section in "${SCRIPT_VARS[@]}"; do
         eval "old_$section=\$$section"
         eval "$section=\$LIB_$section"
     done
     manpage_usage false
-    for section in "${MANPAGE_INFOS[@]}"; do
+    for section in "${MANPAGE_VARS[@]}"; do
         eval "$section=\$old_$section"
     done
-    for section in "${SCRIPT_INFOS[@]}"; do
+    for section in "${SCRIPT_VARS[@]}"; do
         eval "$section=\$old_$section"
     done
 }
@@ -95,7 +95,7 @@ manpage_usage () {
             TMP_PRESENTATION=$(substitue_tabs_newlines "${PRESENTATION}")
             TMP_USAGE="${TMP_USAGE}\n${TMP_PRESENTATION}\n";
         fi
-        for section in "${MANPAGE_INFOS[@]}"; do
+        for section in "${MANPAGE_VARS[@]}"; do
             eval "section_ctt=\"\$$section\""
             if [ "$section" != 'NAME' -a -n "$section_ctt" ]; then
                 if [ "$section" == 'OPTIONS' ]
@@ -118,8 +118,8 @@ manpage_usage () {
     return 0;
 }
 
-#### parsecolortags ( "string with <bold>tags</bold>" )
-man_parsecolortags () {
+#### parse_color_tags ( "string with <bold>tags</bold>" )
+man_parse_color_tags () {
     transformed=""
     while read -r line; do
         doneopts=()
@@ -150,7 +150,7 @@ options=$(getscriptoptions "$*")
 while getopts "${COMMON_OPTIONS_ARGS}" OPTION $options; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
-        -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
+        -) LONGOPTARG="`get_long_option_arg \"${OPTARG}\"`"
             case $OPTARG in
                 type*) MANPAGE_TYPE=$LONGOPTARG;;
                 filename*) MANPAGE_FILENAME=$LONGOPTARG;;
@@ -178,7 +178,7 @@ MAN=$(manpage_usage)
 MAN=$(strip_leading_tabs "$MAN")
 MAN=$(substitue_in_content "'<bold>\(.[^\/bold]*\)<\/bold>'" '\`\1\`' "$MAN")
 MAN=$(substitue_in_content "^[ \\\t]*\(<bold>[^\/bold]<\/bold>\)[ \\\t]*$" '\1\\\n' "$MAN")
-MAN=$(man_parsecolortags "$MAN")
+MAN=$(man_parse_color_tags "$MAN")
 #MAN=$(substitue_in_content '<underline>\(.[^\/underline]*\)<\/underline>' '*\1*' "$MAN")
 
 echo "$MAN"

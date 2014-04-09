@@ -158,12 +158,15 @@ update the code ...
 The first part of an action script will mostly be the information strings about this action.
 The `devtools.sh` accepts that any action defines the following variables:
 
--   `ACTION_DESCRIPTION`: the description string of the action, shown when you see the global
+-   `ACTION_NAME`: the name of the action
+-   `ACTION_VERSION`: the current version number of the action
+-   `ACTION_DESCRIPTION_MANPAGE`: the description string of the action, shown when you see the global
     usage page of DevTools and for the action's specific help;
 -   `ACTION_OPTIONS`: an information about action's command line options and configuration
     variables;
 -   `ACTION_SYNOPSIS`: a quick synopsis of action's options;
--   `ACTION_CFGVARS=()`: a table of configuration variables used by the action.
+-   `ACTION_CFGVARS=()`: a table of configuration variables used by the action;
+-   `ACTION_ADDITIONAL_INFO`: an additional information shown with "help action"
 
 ### Action work
 

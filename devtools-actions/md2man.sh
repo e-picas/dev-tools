@@ -21,10 +21,12 @@
 # action for Dev-Tools
 #
 
-ACTION_DESCRIPTION="Build a manpage file based on a markdown content.";
-ACTION_OPTIONS="<bold>--source=FILENAME</bold>\tthe manpage source file (default is 'MANPAGE.md' - config var: 'DEFAULT_MD2MAN_SOURCE') \n\
-\t<bold>--filename=FILENAME</bold>\tthe filename to use to create the manpage (config var: 'DEFAULT_MD2MAN_FILENAME') \n\
-\t<bold>--markdown=BIN_PATH</bold>\tthe binary to use for the 'markdown' command (default is installed MarkdownExtended package - config var: 'DEFAULT_MD2MAN_MARKDOWN_BIN')";
+ACTION_NAME="MD2Man"
+ACTION_VERSION="1.0.0-alpha"
+ACTION_DESCRIPTION_MANPAGE="Build a manpage file based on a markdown content.";
+ACTION_OPTIONS="--source=FILENAME\tthe manpage source file (default is 'MANPAGE.md' - config var: 'DEFAULT_MD2MAN_SOURCE') \n\
+\t--filename=FILENAME\tthe filename to use to create the manpage (config var: 'DEFAULT_MD2MAN_FILENAME') \n\
+\t--markdown=BIN_PATH\tthe binary to use for the 'markdown' command (default is installed MarkdownExtended package - config var: 'DEFAULT_MD2MAN_MARKDOWN_BIN')";
 ACTION_SYNOPSIS="[--source=path]  [--filename=filename]  [--markdown=bin path]"
 ACTION_CFGVARS=( DEFAULT_MD2MAN_SOURCE DEFAULT_MD2MAN_FILENAME DEFAULT_MD2MAN_MARKDOWN_BIN )
 if $SCRIPTMAN; then return; fi
@@ -55,7 +57,7 @@ OPTIND=1
 while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
-        -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
+        -) LONGOPTARG="`get_long_option_arg \"${OPTARG}\"`"
             case $OPTARG in
                 path*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libvers) ;;
                 source*) MANPAGE_SOURCE=$LONGOPTARG;;

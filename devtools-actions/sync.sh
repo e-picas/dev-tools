@@ -21,12 +21,14 @@
 # action for Dev-Tools
 #
 
-ACTION_DESCRIPTION="Will 'rsync' a project directory to a target, which can use SSH protocol if so ; use the '-x' option to process a '--dry-run' rsync.";
-ACTION_OPTIONS="<bold>--target=SERVER</bold>\t\t\tthe server name to use for synchronization (config var: 'DEFAULT_SYNC_SERVER') \n\
-\t<bold>--options=\"RSYNC OPTIONS\"</bold>\tan options string used for the 'rsync' command (config var: 'DEFAULT_SYNC_RSYNC_OPTIONS') \n\
-\t<bold>--env=ENV</bold>\t\t\tthe environment shortcut to deploy if so (config var: 'DEFAULT_SYNC_ENV') \n\
-\t<bold>--no-env</bold>\t\t\tskip environment deployment \n\
-\t<bold>--env-options=\"RSYNC OPTIONS\"</bold>\tan options string used for the 'rsync' command deploying env (config var: 'DEFAULT_SYNC_RSYNC_ENV_OPTIONS')";
+ACTION_NAME="Synchronize"
+ACTION_VERSION="1.0.0-alpha"
+ACTION_DESCRIPTION_MANPAGE="Will 'rsync' a project directory to a target, which can use SSH protocol if so ; use the '-x' option to process a '--dry-run' rsync.";
+ACTION_OPTIONS="--target=SERVER\t\t\tthe server name to use for synchronization (config var: 'DEFAULT_SYNC_SERVER') \n\
+\t--options=\"RSYNC OPTIONS\"\tan options string used for the 'rsync' command (config var: 'DEFAULT_SYNC_RSYNC_OPTIONS') \n\
+\t--env=ENV\t\t\tthe environment shortcut to deploy if so (config var: 'DEFAULT_SYNC_ENV') \n\
+\t--no-env\t\t\tskip environment deployment \n\
+\t--env-options=\"RSYNC OPTIONS\"\tan options string used for the 'rsync' command deploying env (config var: 'DEFAULT_SYNC_RSYNC_ENV_OPTIONS')";
 ACTION_SYNOPSIS="[--env=env]  [--target=server]  [--options=\"rsync options\"]  [--env-options=\"rsync options\"]  [--no-env]"
 ACTION_CFGVARS=( DEFAULT_SYNC_SERVER DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_RSYNC_ENV_OPTIONS DEFAULT_SYNC_ENV )
 if $SCRIPTMAN; then return; fi
@@ -53,7 +55,7 @@ OPTIND=1
 while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
-        -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
+        -) LONGOPTARG="`get_long_option_arg \"${OPTARG}\"`"
             case $OPTARG in
                 path*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libvers) ;;
                 env*) TARGETENV=$LONGOPTARG;;

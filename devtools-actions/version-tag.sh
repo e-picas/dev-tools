@@ -21,11 +21,13 @@
 # action for Dev-Tools
 #
 
-ACTION_DESCRIPTION="This will create a new GIT version TAG according to the semantic versioning (see <http://semver.org/>).";
-ACTION_OPTIONS="<bold>--name=VERSION</bold>\tthe name of the new tag ; default will be next increased version number \n\
-\t<bold>--branch=NAME</bold>\twhich branch to use (default is 'master' - config var: 'DEFAULT_VERSIONTAG_BRANCH')\n\
-\t<bold>--hook=PATH</bold>\tdefine a pre-tag hook file (config var: 'DEFAULT_VERSIONTAG_HOOK' - see 'pre-tag-hook.sample')\n\
-\t<bold>--no-hook</bold>\tdo not run any pre-tag hook file (disable config setting)";
+ACTION_NAME="Version TAG"
+ACTION_VERSION="1.0.0-alpha"
+ACTION_DESCRIPTION_MANPAGE="This will create a new GIT version TAG according to the semantic versioning (see <http://semver.org/>).";
+ACTION_OPTIONS="--name=VERSION\tthe name of the new tag ; default will be next increased version number \n\
+\t--branch=NAME\twhich branch to use (default is 'master' - config var: 'DEFAULT_VERSIONTAG_BRANCH')\n\
+\t--hook=PATH\tdefine a pre-tag hook file (config var: 'DEFAULT_VERSIONTAG_HOOK' - see 'pre-tag-hook.sample')\n\
+\t--no-hook\tdo not run any pre-tag hook file (disable config setting)";
 ACTION_SYNOPSIS="[--name=version]  [--branch=name]  [--hook=path]  [--no-hook]"
 ACTION_CFGVARS=( DEFAULT_VERSIONTAG_BRANCH DEFAULT_VERSIONTAG_HOOK )
 if $SCRIPTMAN; then return; fi
@@ -34,7 +36,7 @@ TAG_NAME=""
 BRANCH_NAME=""
 HOOK_PATH=""
 
-if ! $(isgitclone $_TARGET); then
+if ! $(git_is_clone $_TARGET); then
     error "Project directory '$_TARGET' is not a git clone !"
 fi
 
@@ -51,7 +53,7 @@ OPTIND=1
 while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
     case $OPTION in
-        -) LONGOPTARG="`getlongoptionarg \"${OPTARG}\"`"
+        -) LONGOPTARG="`get_long_option_arg \"${OPTARG}\"`"
             case $OPTARG in
                 path*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libvers) ;;
                 name*) TAG_NAME=$LONGOPTARG;;

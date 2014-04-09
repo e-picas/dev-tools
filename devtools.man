@@ -35,7 +35,7 @@ devtools - Packages development & deployment facilities
     ... version-tag  [\fB--name\fP \fI=version\fP]  [\fB--branch\fP \fI=name\fP]  [\fB--hook\fP \fI=path\fP]  [\fB--no-hook\fP] 
     --
 
-.SH DESCRIPTION
+.SH DESCRIPTION_MANPAGE
 
 .PP
 \fBDevTools\fP is a shell script that handles a set of actions (defined themselves as shell scripts)

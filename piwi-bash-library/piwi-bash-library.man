@@ -1,11 +1,11 @@
 .\" author: Les Ateliers Pierrot
 
-.TH  "Piwi Bash Library" "3" "2013-11-03" "Version 1.0.0" "piwi-bash-library.sh Manual"
+.TH  "Piwi Bash Library" "3" "2014-04-04" "Version 1.0.1" "piwi-bash-library.sh Manual"
 
 .SH NAME
 
 .PP
-piwi-bash-library - The open source bash library of Les Ateliers Pierrot
+piwi-bash-library - An open source day-to-day bash library.
 
 .SH SYNOPSIS
 
@@ -17,11 +17,11 @@ piwi-bash-library - The open source bash library of Les Ateliers Pierrot
     [\fB--help\fP|\fB--usage\fP|\fB--man\fP]
     [\fB-d\fP \fIpath\fP]  [\fB-l\fP \fIfilename\fP]
     [\fB--force\fP|\fB--help\fP|\fB--interactive\fP|\fB--quiet\fP|\fB--verbose\fP|\fB--debug\fP|\fB--dry-run\fP]
-    [\fB--version\fP|\fB--libversion\fP]
+    [\fB--version\fP|\fB--libvers\fP]
     [\fB--logfile\fP \fI=filename\fP] [\fBworking-dir\fP \fI=path\fP]
         [script options ...]  (--)  [arguments ...]
 
-.SH DESCRIPTION
+.SH DESCRIPTION_MANPAGE
 
 .PP
 \fBBash\fP, the "\fIBourne-Again-SHell\fP", is a \fIUnix shell\fP written for the GNU Project as a
@@ -104,34 +104,27 @@ See the "Options" section below for specific options usage.
 .SS The following actions are available
 .TP
 \fBhelp\fP and \fBusage\fP
-get an 'help' and 'usage' information about the interface itself
+get an 'help' and 'usage' information about the library
 .TP
 \fBinstall\fP
 install a copy of the library locally or in your system
 .TP
-\fBversion\fP
-get the version informations about an installed copy ; use option `\fSquiet\fP` to get only
-the version number
-.TP
 \fBcheck\fP
-check if an installed copy is up-to-date
+check if your library is up-to-date
 .TP
 \fBupdate\fP
-update an installed copy with newer version if so ; this will update the MINOR version
+update the library with a newer version if so ; this will update the MINOR version
 .TP
 \fBuninstall\fP
 uninstall a copy from a system path
 .TP
-\fBselfupdate\fP, \fBself-update\fP
-update the current library script (called script `\fS$0\fP`) with newer version if so
+\fBversion\fP
+get the version informations about the library ; use option `\fSquiet\fP` to get only
+the version number
 .TP
-\fBselfvers\fP, \fBself-version\fP
-get the current library script version informations (called script `\fS$0\fP`) ; use option
-`\fSquiet\fP` to get only the version number
-.TP
-\fBdoc\fP, \fBdocumentation\fP
+\fBdocumentation\fP
 see the library documentation ; use option `\fSverbose\fP` to increase verbosity ; you can
-add an `\fSmd\fP` prefix to get the documentation in Markdown format ('mddoc' or 'mddocumentation')
+add an `\fSmd\fP` prefix to get the documentation in Markdown format ('mddocumentation')
 .SH OPTIONS
 
 .PP
@@ -163,7 +156,7 @@ ask for confirmation before any action ; this will define the environment variab
 \fB-x\fP, \fB--debug\fP
 enable debug mode ; this will define the environment variable `\fSDEBUG\fP` on `\fStrue\fP`
 .TP
-\fB-V\fP, \fB--vers\fP, \fB--version\fP
+\fB-V\fP, \fB--version\fP
 see the script version when available ; use option `\fSquiet\fP` to only have the version number
 .TP
 \fB-d\fP, \fB--working-dir\fP =path
@@ -184,7 +177,7 @@ try to open a manpage for current script if available, or show the help string o
 see commands to run but not run them actually ; this will define the environment variable
 `\fSDRYRUN\fP` on `\fStrue\fP`
 .TP
-\fB--libvers\fP, \fB--libversion\fP
+\fB--libvers\fP
 see the library version ; use option `\fSquiet\fP` to only have the version number
 .PP
 You can group short options like `\fS-xc\fP`, set an option argument like `\fS-d(=)value\fP` or
@@ -207,17 +200,17 @@ piwi-bash-library-script -h --less
 Calling the library script itself to use its interface, you can use the following options:
 .TP
 \fB-t\fP, \fB--target\fP =path
-define the target directory of a copy installation ; if it does not exist, `\fSpath\fP` will
+defines the target directory of a copy installation ; if it does not exist, `\fSpath\fP` will
 be created ; it defaults to current path (`\fSpwd\fP`)
 .TP
 \fB-p\fP, \fB--preset\fP =type
-define the preset type to use for an installation ; can be "\fBdefault\fP" (default value),
+defines the preset type to use for an installation ; can be "\fBdefault\fP" (default value),
 "\fBuser\fP", "\fBdev\fP" or "\fBfull\fP" ; the value of this option will be used to define the
 files to install ; see the "Files" section below for more informations
 .TP
 \fB-b\fP, \fB--branch\fP =name
-define the GIT branch to use from the remote repository ; the branch MUST exist in the
-repository ; it defaults to "master"
+defines the GIT branch to use from the remote repository ; the branch MUST exist in the
+repository ; it defaults to "\fBmaster\fP"
 .SH ENVIRONMENT
 
 .PP
@@ -232,13 +225,13 @@ the library flags, activated by script common options (see previous section)
 USEROS
 the current user operating system
 .TP
-NAME VERSION DATE PRESENTATION LICENSE HOMEPAGE
+NAME VERSION DATE DESCRIPTION_MANPAGE_USAGE LICENSE_USAGE HOMEPAGE_USAGE SYNOPSIS_USAGE OPTIONS_USAGE
 these are used to build the help information of the scripts ; they may be defined for each script
 .TP
-SYNOPSIS DESCRIPTION OPTIONS EXAMPLES EXIT_STATUS FILES ENVIRONMENT COPYRIGHT BUGS AUTHOR SEE_ALSO
+SYNOPSIS_MANPAGE DESCRIPTION_MANPAGE_MANPAGE OPTIONS_MANPAGE EXAMPLES_MANPAGE EXIT_STATUS_MANPAGE FILES_MANPAGE ENVIRONMENT_MANPAGE COPYRIGHT_MANPAGE BUGS_MANPAGE AUTHOR_MANPAGE SEE_ALSO_MANPAGE
 these are used to build man-pages and help informations ; they may be defined for each script
 .TP
-NAME VERSION DATE PRESENTATION COPYRIGHT_TYPE LICENSE_TYPE SOURCES_TYPE ADDITIONAL_INFO
+NAME VERSION DATE PRESENTATION COPYRIGHT LICENSE SOURCES ADDITIONAL_INFO
 these are used to build the version string of the scripts ; they may be defined for each script
 .TP
 SCRIPT_OPTS SCRIPT_ARGS SCRIPT_PROGRAMS OPTIONS_ALLOWED LONG_OPTIONS_ALLOWED ARGIND ARGUMENT
@@ -280,14 +273,30 @@ is installed by the interface using the "dev" or "full" presets
 .SH LICENSE
 
 .PP
-The library is licensed under GPL-3.0 - Copyleft (c) Les Ateliers Pierrot
-<http://www.ateliers-pierrot.fr/> - Some rights reserved. For documentation,
-sources & updates, see <http://github.com/atelierspierrot/piwi-bash-library>. 
-To read GPL-3.0 license conditions, see <http://www.gnu.org/licenses/gpl-3.0.html>.
+Copyright (C) 2013-2014 Les Ateliers Pierrot
+<http://www.ateliers-pierrot.fr/> - Some rights reserved.
 
 .PP
-This is free software: you are free to change and redistribute it ; there is NO WARRANTY,
-to the extent permitted by law.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+.PP
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+.PP
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+.PP
+For documentation, sources & updates, see <http://github.com/atelierspierrot/piwi-bash-library>.
+
+.PP
+To read GPL-3.0 license conditions, see <http://www.gnu.org/licenses/gpl-3.0.html>.
 
 .SH BUGS
 
@@ -297,7 +306,8 @@ To transmit bugs, see <http://github.com/atelierspierrot/piwi-bash-library/issue
 .SH AUTHOR
 
 .PP
-\fBPiwi\fP <&#x70;&#x69;&#101;&#114;&#x6f;&#x2e;w&#98;&#109;&#x73;&#x74;&#114;&#64;&#x67;&#x6d;a&#105;&#108;&#x2e;&#x63;&#111;&#109;> for Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>.
+Created and maintained by \fBPierre Cassat\fP (\fIpiwi\fP - <http://github.com/pierowbmstr>)
+& contributors.
 
 .SH SEE ALSO
 
