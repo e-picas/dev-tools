@@ -58,7 +58,7 @@ set an option argument like `-d(=)value` or `--long=value` and use `--` to expli
 the end of the script options. Any short option(s) with no argument can be used first and any
 short or long option with argument too as long as you use the equal sign:
 
-    devtools.sh action -vi -p ../my/path
+    devtools.sh action -vi -p ../my/path action
 
 is the same as:
 
@@ -68,7 +68,7 @@ Basically, the first string which does not begin by a dash `-` in your command w
 considered as an action name.
 
 For a first start or a quick usage reminder, use option `-h` for a global script help,
-`action -h` to see the help about a specific action and use option `--dry-run` to make dry runs.
+`help action` to see the help about a specific action and use option `--dry-run` to make dry runs.
 
 This package is based on the [Piwi Bash Library](http://github.com/atelierspierrot/piwi-bash-library).
 
@@ -91,7 +91,7 @@ Use special option `-V` to get script's version.
 :   force some commands to not prompt confirmation 
 
 **-i**, **--interactive**
-:   ask for confirmation before any action 
+:   ask for confirmation before some actions
 
 **-x**, **--debug**
 :   see debug infos

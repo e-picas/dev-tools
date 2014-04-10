@@ -86,13 +86,15 @@ else
         TAG_NAME="v${TAG_NAME}"
     fi
     already=$(cd ${_TARGET} && git tag | grep ${TAG_NAME})
-    if [ ! -z ${already} ]; then
+    if [ ! -z ${already} -a "${already}" == "${TAG_NAME}" ]; then
         simple_error "A tag named '${TAG_NAME}' already exists !"
     fi
 fi
 
 if [ -z "${TAG_NAME}" ]; then
     error "Can't guess tag name ..."
+else
+    debecho "> will create tag '${TAG_NAME}' ..."
 fi
 
 if [ ! -z "${BRANCH_NAME}" ]; then
@@ -118,7 +120,7 @@ if [ ! -z ${HOOK_PATH} ]; then
 fi
 
 verecho "> creating git tag named '${TAG_NAME}' ..."
-iexec "cd ${_TARGET} && git tag -a ${TAG_NAME} -m 'Automatic versioning tag'"
+iexec "cd ${_TARGET} && git checkout ${BRANCH_NAME} && git tag -a ${TAG_NAME} -m 'Automatic versioning tag'"
 if ${VERBOSE}; then
     verecho "> tag ${TAG_NAME} created - pushing to remote ..."
 else
