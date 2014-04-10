@@ -29,6 +29,7 @@
 ###### Current version
 NAME="DevTools"
 VERSION="1.2.4"
+DATE=""
 VCSVERSION="@vcsversion@"
 
 ###### First paths
@@ -202,7 +203,6 @@ declare -rx ACTION_SYNOPSIS_MASK="${0}  %s  [common options]  %s  --";
 declare -x ACTIONS_DESCRIPTION_STR=""
 declare -x ACTIONS_SYNOPSIS_STR=""
 prepare_actionslist_strings
-declare -x DESCRIPTION_LISTACTIONS="${ACTIONS_DESCRIPTION_STR}\n\n${DEPLOY_ACTIONS_HELP}"
 declare -x OPTIONS="\n\
 \tinstall\t\t\tinstall the package somewhere in your sytem\n\
 \tuninstall\t\tuninstall an installed package\n\
@@ -283,6 +283,28 @@ find_action () {
         done
     fi
     return 0
+}
+
+#### list_actions ()
+# list available action scripts
+list_actions () {
+    local actions_str="\n<underline>Available actions:</underline>\n${DEPLOY_ACTIONS_HELP}\n"
+    for i in ${!ACTIONS_LIST[*]}; do
+        myaction=${ACTIONS_LIST[$i]}
+        actions_str+="\n    <bold>${myaction%%.sh}</bold>\n"
+        itemdesc=${ACTIONS_DESCRIPTION[$i]}
+        if [ -n "${itemdesc}" ]; then
+            actions_str+="\t${itemdesc/\\n/\\n\t}";
+        fi
+        itemsyn=${ACTIONS_SYNOPSIS[$i]}
+        if [ -n "${itemsyn}" ]; then
+            actions_str+="\n\t<${COLOR_COMMENT}>`printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemstr}\" \"${itemsyn}\"`</${COLOR_COMMENT}>\n";
+        else
+            actions_str+="\n\t<${COLOR_COMMENT}>`printf \"${ACTION_SYNOPSIS_MASK}\" \"${itemstr}\" ''`</${COLOR_COMMENT}>\n";
+        fi
+    done
+    actions_str+="\n<${COLOR_COMMENT}>`library_info`</${COLOR_COMMENT}>";
+    parse_color_tags "${actions_str}\n"
 }
 
 #### action_usage ( action name , action file )
@@ -513,8 +535,9 @@ selfUpdateAction () {
 }
 
 listActions () {
-    parse_color_tags  "<bold>`script_short_title`</bold>"
-    parse_color_tags "${DESCRIPTION_LISTACTIONS}"
+    script_title
+    list_actions
+#    parse_color_tags "${DESCRIPTION_LISTACTIONS}"
 }
 
 #### first setup & options treatment ##########################
@@ -532,7 +555,7 @@ if [ -n "${ACTION}" ]; then load_action "${ACTION}"; fi
 
 # common options parsing
 parse_common_options_strict
-if ${DEBUG}; then library_debug "$*"; fi
+if ${DEBUG}; then library_debug "$*" && echo; fi
 OPTIND=1
 while getopts ":at:${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
@@ -550,8 +573,8 @@ done
 # special help option
 if [ ! -z "$ACTION" ]; then
     case "$ACTION" in
-        help)  helpAction; exit 0;;
-        usage)  usageAction; exit 0;;
+        help) helpAction; exit 0;;
+        usage) usageAction; exit 0;;
         install) installAction; exit 0;;
         uninstall) uninstallAction; exit 0;;
         self-update) selfUpdateAction; exit 0;;

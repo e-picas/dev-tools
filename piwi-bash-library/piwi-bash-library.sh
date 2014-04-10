@@ -134,7 +134,7 @@ declare -rx LIB_SYSHOMEDIR="${HOME}/.${LIB_FILENAME_DEFAULT}"
 ##@ LIB_SYSCACHEDIR = "${LIB_SYSHOMEDIR}/cache/" (read-only)
 declare -rx LIB_SYSCACHEDIR="${LIB_SYSHOMEDIR}/cache"
 
-declare -rx VCSVERSION_MASK="@vcsversion@"
+declare -rx VCS_VERSION_MASK="@vcsversion@"
 declare -x TEST_VAR="test"
 
 
@@ -229,9 +229,9 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 ##@ LIB_NAME LIB_VERSION LIB_DATE LIB_VCSVERSION LIB_VCSVERSION
 ##@ LIB_COPYRIGHT LIB_LICENSE_TYPE LIB_LICENSE_URL LIB_SOURCES_URL
 declare -rx LIB_NAME="Piwi Bash library"
-declare -rx LIB_VERSION="1.0.1"
-declare -rx LIB_DATE="2014-04-04"
-declare -rx LIB_VCSVERSION="master@fb34ed425a494bbe22f5e47f6a6a3d735c27e2ee"
+declare -rx LIB_VERSION="2.0.0"
+declare -rx LIB_DATE="2014-04-09"
+declare -rx LIB_VCSVERSION="master@77dc5568d15c4422419dbfde5979fe8a4f009d2e"
 declare -rx LIB_DESCRIPTION="An open source day-to-day bash library"
 declare -rx LIB_LICENSE_TYPE="GPL-3.0"
 declare -rx LIB_LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
@@ -878,13 +878,20 @@ declare -x SCRIPT_VCS=""
 get_version_string () {
     local fpath="${1:-$0}"
     local cstname="${2:-VCSVERSION}"
-    if [ ! -f "${fpath}" ]; then error "file '${fpath}' not found!"; fi
-    local _infile=$(head -n200 "${fpath}" | grep -o -e "${cstname}=\".*\"" | sed "s|^${cstname}=\"\(.*\)\"$|\1|g")
-    if [ ! -z ${_infile} ]
-    then echo ${_infile}
-    elif [ "${SCRIPT_VCS}" == 'git' ]; then
-        if git_is_clone; then
-            git_get_version
+    if [ ! -z ${!cstname} ]
+    then
+        echo "${!cstname}"
+    else
+        local _infile
+        if [ -f "${fpath}" ]; then
+            _infile=$(head -n200 "${fpath}" | grep -o -e "${cstname}=\".*\"" | sed "s|^${cstname}=\"\(.*\)\"$|\1|g")
+        fi
+        if [ ! -z ${_infile} ]
+        then echo ${_infile}
+        elif [ "${SCRIPT_VCS}" == 'git' ]; then
+            if git_is_clone; then
+                git_get_version
+            fi
         fi
     fi
     return 0
@@ -2281,14 +2288,17 @@ library_short_version () {
 #### library_version ( quiet = false )
 ## this function must echo an FULL information about library name & version (GNU like)
 library_version () {
+    local OLD_VCSVERSION="${VCSVERSION}"
+    export VCSVERSION="${LIB_VCSVERSION}"
     for section in "${VERSION_VARS[@]}"; do
-        eval "export OLD_$section=\$$section"
+        eval "local OLD_$section=\$$section"
         eval "export $section=\$LIB_$section"
     done
     script_version ${1:-false}
     for section in "${VERSION_VARS[@]}"; do
         eval "export $section=\$OLD_$section"
     done
+    export VCSVERSION="${OLD_VCSVERSION}"
     return 0
 }
 
@@ -2610,12 +2620,12 @@ SYNOPSIS_USAGE=" ${0}  [-${COMMON_OPTIONS_ALLOWED_MASK}] ... \n\
 \t[--] <action>";
 declare -x DOCUMENTATION_TITLE="Piwi Bash Library documentation\n\n[*`library_info`*]"
 declare -x DOCUMENTATION_INTRO="\
-Package [${LIB_PACKAGE}] version [${LIB_VERSION}].\n\
-${LIB_COPYRIGHT} - Some rights reserved. \n\
-${LIB_LICENSE_TYPE}.\n\
-${LIB_SOURCES_TYPE}.\n\
-Bug reports: <http://github.com/atelierspierrot/piwi-bash-library/issues>.\n\
-${LIB_ADDITIONAL_INFO}";
+\tPackage [${LIB_PACKAGE}] version [${LIB_VERSION}].\n\
+\t${LIB_COPYRIGHT} - Some rights reserved. \n\
+\t${LIB_LICENSE}.\n\
+\t${LIB_SOURCES}.\n\
+\tBug reports: <http://github.com/atelierspierrot/piwi-bash-library/issues>.\n\
+\t${LIB_ADDITIONAL_INFO}";
 
 # internal API methods
 
@@ -2667,7 +2677,7 @@ intlibaction_documentation_tomd () {
     return 0
 }
 intlibaction_clean () {
-    clean_cachedir
+    clean_library_cachedir
     quietecho ">> cache cleaned"
     return 0
 }
