@@ -1,43 +1,57 @@
 #!/bin/sh
 
-#git --no-pager log --format="%ai %aN %n%n%x09* %s%d%n"
-echo 'ok' && exit 0
+# git command to build inter-tags log
+_LOGCMD="git --no-pager \
+        log --decorate --name-only --first-parent --date-order --date=short \
+        --format=\"%n%ad %aN <%aE>%n%n%x09* %s%d%n%b\"";
 
+# git command to get tag infos
+#git log --tags --simplify-by-decoration --pretty="format:%ai %d"
+#        show --quiet --decorate --date=short --abbrev-commit  \
+#        --pretty=oneline \
+_TAGCMD="git --no-pager \
+        log -1 --simplify-by-decoration --date=short \
+        --format=\"%n## %ad %d (%h)%n%s\"";
 
-CHANGELOG=`ls | egrep 'change|history' -i`
-if test "$CHANGELOG" = ""; then CHANGELOG='History.md'; fi
-DATE=`date +'%Y-%m-%d'`
-HEAD="\nn.n.n / $DATE \n==================\n"
+# get concerned paths
+_CONCERNEDFILES="devtools.sh devtools.conf MANPAGE.md"
 
-if test "$1" = "--list"; then
-	version=`git for-each-ref refs/tags --sort="-*authordate" --format='%(refname)' \
-    --count=1 | sed 's/^refs\/tags\///'`
-  if test -z "$version"; then
-		git log --pretty="format: * %s"
-  else
-		git log --pretty="format: * %s" $version..
-  fi
-else
-	tmp="/tmp/changelog"
-    echo $HEAD > $tmp
-    ./changelog.sh --list >> $tmp
-    echo '' >> $tmp
-    if test -f "$CHANGELOG"; then cat $CHANGELOG >> $tmp; fi
-    mv "$tmp" "$CHANGELOG"
-    test -n "$EDITOR" && $EDITOR $CHANGELOG
-fi
-echo 'ok' && exit 0
+# prepare the file
+_TMPFILE=CHANGELOG
+if [ -f ${_TMPFILE} ]; then rm -f ${_TMPFILE}; fi
+touch ${_TMPFILE}
 
-if test -d ".git"; then
-    git log --date-order --date=short | \
-    sed -e '/^commit.*$/d' | \
-    awk '/^Author/ {sub(/\\$/,""); getline t; print $0 t; next}; 1' | \
-    sed -e 's/^Author: //g' | \
-    sed -e 's/>Date:   \([0-9]*-[0-9]*-[0-9]*\)/>\t\1/g' | \
-    sed -e 's/^\(.*\) \(\)\t\(.*\)/\3    \1    \2/g' > ChangeLog
-    exit 0
-else
-    echo "No git repository present."
-    exit 1
-fi
-echo 'ok' && exit 0
+# let's go
+_MIN=''
+_MAX=''
+_versions=$(git for-each-ref refs/tags --sort="-*authordate" --format='%(refname)'  | sed 's/^refs\/tags\///' | sort -u)
+for _vers in ${_versions}; do
+    gitarg=''
+    if [ ! -z ${_MAX} ]; then _MIN=${_MAX}; fi
+    _MAX=${_vers}
+    if [ ! -z ${_MIN} ]
+        then gitarg+="${_MIN}..${_MAX}"
+        else gitarg+="..${_MAX}"
+    fi
+
+    echo "> building changelog on range ${_MIN}..${_MAX} "
+
+    # log
+    if [ ! -z "${_CONCERNEDFILES}" ]
+        then toexec="${_LOGCMD} ${gitarg} -- ${_CONCERNEDFILES}"
+        else toexec="${_LOGCMD} ${gitarg}"
+    fi
+    eval ${toexec} \
+        | cat - ${_TMPFILE} > ${_TMPFILE}.tmp \
+            && mv ${_TMPFILE}.tmp ${_TMPFILE};
+
+    # tag name
+    eval ${_TAGCMD} ${_vers} \
+        | cat - ${_TMPFILE} > ${_TMPFILE}.tmp \
+            && mv ${_TMPFILE}.tmp ${_TMPFILE};
+
+done
+echo "> OK: changelog file is '${_TMPFILE}'"
+
+cat ${_TMPFILE}
+
