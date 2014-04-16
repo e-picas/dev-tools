@@ -27,6 +27,10 @@ if [ ! -f "${_MDEBIN}" ]; then
     if [ "${USERRESPONSE}" != 'y' ]; then exit 0; fi
 fi
 
+if [ ! -x ${_MDEBIN} ]; then
+    chmod a+x ${_MDEBIN}
+fi
+
 if [ -f "${_BINFILE}" ]; then
     debecho "> inserting version and date in ${_LIBFILE}"
     if `in_array ${USEROS} ${LINUX_OS[@]}`
@@ -62,9 +66,9 @@ else
     verecho "!! > Manual file '${_MANFILE}' not found! (can't update version number and date)"
 fi
 
-git commit -m "Automatic version number and date insertion" && \
-    LASTSHA=`git log -1 --format="%H"` && \
-    git checkout wip && git cherry-pick ${LASTSHA} && \
-    git checkout master && git push origin master wip;
+git commit -m "Version ${_VERSION} : automatic version number and date insertion"
+LASTSHA=`git log -1 --format="%H"`
+git checkout wip && git cherry-pick ${LASTSHA}
+git checkout master && git push origin master wip;
 
 # Endfile
