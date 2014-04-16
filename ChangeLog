@@ -1,0 +1,54 @@
+# Changelog
+
+## 1.3.0 (current master)
+
+- Bash Library updated to version 2.0.1
+- pre-tag-hook ameliorated
+
+## 1.2.0
+
+- new 'less' and 'more' options for the help
+- switching the old Bash Library package to Piwi Bash Library 1.0.0
+- new 'env' option for the 'synch' action
+- new 'list-actions' internal action
+
+## 1.1.0
+
+- renaming original 'deploy.sh' in 'dev-tools.sh', it's real name
+- 'dev-tools' becomes 'devtools'
+- Bash Library updated to version 1.0.4
+- new dependence to the 'atelierspierrot/markdown-extended' package
+- usage of the default BashLibrary "usage" strings
+- internal configuration is now handled in 'devtools.conf'
+- actions:
+    - new 'pre-tag-hook' feature for the 'version-tag' action
+    - changing action 'filename' to 'show-filename' for the 'extract' action
+    - new 'manpage' action
+
+## 1.0.4
+
+- deleting 'dev' code in master
+
+## 1.0.3
+
+//
+
+## 1.0.2
+
+- 'version-tag' action review: correction in informations
+
+## 1.0.1
+
+- full redesign:
+    - specific help string for each action
+    - new files rights
+    - allow usage of a personal action filename
+    - new naming for conig vars
+    - new 'dry-run' option (same as '-x')
+- new 'extract' action
+- 'version-tag' action review: correction in informations
+
+## 1.0
+
+- Bash Library version 0.0.1
+- initial actions
