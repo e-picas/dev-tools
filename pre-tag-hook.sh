@@ -15,6 +15,7 @@ BRANCH_NAME="$3"
 
 _VERSION="${TAG_NAME/v/}"
 _DATE=$(git log -1 --format="%ci" --date=short | cut -s -f 1 -d ' ')
+_GITVERSION=$(git_get_version)
 _BINFILE="devtools.sh"
 _MANFILE="MANPAGE.md"
 _MANMANFILE="devtools.man"
@@ -34,8 +35,8 @@ fi
 if [ -f "${_BINFILE}" ]; then
     debecho "> inserting version and date in ${_LIBFILE}"
     if `in_array ${USEROS} ${LINUX_OS[@]}`
-        then sed -i -e "s|^declare -rx VERSION=\".*\"$|declare -rx VERSION=\"${_VERSION}\"|" "${_BINFILE}";
-        else sed -i '' -e "s|^declare -rx VERSION=\".*\"$|declare -rx VERSION=\"${_VERSION}\"|" "${_BINFILE}";
+        then sed -i -e "s|^VERSION=\".*\"$|VERSION=\"${_VERSION}\"|;s|^DATE=\".*\"|DATE=\"${_DATE}\"|;s|^VCSVERSION=\".*\"|VCSVERSION=\"${_GITVERSION}\"|" "${_BINFILE}";
+        else sed -i '' -e "s|^VERSION=\".*\"$|VERSION=\"${_VERSION}\"|;s|^DATE=\".*\"|DATE=\"${_DATE}\"|;s|^VCSVERSION=\".*\"|VCSVERSION=\"${_GITVERSION}\"|" "${_BINFILE}";
     fi
     debecho "> adding ${_LIBFILE}"
     git add "${_BINFILE}"
