@@ -28,9 +28,9 @@
 
 ###### Current version
 NAME="DevTools"
-VERSION="1.2.4"
-DATE=""
-VCSVERSION="@vcsversion@"
+VERSION="1.3.0"
+DATE="2014-04-16"
+VCSVERSION="master@f9291b4e5c12aefe57b2c905281d3bfffb316f06"
 
 ###### First paths
 ##@ _REALPATH _REALDIRPATH _DEVTOOLS_CONFIGFILE _DEVTOOLS_ACTIONSDIR
