@@ -144,9 +144,9 @@ declare -x TEST_VAR="test"
 ##@ COMMON_OPTIONS_ALLOWED_MASK : REGEX mask that matches all common short options
 ##@ COMMON_LONG_OPTIONS_ALLOWED="working-dir:,working-directory:,force,help,interactive,log:,logfile:,quiet,verbose,version,debug,dry-run,libvers,man,usage"
 ##@ COMMON_LONG_OPTIONS_ALLOWED_MASK : REGEX mask that matches all common long options
-declare -x COMMON_OPTIONS_ALLOWED="d:fhil:qvVx-:"
+declare -x COMMON_OPTIONS_ALLOWED="d:fhiqvVx-:"
 declare -x COMMON_LONG_OPTIONS_ALLOWED="working-dir:,force,help,interactive,log:,quiet,verbose,version,debug,dry-run,libvers,man,usage"
-declare -x COMMON_OPTIONS_ALLOWED_MASK="h|f|i|q|v|x|V|d|l"
+declare -x COMMON_OPTIONS_ALLOWED_MASK="h|f|i|q|v|x|V"
 declare -x COMMON_LONG_OPTIONS_ALLOWED_MASK="working-dir|force|help|interactive|log|quiet|verbose|version|debug|dry-run|libvers|man|usage"
 
 ##@ ORIGINAL_SCRIPT_OPTS="$@" (read-only)
@@ -183,8 +183,8 @@ declare -rx COMMON_OPTIONS_MANPAGE="<bold>-h | --help</bold>\t\t\tshow this info
 \t<bold>-i | --interactive</bold>\t\task for confirmation before any action \n\
 \t<bold>-x | --debug</bold>\t\t\tenable debug mode \n\
 \t<bold>-V | --version</bold>\t\t\tsee the script version when available ; use option '-q' to get the version number only\n\
-\t<bold>-d | --working-dir=PATH</bold>\t\tredefine the working directory (default is 'pwd' - 'PATH' must exist)\n\
-\t<bold>-l | --log=FILENAME</bold>\t\tdefine the log filename to use (default is '${LIB_LOGFILE}')\n\
+\t<bold>--working-dir=PATH</bold>\t\tredefine the working directory (default is 'pwd' - 'PATH' must exist)\n\
+\t<bold>--log=FILENAME</bold>\t\tdefine the log filename to use (default is '${LIB_LOGFILE}')\n\
 \t<bold>--usage</bold>\t\t\t\tshow quick usage information \n\
 \t<bold>--man</bold>\t\t\t\tsee the current script manpage if available \n\
 \t<bold>--dry-run</bold>\t\t\tsee commands to run but not run them actually \n\
@@ -197,8 +197,8 @@ declare -rx COMMON_OPTIONS_USAGE="\n\
 \t-f, --force\t\tforce some commands to not prompt confirmation \n\
 \t-i, --interactive\task for confirmation before any action \n\
 \t-x, --debug\t\tenable debug mode \n\
-\t-d, --working-dir=PATH\tredefine the working directory (default is 'pwd' - 'PATH' must exist)\n\
-\t-l, --log=FILENAME\tdefine the log filename to use (default is '${LIB_LOGFILE}')\n\
+\t--working-dir=PATH\tredefine the working directory (default is 'pwd' - 'PATH' must exist)\n\
+\t--log=FILENAME\t\tdefine the log filename to use (default is '${LIB_LOGFILE}')\n\
 \t--dry-run\t\tsee commands to run but not run them actually \n\n\
 \t-V, --version\t\tsee the script version when available\n\
 \t\t\t\tuse option '-q' to get the version number only\n\
@@ -229,9 +229,9 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 ##@ LIB_NAME LIB_VERSION LIB_DATE LIB_VCSVERSION LIB_VCSVERSION
 ##@ LIB_COPYRIGHT LIB_LICENSE_TYPE LIB_LICENSE_URL LIB_SOURCES_URL
 declare -rx LIB_NAME="Piwi Bash library"
-declare -rx LIB_VERSION="2.0.0"
-declare -rx LIB_DATE="2014-04-09"
-declare -rx LIB_VCSVERSION="master@77dc5568d15c4422419dbfde5979fe8a4f009d2e"
+declare -rx LIB_VERSION="2.0.1"
+declare -rx LIB_DATE="2014-04-16"
+declare -rx LIB_VCSVERSION="master@4bae89b98e72f3a44e08c8125acceb4e62002e74"
 declare -rx LIB_DESCRIPTION="An open source day-to-day bash library"
 declare -rx LIB_LICENSE_TYPE="GPL-3.0"
 declare -rx LIB_LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
@@ -381,8 +381,9 @@ realpath () { get_absolute_path "$*"; }
 resolve () {
     if [ $# -eq 0 ]; then return 0; fi
     local _path="$1"
-    _path="${_path/\~/${HOME}}"
-    _path="${_path/./`pwd`}"
+    if [ "${_path:0:1}" == '~' ]; then _path="${_path/\~/${HOME}}"; fi
+    if [ "${_path:0:2}" == '..' ]; then _path="${_path/..\//`pwd`/../}"; fi
+    if [ "${_path:0:1}" == '.' ]; then _path="${_path/.\//`pwd`/}"; fi
     echo ${_path}
 }
 
@@ -867,6 +868,8 @@ path_simple_error () {
 
 
 #### VCS #############################################################################
+
+declare -rxa VCS_VARS=(VCSVERSION SCRIPT_VCS)
 
 ##@ VCSVERSION : variable used as version marker like `branch@commit_sha`
 
@@ -1831,8 +1834,6 @@ parse_common_options () {
             f) export FORCED=true;;
             x) export DEBUG=true;;
             q) export VERBOSE=false; export INTERACTIVE=false; export QUIET=true;;
-            d) set_working_directory $OPTARG;;
-            l) set_log_filename $OPTARG;;
             V) if [ -z ${actiontodo} ]; then actiontodo='version'; fi;;
             -) LONGOPTARG="`get_long_option_arg \"${OPTARG}\"`"
                 case ${OPTARG} in
@@ -2563,6 +2564,9 @@ declare -x INTLIB_MAN_FILENAME="${LIB_FILENAME_DEFAULT}.man"
 declare -x INTLIB_PRESET='default'
 declare -x INTLIB_BRANCH='master'
 declare -x INTLIB_TARGET
+declare -x INTLIB_RELEASE
+declare -rx INTLIB_RELEASE_MASK="%s.tar.gz"
+declare -rx INTLIB_RELEASE_MASK_URL="${LIB_SOURCES_URL}/archive/%s"
 # days to make automatic version check
 declare -x INTLIB_OUTDATED_CHECK=30
 # days to force user update (message is always shown)
@@ -2578,8 +2582,8 @@ for section in "${VERSION_VARS[@]}";        do eval "${section}=\$LIB_${section}
 for section in "${USAGE_VARS[@]}";          do eval "${section}=\$LIB_${section}"; done
 for section in "${INSTALLATION_VARS[@]}";   do eval "${section}=\$LIB_${section}"; done
 SCRIPT_REPOSITORY_URL="${LIB_SOURCES_URL}"
-OPTIONS_ALLOWED="b:t:p:${COMMON_OPTIONS_ALLOWED}"
-LONG_OPTIONS_ALLOWED="branch:,target:,preset:,${COMMON_LONG_OPTIONS_ALLOWED}"
+OPTIONS_ALLOWED="b:t:p:r:${COMMON_OPTIONS_ALLOWED}"
+LONG_OPTIONS_ALLOWED="branch:,target:,preset:,release:,local,${COMMON_LONG_OPTIONS_ALLOWED}"
 INTLIB_PRESET_INFO=""
 for pres in "${INTLIB_PRESET_ALLOWED[@]}"; do
     INTLIB_PRESET_INFO+=" '${pres}'"
@@ -2599,11 +2603,13 @@ OPTIONS_USAGE="\n\
 `parse_color_tags \"<bold>available options:</bold>\"`\n\
 \t-t, --target=PATH\tdefine the target directory ('PATH' must exist - default is '\$HOME/bin/')\n\
 \t-p, --preset=TYPE\tdefine a preset for an installation ; can be ${INTLIB_PRESET_INFO}\n\
-\t-b, --branch=NAME\tdefine the GIT branch to use from the library remote repository (default is '${INTLIB_BRANCH}')\
+\t-b, --branch=NAME\tdefine the GIT branch to use from the library remote repository (default is '${INTLIB_BRANCH}')\n\
+\t-r, --release=VERSION\tdefine the GIT release tag to use from the library remote repository (default is empty)\n\
+\t--local\t\t\tlocal installation in current directory (alias of '-t \$(pwd)')\
 ${COMMON_OPTIONS_USAGE}";
 SYNOPSIS_ERROR=" ${0}  [-${COMMON_OPTIONS_ALLOWED_MASK}] ... \n\
-\t[-t | --target=path]  ...\n\
-\t[-b | --branch=branch]  ...\n\
+\t[-t | --target=path]  [--local]  ...\n\
+\t[-b | --branch=branch]  [-r | --release=version]  ...\n\
 \t[-p | --preset= (${INTLIB_PRESET_ALLOWED[@]}) ]  ...\n\
 \thelp | usage\n\
 \tversion\n\
@@ -2614,8 +2620,8 @@ SYNOPSIS_ERROR=" ${0}  [-${COMMON_OPTIONS_ALLOWED_MASK}] ... \n\
 \tdocumentation\n\
 \tclean\n";
 SYNOPSIS_USAGE=" ${0}  [-${COMMON_OPTIONS_ALLOWED_MASK}] ... \n\
-\t[-t | --target=path]  ...\n\
-\t[-b | --branch=branch]  ...\n\
+\t[-t | --target=path]  [--local]  ...\n\
+\t[-b | --branch=branch]  [-r | --release=version]  ...\n\
 \t[-p | --preset= (${INTLIB_PRESET_ALLOWED[@]}) ]  ...\n\
 \t[--] <action>";
 declare -x DOCUMENTATION_TITLE="Piwi Bash Library documentation\n\n[*`library_info`*]"
@@ -2647,10 +2653,37 @@ intlib_preset_valid () {
 
 # -> prepare a clone of the library repo
 intlib_prepare_libclone () {
-    git_make_clone ${SCRIPT_REPOSITORY_URL}
-    export LIBINST_CLONE=${CURRENT_GIT_CLONE_DIR}
-    git_change_branch ${LIBINST_CLONE} ${LIBINST_BRANCH}
-    git_update_clone ${LIBINST_CLONE}
+    if [ "${INTLIB_RELEASE}" != '' ]
+    then
+        make_library_cachedir
+        local oldpwd=$(pwd)
+        if [ "${INTLIB_RELEASE:0:1}" != 'v' ]; then export INTLIB_RELEASE="v${INTLIB_RELEASE}"; fi
+        local _tag=$(printf "${INTLIB_RELEASE_MASK}" "${INTLIB_RELEASE}")
+        local _tag_url=$(printf "${INTLIB_RELEASE_MASK_URL}" "${_tag}")
+        local _target="${LIB_SYSCACHEDIR}/${INTLIB_RELEASE}"
+        if [ ! -d ${_target} ]; then
+            local wgetcmd=$(which wget)
+            if [ -z ${wgetcmd} ]; then command_error 'wget'; fi
+            cd ${LIB_SYSCACHEDIR}
+            ${wgetcmd} "${_tag_url}"
+            local _tar_dirname=$(tar -tzf "${_tag}" | sed -n 1p)
+            _tar_dirname="${_tar_dirname%/}"
+            if [ -d "${_tar_dirname}" ]; then rm -rf ${_tar_dirname}; fi
+            if ${VERBOSE}
+            then tar xvf ${_tag}
+            else tar xf ${_tag}
+            fi
+            mv ${_tar_dirname} ${INTLIB_RELEASE}
+        fi
+        export LIBINST_CLONE="${_target}"
+        cd ${oldpwd}
+    else
+        local target="${LIB_SYSCACHEDIR}/`basename ${LIB_SOURCES_URL}`-${LIBINST_BRANCH}"
+        git_make_clone ${LIB_SOURCES_URL} ${target}
+        export LIBINST_CLONE=${CURRENT_GIT_CLONE_DIR}
+        git_change_branch ${LIBINST_CLONE} ${LIBINST_BRANCH}
+        git_update_clone ${LIBINST_CLONE}
+    fi
     return 0
 }
 
@@ -2699,6 +2732,13 @@ intlibaction_install () {
     return 0
 }
 intlibaction_update () {
+
+# @TODO: test version to make a warning if upgrade
+
+    local installed="${INTLIB_TARGET}/${INTLIB_BIN_FILENAME}"
+    if [ ! -f ${installed} ]; then
+        simple_error "no installed library found to update in '${INTLIB_TARGET}'!"
+    fi
     script_installation_target ${INTLIB_TARGET}
     intlib_preset_valid
     intlib_prepare_install
@@ -2775,11 +2815,14 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
         t) export INTLIB_TARGET="${OPTARG}";;
         p) export INTLIB_PRESET="${OPTARG}";;
         b) export LIBINST_BRANCH="${OPTARG}";;
+        r) export INTLIB_RELEASE="${OPTARG}";;
         -) LONGOPTARG="`get_long_option_arg \"${OPTARG}\"`"
             case ${OPTARG} in
                 target*) export INTLIB_TARGET="${LONGOPTARG}";;
+                local) export INTLIB_TARGET=$(pwd);;
                 preset*) export INTLIB_PRESET="${LONGOPTARG}";;
                 branch*) export LIBINST_BRANCH="${LONGOPTARG}";;
+                release*) export INTLIB_RELEASE="${LONGOPTARG}";;
                 ?) ;;
             esac ;;
         ?) ;;
