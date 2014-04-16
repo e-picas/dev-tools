@@ -86,7 +86,7 @@ else
         TAG_NAME="v${TAG_NAME}"
     fi
     already=$(cd ${_TARGET} && git tag | grep ${TAG_NAME})
-    if [ ! -z ${already} -a "${already}" == "${TAG_NAME}" ]; then
+    if [ ! -z "${already}" -a "${already}" == "${TAG_NAME}" ]; then
         simple_error "A tag named '${TAG_NAME}' already exists !"
     fi
 fi
