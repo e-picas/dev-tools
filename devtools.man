@@ -1,6 +1,6 @@
 .\" author: Les Ateliers Pierrot
 
-.TH  "Dev Tools" "3" "2014-04-01" "Version 1.2.4" "devtools.sh Manual"
+.TH  "Dev Tools" "3" "2014-04-16" "Version 1.3.0" "devtools.sh Manual"
 
 .SH NAME
 
@@ -11,6 +11,17 @@ devtools - Packages development & deployment facilities
 
 .PP
 \fBdevtools.sh action [common options] [script options [=value]] --\fP
+
+.PP
+\fBdevtools.sh\fP  [\fB-V\fP]  [\fB-f\fP|\fB-i\fP|\fB-q\fP|\fB-v\fP]  [\fB-x\fP|\fB--dry-run\fP]  [\fB-p\fP | \fB--path\fP \fI=path\fP]  ...
+    ... help  <action>  [\fB--less\fP]  [\fB--more\fP]
+    ... usage
+    ... list-actions
+    ... install  [<path> = ~/bin/]
+    ... uninstall  [<path> = ~/bin/]
+    ... self-check  [<path> = ~/bin/]
+    ... self-update  [<path> = ~/bin/]
+    --
 
 .PP
 \fBdevtools.sh\fP  <action>  [\fB-h\fP|\fB--help\fP|\fB-V\fP]  [\fB-f\fP|\fB-i\fP|\fB-q\fP|\fB-v\fP]  [\fB-x\fP|\fB--dry-run\fP]  [\fB-p\fP | \fB--path\fP \fI=path\fP]  ...
@@ -26,7 +37,7 @@ devtools - Packages development & deployment facilities
     ... version-tag  [\fB--name\fP \fI=version\fP]  [\fB--branch\fP \fI=name\fP]  [\fB--hook\fP \fI=path\fP]  [\fB--no-hook\fP] 
     --
 
-.SH DESCRIPTION_MANPAGE
+.SS DESCRIPTION_MANPAGE
 
 .PP
 \fBDevTools\fP is a shell script that handles a set of actions (defined themselves as shell scripts)
@@ -53,7 +64,7 @@ short or long option with argument too as long as you use the equal sign:
 .RS
 
 .EX
-devtools.sh action -vi -p ../my/path
+devtools.sh action -vi -p ../my/path action
 .EE
 .RE
 
@@ -72,12 +83,15 @@ considered as an action name.
 
 .PP
 For a first start or a quick usage reminder, use option `\fS-h\fP` for a global script help,
-`\fSaction -h\fP` to see the help about a specific action and use option `\fS--dry-run\fP` to make dry runs.
+`\fShelp action\fP` to see the help about a specific action and use option `\fS--dry-run\fP` to make dry runs.
 
 .PP
 This package is based on the Piwi Bash Library <http://github.com/atelierspierrot/piwi-bash-library>.
 
 .SH OPTIONS
+
+.PP
+Use special option `\fS-V\fP` to get script's version.
 
 .PP
 \fIThe following common options are supported:\fP
@@ -95,7 +109,7 @@ decrease script verbosity, nothing will be written unless errors
 force some commands to not prompt confirmation 
 .TP
 \fB-i\fP, \fB--interactive\fP
-ask for confirmation before any action 
+ask for confirmation before some actions
 .TP
 \fB-x\fP, \fB--debug\fP
 see debug infos
@@ -117,6 +131,30 @@ See the help information about the script or an action.
 The `\fS--less\fP` option shows the help information using the `\fSless\fP` program. The `\fS--more\fP`
 option shows the help information using the `\fSmore\fP` program. If both options are used,
 the 'less' program will be choosed preferabily.
+.TP
+\fBlist-actions\fP
+See available actions list.
+.TP
+\fBinstall\fP
+Install the DevTools in your system.
+.RS
+
+.EX
+ devtools.sh  install  -[common options ...]  --
+.EE
+.RE
+.PP
+The `\fS-p=... / --path=...\fP` option can be defined to choose the installation path. It
+default to current user's `\fS$HOME/bin/\fP` directory.
+.TP
+\fBuninstall\fP
+uninstall the DevTools from your system
+.TP
+\fBself-check\fP
+check if installed DevTools are up-to-date
+.TP
+\fBself-update\fP
+actually update DevTools
 .PP
 \fIThe following actions are currently available:\fP
 
@@ -577,7 +615,8 @@ To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 \fBLes Ateliers Pierrot\fP <http://www.ateliers-pierrot.fr/> - Paris, France.
 
 .PP
-Created and maintained by \fBPierre Cassat\fP & contributors.
+Created and maintained by \fBPierre Cassat\fP (\fIpiwi\fP - <http://github.com/pierowbmstr>)
+& contributors.
 
 .SH SEE ALSO
 
