@@ -32,7 +32,7 @@ devtools - Packages development & deployment facilities
     ... fix-rights  [**--files** *=chmod*]  [**--dirs** *=chmod*]  [**--bin** *=path*]  [**--bin-mask** *=mask*] 
     ... md2man  [**--source** *=path*]  [**--filename** *=filename*]  [**--markdown** *=bin path*]
     ... manpage  [**--source** *=path*]  [**--filename** *=filename*]  [**--type** *=type*]  [**--dir** *=dir path*]  [**--markdown** *=bin path*]  [**--whatis** *=bin path*]  [**--makewhatis** *=bin path*] 
-    ... sync  [**--env** *=env*]  [**--target** *=server*]  [**--options** *="rsync options"*]  [**--env-options** *="rsync options"*]  [**--no-env**] 
+    ... sync  [**--method** *=method*]  [**--env** *=env*]  [**--target** *=server*]  [**--options** *="rsync/ftp options"*]  [**--env-options** *="rsync options"*]  [**--no-env**] 
     ... version-tag  [**--name** *=version*]  [**--branch** *=name*]  [**--hook** *=path*]  [**--no-hook**] 
     -- 
 
@@ -268,17 +268,22 @@ and can be referenced if the `whatis` and `makewhatis` binaries are found or def
 
 #### sync
 
-Will `rsync` a project directory to a target, which can use SSH protocol if so ; use the
-`-x` option to process a `--dry-run` rsync.
+Will synchronize a project directory to a target via `rsync` of `ncftp`. The `rsync` method 
+can use SSH protocol if so ; use the `-x` option to process a `--dry-run` rsync.
 
     devtools.sh  sync  -[common options ...]  [--dry-run]
-        [--env =env]  [--target =server]  [--options ="rsync options"]  --
+        [--method =method]  [--env =env]  [--target =server]  [--options ="rsync/ftp options"]  
+        [--no-env]  [--env-options ="rsync env options"]  --
+
+**--method** =method
+:   the method to use for the synchronization in 'rsync', 'ftp' ; default method is 'rsync'
+(configuration variable: `DEFAULT_SYNC_METHOD`) 
 
 **--target** =server
 :   the server name to use for synchronization (configuration variable: `DEFAULT_SYNC_SERVER`) 
 
-**--options** ="rsync opts"
-:   an options string used for the 'rsync' command (configuration variable: `DEFAULT_SYNC_RSYNC_OPTIONS`) 
+**--options** ="rsync/ftp opts"
+:   an options string used for the 'rsync' or 'ftp' command (configuration variable: `DEFAULT_SYNC_RSYNC_OPTIONS`) 
 
 **--env** =env
 :   the environment shortcut to deploy if so (configuration variable: `DEFAULT_SYNC_ENV`)
