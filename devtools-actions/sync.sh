@@ -31,7 +31,7 @@ ACTION_OPTIONS="--method\t=METHOD\t\t\tthe synchronization method to use in 'rsy
 \t--no-env\t\t\t\tskip environment deployment \n\
 \t--env-options\t=\"RSYNC OPTIONS\"\tan options string used for the 'rsync' command deploying env (config var: 'DEFAULT_SYNC_RSYNC_ENV_OPTIONS')";
 ACTION_SYNOPSIS="[--method=method]  [--env=env]  [--target=server]  [--options=\"rsync/ftp options\"]  [--env-options=\"rsync options\"]  [--no-env]"
-ACTION_CFGVARS=( DEFAULT_SYNC_SERVER DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_RSYNC_ENV_OPTIONS DEFAULT_SYNC_ENV DEFAULT_SYNC_METHOD DEFAULT_SYNC_FTP_OPTIONS )
+ACTION_CFGVARS=( DEFAULT_SYNC_SERVER DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_RSYNC_ENV_OPTIONS DEFAULT_SYNC_ENV DEFAULT_SYNC_METHOD DEFAULT_SYNC_FTP_OPTIONS DEFAULT_SYNC_FTP_EXCLUDED_FILES DEFAULT_SYNC_FTP_EXCLUDED_DIRS )
 if ${SCRIPTMAN}; then return; fi
 
 METHOD="rsync"
