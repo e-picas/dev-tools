@@ -394,12 +394,29 @@ DEFAULT_MANPAGE_WHATIS_BIN DEFAULT_MANPAGE_MAKEWHATIS_BIN DEFAULT_MANPAGE_MARKDO
 
 #### sync
 
-DEFAULT_SYNC_SERVER DEFAULT_SYNC_ENV
-:   default distant server and environment to synchronize when using action `sync`
+DEFAULT_SYNC_METHOD
+:   default method to use in `rsync` and `ftp` ; default is `rsync`
 
-DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_RSYNC_ENV_OPTIONS
-:   default options to use with the `rysnc` command when using action `sync` ; default is
+DEFAULT_SYNC_SERVER
+:   default distant server to synchronize when using action `sync`
+
+:   to use an SSH tunnel with method `rsync`, write "-e ssh user@server.name:~/server/path/"
+
+:   to use the `ftp` method, write "-u USER -p PASSWORD -P PORT SERVERNAME REMOTEDIR"
+
+:   to use a host configuration file for the `ftp` method, write "-f FILENAME REMOTEDIR"
+
+DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_FTP_OPTIONS
+:   default options to use with the `rysnc` or `ftp` commands when using action `sync` ; 
+    default is `avrlzh` which may be used for a default synchronization keeping files permissions
+
+DEFAULT_SYNC_ENV DEFAULT_SYNC_RSYNC_ENV_OPTIONS
+:   default environment and options to use with the `rysnc` command when using action `sync` ; default is
     `avrlzh` which may be used for a default synchronization keeping files permissions
+
+DEFAULT_SYNC_FTP_EXCLUDED_FILES DEFAULT_SYNC_FTP_EXCLUDED_DIRS
+:   arrays of filenames or dirnames to exclude from synchronization when using the `ftp` method ;
+    you can write REGEXP masks
 
 #### version-tag
 
