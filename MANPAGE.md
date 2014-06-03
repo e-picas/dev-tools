@@ -288,6 +288,13 @@ can use SSH protocol if so ; use the `-x` option to process a `--dry-run` rsync.
 **--env** =env
 :   the environment shortcut to deploy if so (configuration variable: `DEFAULT_SYNC_ENV`)
 
+**--no-env**
+:   skip any configured environment deployment
+
+**--env-options** ="rsync opts"
+:   an options string used for the 'rsync' command when deploying the environment files
+(configuration variable: `DEFAULT_SYNC_RSYNC_ENV_OPTIONS`) 
+
 #### version-tag
 
 This will create a new GIT version TAG according to the semantic versioning (see <http://semver.org/>).

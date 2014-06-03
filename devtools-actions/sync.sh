@@ -55,7 +55,6 @@ fi
 if [ ! -z "${DEFAULT_SYNC_ENV}" ]; then
     TARGETENV="${DEFAULT_SYNC_ENV}"
 fi
-
 if [ ! -z "${DEFAULT_SYNC_RSYNC_ENV_OPTIONS}" ]; then
     RSYNC_ENV_OPTIONS="${DEFAULT_SYNC_RSYNC_ENV_OPTIONS}"
 fi
