@@ -417,7 +417,7 @@ trigger_event () {
 
 #### load_user_config ()
 # overwrite current deploy config with user's one if so
-# searched in '$HOME/.devtools_globals'
+# searched in '$HOME/.devtools_global'
 load_user_config () {
     if [ ! -z ${HOME} ]; then
         local target_configfile=$(realpath "${HOME}/${DEFAULT_USER_CONFIG_FILE}")
