@@ -36,7 +36,7 @@ devtools - Packages development & deployment facilities
     ... version-tag  [**--name** *=version*]  [**--branch** *=name*]  [**--hook** *=path*]  [**--no-hook**] 
     -- 
 
-## DESCRIPTION_MANPAGE
+## DESCRIPTION
 
 **DevTools** is a shell script that handles a set of actions (defined themselves as shell scripts)
 to execute something upon a package in development. The usage is quite simple as it just
@@ -78,20 +78,20 @@ Use special option `-V` to get script's version.
 
 *The following common options are supported:*
 
-**-p**, **--path** =path
-:   define the project directory path (default is `pwd` - the `path` argument must exist)
-
-**-v**, **--verbose**
-:   increase script verbosity 
-
-**-q**, **--quiet**
-:   decrease script verbosity, nothing will be written unless errors 
-
 **-f**, **--force**
 :   force some commands to not prompt confirmation 
 
 **-i**, **--interactive**
 :   ask for confirmation before some actions
+
+**-p**, **--path** =path
+:   define the project directory path (default is `pwd` - the `path` argument must exist)
+
+**-q**, **--quiet**
+:   decrease script verbosity, nothing will be written unless errors 
+
+**-v**, **--verbose**
+:   increase script verbosity 
 
 **-x**, **--debug**
 :   see debug infos
@@ -110,9 +110,6 @@ Use special option `-V` to get script's version.
     option shows the help information using the `more` program. If both options are used,
     the 'less' program will be choosed preferabily.
 
-**list-actions**
-:   See available actions list.
-
 **install**
 :   Install the DevTools in your system.
 
@@ -121,14 +118,17 @@ Use special option `-V` to get script's version.
 :   The `-p=... / --path=...` option can be defined to choose the installation path. It
     default to current user's `$HOME/bin/` directory.
 
-**uninstall**
-:   uninstall the DevTools from your system
+**list-actions**
+:   See available actions list.
 
 **self-check**
 :   check if installed DevTools are up-to-date
 
 **self-update**
 :   actually update DevTools
+
+**uninstall**
+:   uninstall the DevTools from your system
 
 *The following actions are currently available:*
 
@@ -139,13 +139,6 @@ This will clean (remove) all OS or IDE specific files from the project
 
     devtools.sh  cleanup  -[common options ...]  [--dry-run]  --
 
-#### flush
-
-This will clean (remove) all contents recursively from temporary directories
-(configuration variable: `DEFAULT_FLUSH_DIRNAMES`).
-
-    devtools.sh  flush  -[common options ...]  [--dry-run]  --
-
 #### config
 
 Manage the devtools configuration for a package, stored in `.devtools` dotfile ;
@@ -154,17 +147,17 @@ with no option, current configuration will be shown.
     devtools.sh  config  -[common options ...]  [--dry-run]
         [--var =name]  [--val =value]  [--filename]  [--full]  --
 
-**--var** =name
-:    select a configuration variable to read or define
-
-**--val** =value
-:    define a configuration variable value (requires the `--var` option to be defined)
-
 **--filename**
 :    see current configuration file path for the project
 
 **--full**
 :    see the full configuration entries for the project (defaults and custom)
+
+**--val** =value
+:    define a configuration variable value (requires the `--var` option to be defined)
+
+**--var** =name
+:    select a configuration variable to read or define
 
 #### deploy
 
@@ -206,34 +199,24 @@ This will fix files and directories UNIX rights recursively on the project.
         [--files =chmod]  [--dirs =chmod]  [--bin =path]
         [--bin-mask =mask]  --
 
-**--dirs** =chmod
-:   the rights level setted for directories (default is `0755` - configuration variable: `DEFAULT_FIXRIGHTS_DIRS_CHMOD`) 
-
-**--files** =chmod
-:   the rights level setted for files (default is `0644` - configuration variable: `DEFAULT_FIXRIGHTS_FILES_CHMOD`) 
-
 **--bin** =path
 :   directory name of the binaries, to define their rights on `a+x` (default is `bin/` - configuration variable: `DEFAULT_FIXRIGHTS_BIN_DIR`)
 
 **--bin-mask** =mask
 :   mask to match binary files in 'bin' (default is empty - configuration variable: `DEFAULT_FIXRIGHTS_BIN_MASK`)
 
-#### md2man
+**--dirs** =chmod
+:   the rights level setted for directories (default is `0755` - configuration variable: `DEFAULT_FIXRIGHTS_DIRS_CHMOD`) 
 
-Build a manpage file based on a markdown content.
+**--files** =chmod
+:   the rights level setted for files (default is `0644` - configuration variable: `DEFAULT_FIXRIGHTS_FILES_CHMOD`) 
 
-    devtools.sh  md2man  -[common options ...]  [--dry-run]
-        [--source =path]  [--filename =filename]  [--markdown =bin]  --
+#### flush
 
-**--source** =filename
-:   the manpage source file (default is `MANPAGE.md` - configuration variable: `DEFAULT_MANPAGE_SOURCE`) 
+This will clean (remove) all contents recursively from temporary directories
+(configuration variable: `DEFAULT_FLUSH_DIRNAMES`).
 
-**--filename** =filename
-:   the filename to use to create the manpage (configuration variable: `DEFAULT_MANPAGE_FILENAME`) 
-
-**--markdown** =bin path
-:   the binary to use for the 'markdown' command 
-    (default is installed MarkdownExtended package - configuration variable: `DEFAULT_MANPAGE_MARKDOWN_BIN`) 
+    devtools.sh  flush  -[common options ...]  [--dry-run]  --
 
 #### manpage
 
@@ -244,27 +227,44 @@ and can be referenced if the `whatis` and `makewhatis` binaries are found or def
         [--source =path]  [--filename =filename]  [--type =type]  [--dir =path]
         [--markdown =bin]  [--whatis =bin]  [--makewhatis =bin]  --
 
-**--source** =filename
-:   the manpage source file (default is `MANPAGE.md` - configuration variable: `DEFAULT_MANPAGE_SOURCE`) 
+**--dir** =name
+:   the manpage system directory to install manpage in 
 
 **--filename** =filename
 :   the filename to use to create the manpage (configuration variable: `DEFAULT_MANPAGE_FILENAME`) 
 
-**--section** =reference
-:   the manpage section (default is '3' - configuration variable: `DEFAULT_MANPAGE_SECTION`) 
-
-**--dir** =name
-:   the manpage system directory to install manpage in 
+**--makewhatis** =bin path
+:   the binary to use for the 'makewhatis' command (configuration variable: `DEFAULT_MANPAGE_MAKEWHATIS_BIN`)
 
 **--markdown** =bin path
 :   the binary to use for the 'markdown' command 
     (default is installed MarkdownExtended package - configuration variable: `DEFAULT_MANPAGE_MARKDOWN_BIN`) 
 
+**--section** =reference
+:   the manpage section (default is '3' - configuration variable: `DEFAULT_MANPAGE_SECTION`) 
+
+**--source** =filename
+:   the manpage source file (default is `MANPAGE.md` - configuration variable: `DEFAULT_MANPAGE_SOURCE`) 
+
 **--whatis** =bin path
 :   the binary to use for the 'whatis' command (configuration variable: `DEFAULT_MANPAGE_WHATIS_BIN`) 
 
-**--makewhatis** =bin path
-:   the binary to use for the 'makewhatis' command (configuration variable: `DEFAULT_MANPAGE_MAKEWHATIS_BIN`)
+#### md2man
+
+Build a manpage file based on a markdown content.
+
+    devtools.sh  md2man  -[common options ...]  [--dry-run]
+        [--source =path]  [--filename =filename]  [--markdown =bin]  --
+
+**--filename** =filename
+:   the filename to use to create the manpage (configuration variable: `DEFAULT_MANPAGE_FILENAME`) 
+
+**--markdown** =bin path
+:   the binary to use for the 'markdown' command 
+    (default is installed MarkdownExtended package - configuration variable: `DEFAULT_MANPAGE_MARKDOWN_BIN`) 
+
+**--source** =filename
+:   the manpage source file (default is `MANPAGE.md` - configuration variable: `DEFAULT_MANPAGE_SOURCE`) 
 
 #### sync
 
@@ -275,25 +275,25 @@ can use SSH protocol if so ; use the `-x` option to process a `--dry-run` rsync.
         [--method =method]  [--env =env]  [--target =server]  [--options ="rsync/ftp options"]  
         [--no-env]  [--env-options ="rsync env options"]  --
 
-**--method** =method
-:   the method to use for the synchronization in 'rsync', 'ftp' ; default method is 'rsync'
-(configuration variable: `DEFAULT_SYNC_METHOD`) 
-
-**--target** =server
-:   the server name to use for synchronization (configuration variable: `DEFAULT_SYNC_SERVER`) 
-
-**--options** ="rsync/ftp opts"
-:   an options string used for the 'rsync' or 'ftp' command (configuration variable: `DEFAULT_SYNC_RSYNC_OPTIONS`) 
-
 **--env** =env
 :   the environment shortcut to deploy if so (configuration variable: `DEFAULT_SYNC_ENV`)
-
-**--no-env**
-:   skip any configured environment deployment
 
 **--env-options** ="rsync opts"
 :   an options string used for the 'rsync' command when deploying the environment files
 (configuration variable: `DEFAULT_SYNC_RSYNC_ENV_OPTIONS`) 
+
+**--method** =method
+:   the method to use for the synchronization in 'rsync', 'ftp' ; default method is 'rsync'
+(configuration variable: `DEFAULT_SYNC_METHOD`) 
+
+**--no-env**
+:   skip any configured environment deployment
+
+**--options** ="rsync/ftp opts"
+:   an options string used for the 'rsync' or 'ftp' command (configuration variable: `DEFAULT_SYNC_RSYNC_OPTIONS`) 
+
+**--target** =server
+:   the server name to use for synchronization (configuration variable: `DEFAULT_SYNC_SERVER`) 
 
 #### version-tag
 
@@ -302,14 +302,14 @@ This will create a new GIT version TAG according to the semantic versioning (see
     devtools.sh  version-tag  -[common options ...]  [--dry-run]
         [--name =version]  [--branch =name]  [--hook =path]  [--no-hook]  --
 
-**--name** =version
-:   the name of the new tag ; default will be next increased version number 
-
 **--branch** =name
 :   which branch to use (default is `master` - configuration variable: `DEFAULT_VERSIONTAG_BRANCH`)
 
 **--hook** =path
 :   define a pre-tag hook file (configuration variable: `DEFAULT_VERSIONTAG_HOOK` - see `pre-tag-hook.sample`)
+
+**--name** =version
+:   the name of the new tag ; default will be next increased version number 
 
 **--no-hook**
 :   do not run any pre-tag hook file (disable config setting)
@@ -330,11 +330,11 @@ the script can help you to manage this type of configuration.
 DEFAULT_BASHLIBRARY_PATH
 :   relative path from your project dir to 'piwi-bash-library.sh' ; default is `piwi-bash-library/piwi-bash-library.sh`
 
-DEFAULT_USER_CONFIG_FILE
-:   default project config file (DO NOT CHANGE after a first usage) ; default is `.devtools_globals`
-
 DEFAULT_PROJECT_CONFIG_FILE
 :   default project config file (DO NOT CHANGE after a first usage) ; default is `.devtools`
+
+DEFAULT_USER_CONFIG_FILE
+:   default project config file (DO NOT CHANGE after a first usage) ; default is `.devtools_global`
 
 #### cleanup
 
@@ -368,29 +368,29 @@ DEFAULT_FIXRIGHTS_FILES_CHMOD DEFAULT_FIXRIGHTS_DIRS_CHMOD
 :   default rights levels to use on files and directories when using action `fix-rights` ;
     default is `0755` dor directories and `0644` for files
 
-#### md2man
-
-DEFAULT_MD2MAN_SOURCE DEFAULT_MD2MAN_FILENAME
-:   default source and target file names when using action `manpage` ; default is a source 
-    file named `MANPAGE.md`
-
-DEFAULT_MD2MAN_MARKDOWN_BIN
-:   path of the binary to use for the `markdown` command ; default is what the script found
-    in your system using the `which` command
-
 #### manpage
-
-DEFAULT_MANPAGE_SOURCE DEFAULT_MANPAGE_FILENAME
-:   default source and target file names when using action `manpage`
 
 DEFAULT_MANPAGE_SECTION
 :   default system manpage type to use when using action `manpage` ; default is `3` which
     is the recommended section for third-party manpages
 
+DEFAULT_MANPAGE_SOURCE DEFAULT_MANPAGE_FILENAME
+:   default source and target file names when using action `manpage`
+
 DEFAULT_MANPAGE_WHATIS_BIN DEFAULT_MANPAGE_MAKEWHATIS_BIN DEFAULT_MANPAGE_MARKDOWN_BIN
 :   path of the binaries to use for the `whatis`, `makewhatis` and `markdown` commands
     when using action `manpage` ; default is what the script found in your system using
     the `which` command
+
+#### md2man
+
+DEFAULT_MD2MAN_MARKDOWN_BIN
+:   path of the binary to use for the `markdown` command ; default is what the script found
+    in your system using the `which` command
+
+DEFAULT_MD2MAN_SOURCE DEFAULT_MD2MAN_FILENAME
+:   default source and target file names when using action `manpage` ; default is a source 
+    file named `MANPAGE.md`
 
 #### sync
 
@@ -444,12 +444,12 @@ DEFAULT_VERSIONTAG_HOOK
 *devtools-actions/*, *devtools-[action]*
 :   This directory contains the actions currently available ; the directory and its contents
     are required to use script's actions ; they will be searched in the same directory as
-    the script above, then in current user `$HOME` ; the scripts must be executable for its/all
-    user(s).
+    the script above, then in current user's `$HOME` ; the scripts must be executable for 
+    its/all user(s).
 :   When it is installed globally, each action is stored as a `devtools-action` binary file
     in the same directory as the global script.
 
-*.devtools_globals*
+*.devtools_global*
 :   This is the specific dotfile to use for "per user" configuration ; you may write your
     configuration following the global `devtools.conf` rules ; this file is searched at the
     root directory of user's `$HOME` and is loaded first.
