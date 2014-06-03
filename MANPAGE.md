@@ -514,4 +514,3 @@ Created and maintained by **Pierre Cassat** (*piwi* - <http://github.com/pierowb
 ## SEE ALSO
 
 piwi-bash-library(3)
-
