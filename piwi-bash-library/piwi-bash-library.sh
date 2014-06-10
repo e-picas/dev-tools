@@ -140,11 +140,11 @@ declare -x TEST_VAR="test"
 
 #### COMMON OPTIONS #############################################################################
 
-##@ COMMON_OPTIONS_ALLOWED = "d:fhil:qvVx-:"
+##@ COMMON_OPTIONS_ALLOWED = "fhiqvVx-:"
 ##@ COMMON_OPTIONS_ALLOWED_MASK : REGEX mask that matches all common short options
 ##@ COMMON_LONG_OPTIONS_ALLOWED="working-dir:,working-directory:,force,help,interactive,log:,logfile:,quiet,verbose,version,debug,dry-run,libvers,man,usage"
 ##@ COMMON_LONG_OPTIONS_ALLOWED_MASK : REGEX mask that matches all common long options
-declare -x COMMON_OPTIONS_ALLOWED="d:fhiqvVx-:"
+declare -x COMMON_OPTIONS_ALLOWED="fhiqvVx-:"
 declare -x COMMON_LONG_OPTIONS_ALLOWED="working-dir:,force,help,interactive,log:,quiet,verbose,version,debug,dry-run,libvers,man,usage"
 declare -x COMMON_OPTIONS_ALLOWED_MASK="h|f|i|q|v|x|V"
 declare -x COMMON_LONG_OPTIONS_ALLOWED_MASK="working-dir|force|help|interactive|log|quiet|verbose|version|debug|dry-run|libvers|man|usage"
@@ -229,9 +229,9 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 ##@ LIB_NAME LIB_VERSION LIB_DATE LIB_VCSVERSION LIB_VCSVERSION
 ##@ LIB_COPYRIGHT LIB_LICENSE_TYPE LIB_LICENSE_URL LIB_SOURCES_URL
 declare -rx LIB_NAME="Piwi Bash library"
-declare -rx LIB_VERSION="2.0.1"
-declare -rx LIB_DATE="2014-04-16"
-declare -rx LIB_VCSVERSION="master@4bae89b98e72f3a44e08c8125acceb4e62002e74"
+declare -rx LIB_VERSION="2.0.2"
+declare -rx LIB_DATE="2014-06-11"
+declare -rx LIB_VCSVERSION="master@7d13b368be96eae02086fb93e7e9115e2a637148"
 declare -rx LIB_DESCRIPTION="An open source day-to-day bash library"
 declare -rx LIB_LICENSE_TYPE="GPL-3.0"
 declare -rx LIB_LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
