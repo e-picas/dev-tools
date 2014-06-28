@@ -16,7 +16,7 @@
     }],
     "support": { "issues": "http://github.com/atelierspierrot/dev-tools/issues" },
     "require-dev": {
-        "atelierspierrot/markdown-extended": "dev-master",
+        "piwi/markdown-extended": "dev-master",
         "atelierspierrot/piwi-bash-library": "1.*" 
     },
     "bin": [

@@ -3,6 +3,7 @@
 ## 1.3.2 (current master)
 
 - renaming the '.devtools_globals' config file in '.devtools_global' (no trailing "s")
+- renaming old 'atelierspierrot/markdown-extended' to 'piwi/markdown-extended'
 
 ## 1.3.1
 
