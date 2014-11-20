@@ -508,7 +508,7 @@ To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 
 **Les Ateliers Pierrot** <http://www.ateliers-pierrot.fr/> - Paris, France.
 
-Created and maintained by **Pierre Cassat** (*piwi* - <http://github.com/piwi>)
+Created and maintained by **Pierre Cassat** (*piwi* - <http://e-piwi.fr/>)
 & contributors.
 
 ## SEE ALSO
