@@ -208,7 +208,8 @@ declare -x OPTIONS="\n\
 \tuninstall\t\tuninstall an installed package\n\
 \tself-check\t\tcheck if an installed package needs to be updated\n\
 \tself-update\t\tupdate an installed package\n\
-\tlist-actions\t\tsee available actions list\n\n\
+\tlist-actions\t\tsee available actions list\n\
+\thelp <action>\t\tget the help of a specific action\n\n\
 \t-p, --path=PATH\t\tthe project path (default is 'pwd' - 'PATH' must exist)\n\
 \t-h, --help\t\tshow this information message \n\
 \t-v, --verbose\t\tincrease script verbosity \n\
