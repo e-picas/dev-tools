@@ -1,0 +1,12 @@
+# special configuration file for FTP synchronization
+#
+# To use it, put the followings in your devtools in your config file:
+#
+# DEFAULT_SYNC_METHOD="ftp"
+# DEFAULT_SYNC_SERVER="-f path/to/this-config.file ..."
+#
+
+host ftp.domain.ext
+user ftp_username
+pass ftp_pass
+port 21
