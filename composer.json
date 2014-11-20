@@ -11,8 +11,7 @@
         "homepage": "http://www.ateliers-pierrot.fr/"
     },{
         "name": "Pierre Cassat",
-        "email": "me@e-piwi.fr",
-        "homepage": "http://github.com/piwi"
+        "homepage": "http://e-piwi.fr/"
     }],
     "support": { "issues": "http://github.com/atelierspierrot/dev-tools/issues" },
     "require-dev": {
