@@ -1,6 +1,6 @@
 .\" author: Les Ateliers Pierrot
 
-.TH  "NAME" "3" "2014-06-11" "Version 1.3.3" "devtools.sh Manual"
+.TH  "NAME" "3" "2014-11-20" "Version 1.3.4" "devtools.sh Manual"
 
 .SH NAME
 
@@ -452,7 +452,7 @@ default project config file (DO NOT CHANGE after a first usage) ; default is `\f
 DEFAULT_USER_CONFIG_FILE
 default project config file (DO NOT CHANGE after a first usage) ; default is `\fS.devtools_global\fP`
 .RE
-.TP cleanup_53979acab25ed
+.TP cleanup_546de045d3ff7
 \fBcleanup\fP
 .RS
 .TP
@@ -461,14 +461,14 @@ list of file names or masks to remove when cleaning a project ; default is:
 .DS&#95;Store .AppleDouble .LSOverride .Spotlight-V100 .Trashes Icon .&#95;&#42; &#42;~ &#42;~lock&#42; 
 Thumbs.db ehthumbs.db Desktop.ini .project .buildpath
 .RE
-.TP deploy_53979acab2754
+.TP deploy_546de045d41b0
 \fBdeploy\fP
 .RS
 .TP
 DEFAULT_DEPLOY_ENV
 default environment name to deploy when using action `\fSdeploy\fP` ; default is `\fSdefault\fP`
 .RE
-.TP extract_53979acab28af
+.TP extract_546de045d435a
 \fBextract\fP
 .RS
 .TP
@@ -478,7 +478,7 @@ the default masks to begin and end file contents extraction when using action `\
 DEFAULT_EXTRACT_SHOW_FILENAME
 whether to show source filename before contents extracted when using action `\fSextract\fP` ; default is `\fSfalse\fP`
 .RE
-.TP fixrights_53979acab2a06
+.TP fixrights_546de045d44c1
 \fBfix-rights\fP
 .RS
 .TP
@@ -492,7 +492,7 @@ DEFAULT_FIXRIGHTS_FILES_CHMOD DEFAULT_FIXRIGHTS_DIRS_CHMOD
 default rights levels to use on files and directories when using action `\fSfix-rights\fP` ;
 default is `\fS0755\fP` dor directories and `\fS0644\fP` for files
 .RE
-.TP manpage_53979acab2be8
+.TP manpage_546de045d4640
 \fBmanpage\fP
 .RS
 .TP
@@ -508,7 +508,7 @@ path of the binaries to use for the `\fSwhatis\fP`, `\fSmakewhatis\fP` and `\fSm
 when using action `\fSmanpage\fP` ; default is what the script found in your system using
 the `\fSwhich\fP` command
 .RE
-.TP md2man_53979acab2d89
+.TP md2man_546de045d47b2
 \fBmd2man\fP
 .RS
 .TP
@@ -520,7 +520,7 @@ DEFAULT_MD2MAN_SOURCE DEFAULT_MD2MAN_FILENAME
 default source and target file names when using action `\fSmanpage\fP` ; default is a source 
 file named `\fSMANPAGE.md\fP`
 .RE
-.TP sync_53979acab2f0b
+.TP sync_546de045d4923
 \fBsync\fP
 .RS
 .TP
@@ -548,7 +548,7 @@ DEFAULT_SYNC_FTP_EXCLUDED_FILES DEFAULT_SYNC_FTP_EXCLUDED_DIRS
 arrays of filenames or dirnames to exclude from synchronization when using the `\fSftp\fP` method ;
 you can write REGEXP masks
 .RE
-.TP versiontag_53979acab3064
+.TP versiontag_546de045d4a96
 \fBversion-tag\fP
 .RS
 .TP
@@ -664,7 +664,7 @@ To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
 \fBLes Ateliers Pierrot\fP <http://www.ateliers-pierrot.fr/> - Paris, France.
 
 .PP
-Created and maintained by \fBPierre Cassat\fP (\fIpiwi\fP - <http://github.com/piwi>)
+Created and maintained by \fBPierre Cassat\fP (\fIpiwi\fP - <http://e-piwi.fr/>)
 & contributors.
 
 .SH SEE ALSO
