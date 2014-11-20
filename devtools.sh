@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Dev-Tools - Packages development & deployment facilities
 # Copyright (C) 2013-2014 Les Ateliers Pierrot
