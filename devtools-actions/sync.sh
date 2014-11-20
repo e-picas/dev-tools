@@ -22,8 +22,8 @@
 #
 
 ACTION_NAME="Synchronize"
-ACTION_VERSION="1.0.0-alpha"
-ACTION_DESCRIPTION="Will 'rsync' a project directory to a target, which can use SSH protocol if so ; use the '-x' option to process a '--dry-run' rsync.";
+ACTION_VERSION="1.0.0-beta"
+ACTION_DESCRIPTION="Will 'rsync' a project directory to a target, which can use SSH or FTP protocols if so ; use the '-x' option to process a '--dry-run' rsync.";
 ACTION_OPTIONS="--method\t=METHOD\t\t\tthe synchronization method to use in 'rsync' (default) or 'ftp' (config var: 'DEFAULT_SYNC_METHOD') \n\
 \t--target\t=SERVER\t\t\tthe server name to use for synchronization (config var: 'DEFAULT_SYNC_SERVER') \n\
 \t--options\t=\"RSYNC/FTP OPTIONS\"\tan options string used for the 'rsync' or 'ftp' command (config var: 'DEFAULT_SYNC_RSYNC_OPTIONS' 'DEFAULT_SYNC_FTP_OPTIONS') \n\
@@ -92,6 +92,13 @@ if [ ! ${TARGETSERVER} 2&> /dev/null ] || [ -z "${TARGETSERVER}" ]; then
 fi
 
 _TARGET="${_TARGET%/}/"
+
+# add the '--progress' option to rsync in VERBOSE mode
+if $VERBOSE; then
+    if [[ $RSYNC_OPTIONS != *--progress* ]]; then
+        RSYNC_OPTIONS+=' --progress'
+    fi
+fi
 
 FIND_OPTS=""
 if [ "${METHOD}" == 'ftp' ]||[ "${METHOD}" == 'ncftp' ]; then
