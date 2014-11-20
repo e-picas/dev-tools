@@ -1,8 +1,8 @@
 Man:        devtools.sh Manual
 Name:       Dev Tools
 Author:     Les Ateliers Pierrot
-Date: 2014-06-11
-Version: 1.3.3
+Date: 2014-11-20
+Version: 1.3.4
 
 
 ## NAME
