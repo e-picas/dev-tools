@@ -21,9 +21,9 @@
 # 
 # ------------------
 #
-# Global help : `devtools.sh -h` OR `devtools.sh help`
-# Action help : `devtools.sh action -h` OR `devtools.sh help action`
-# Action usage : `devtools.sh action [-vix] -p=PROJECT_PATH [action options]`
+# Global help :     `devtools.sh -h` OR `devtools.sh help`
+# Action help :     `devtools.sh help action`
+# Action usage :    `devtools.sh action [-vix] -p=PROJECT_PATH [action options]`
 #
 
 ###### Current version
