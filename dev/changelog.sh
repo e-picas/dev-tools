@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # git command to build inter-tags log
 _LOGCMD="git --no-pager \

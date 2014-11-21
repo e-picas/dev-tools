@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # 
 # DevTools - Packages development & deployment facilities
 # Copyleft (c) 2013 Pierre Cassat and contributors
