@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Piwi Bash Library - An open source day-to-day bash library
 # Copyright (C) 2013-2014 Les Ateliers Pierrot
@@ -229,9 +229,9 @@ ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis dolorib
 ##@ LIB_NAME LIB_VERSION LIB_DATE LIB_VCSVERSION LIB_VCSVERSION
 ##@ LIB_COPYRIGHT LIB_LICENSE_TYPE LIB_LICENSE_URL LIB_SOURCES_URL
 declare -rx LIB_NAME="Piwi Bash library"
-declare -rx LIB_VERSION="2.0.3"
-declare -rx LIB_DATE="2014-06-29"
-declare -rx LIB_VCSVERSION="master@e3e9631639da6b24e8de63e5a000f4a879539fff"
+declare -rx LIB_VERSION="2.0.4"
+declare -rx LIB_DATE="2014-11-21"
+declare -rx LIB_VCSVERSION="master@3473ae5dceb5c25a59e95ce60490290a56962912"
 declare -rx LIB_DESCRIPTION="An open source day-to-day bash library"
 declare -rx LIB_LICENSE_TYPE="GPL-3.0"
 declare -rx LIB_LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
@@ -595,6 +595,82 @@ quiet_echo () {
 #### / quietecho ( string )
 ## alias of 'quiet_echo'
 quietecho () { quiet_echo "$*"; }
+
+#### evaluate ( command )
+## evaluates the command catching events:
+## - stdout is loaded in global `$CMD_OUT`
+## - stderr is loaded in global `$CMD_ERR`
+## - final status is loaded in global `$CMD_STATUS`
+evaluate () {
+    unset CMD_OUT CMD_ERR CMD_STATUS
+    local f_out=`mktemp`;
+    local f_err=`mktemp`;
+    eval "($@) 1>$f_out 2>$f_err;";
+    CMD_STATUS="$?";
+    CMD_OUT=$(cat $f_out) && rm -f $f_out;
+    CMD_ERR=$(cat $f_err) && rm -f $f_err;
+    echo "$CMD_OUT" >&1;
+    echo "$CMD_ERR" >&2;
+    export CMD_OUT CMD_ERR CMD_STATUS
+    return $CMD_STATUS
+}
+
+#### interactive_evaluate ( command )
+## evaluates the command after user confirmation if "interactive" is "on"
+interactive_evaluate () {
+    if [ $# -eq 0 ]; then return 0; fi
+    if ${INTERACTIVE}; then
+        prompt "Run command: \"$1\"" "y" "Y/n"
+        while true; do
+            case ${USERRESPONSE} in
+                [yY]* ) break;;
+                * ) _echo "_ no"; return 0; break;;
+            esac
+        done
+    fi
+    cmd_fct=${FUNCNAME[2]}
+    cmd_line=${BASH_LINENO[1]}
+    debug_evaluate "$*"
+    if [[ $CMD_STATUS -ne 0 ]]; then
+        error "error on execution: $CMD_ERR" $CMD_STATUS ${cmd_fct} ${cmd_line}
+    fi
+    return ${CMD_STATUS:-0}
+}
+
+#### / ievaluate ( command )
+## alias of 'interactive_evaluate'
+ievaluate () { interactive_evaluate "$*"; }
+
+#### / ieval ( command )
+## alias of 'interactive_evaluate'
+ieval () { interactive_evaluate "$*"; }
+
+#### debug_evaluate ( command )
+## evaluates the command if "dryrun" is "off", just write it on screen otherwise
+debug_evaluate () {
+    if [ $# -eq 0 ]; then return 0; fi
+    unset CMD_OUT CMD_ERR CMD_STATUS
+    if ${DRYRUN}
+    then
+        _echo "$(colorize 'dry-run >>' bold) \"$@\""
+        local status=0
+    else
+        unset CMD_OUT CMD_ERR CMD_STATUS
+        evaluate "$@" 2>&1 1>/dev/null
+        [ ! -z "$CMD_OUT" ] && echo "$CMD_OUT" >&1
+        [ ! -z "$CMD_ERR" ] && echo "$CMD_ERR" >&2
+        local status=$CMD_STATUS
+    fi
+    return $status
+}
+
+#### / debevaluate ( command )
+## alias of 'debug_evaluate'
+debevaluate () { debug_evaluate "$*"; }
+
+#### / debeval ( command )
+## alias of 'debug_evaluate'
+debeval () { debug_evaluate "$*"; }
 
 #### interactive_exec ( command , debug_exec = true )
 ## executes the command after user confirmation if "interactive" is "on"
@@ -2775,12 +2851,8 @@ intlibaction_usage () {
 }
 intlib_check_uptodate () {
     if ${QUIET}; then return 0; fi
-    local now=$(date "+%s")
-    local fmdate
-    if `in_array ${USEROS} ${LINUX_OS[@]}`
-        then fmdate=$(stat -c "%Y" "$0")
-        else fmdate=$(stat -f "%m" "$0")
-    fi
+    local now=$(date '+%s')
+    local fmdate=$(stat -c "%Y" "$0")
     local checkdiff=$((${now}-${fmdate}))
     # simple check
     local ts_limit=$((${INTLIB_OUTDATED_CHECK}*24*60*60))
