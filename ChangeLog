@@ -4,6 +4,7 @@
 
 - the 'sync' action is updated to version 1.0.0-beta
 - the 'devtools.sh' now uses a global shebang (for compatibility)
+- update of the PiwiBashLibrary to version 2.0.4
 
 ## 1.3.3 (current master)
 
