@@ -1,6 +1,3 @@
-### Hack to allow keeping an empty directory
-!.gitkeep
-
 ### OS & software files
 .DS_Store
 .AppleDouble
@@ -43,3 +40,6 @@ dev/*
 
 # devtools specific
 deploy-actions/backup
+
+### Hack to allow keeping an empty directory
+!.gitkeep
