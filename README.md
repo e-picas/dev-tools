@@ -1,18 +1,20 @@
 Dev Tools
 =========
 
-This package is a set of shell scripts to help in package development life-cycle, such as cleaning
+This package is a set of shell scripts to help in projects development life-cycle, such as cleaning
 up some un-wanted files to prepare a deployment, actually deploy the package loading some
 environment specific files and helping create some GIT version TAGs.
 
 The tools embedded in this package are based on our work about the best practices in project
 development and deployment: <http://github.com/atelierspierrot/atelierspierrot/blob/master/Package-Deployment.md>.
 
+The binaries of this package are all coded in [Bash](http://en.wikipedia.org/wiki/Bash_%28Unix_shell%29).
+
 
 ## Presentation
 
 The `devtools` package is one single shell script that handles a set of available actions
-(defined themselves as shell scripts) to execute something upon a package in development. The usage is
+(also defined as shell scripts) to execute something upon a project under development. The usage is
 quite simple as it just requires to understand the command line call of one single script.
 The global script always follows the same rules and acts like a dispatcher that distributes the
 options to an action. More, creating a new action (such as your own actions) is as simple
@@ -48,13 +50,13 @@ To download, install and use the package, you need to run something like:
     chmod a+x path/to/your/project/bin/devtools.sh path/to/your/project/bin/devtools-actions/*.sh
 
 If you already use the [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library)
-in your project, you can avoid duplicate following the configuration procedure described
+in your project, you can avoid to duplicate it by following the configuration procedure described
 in next chapter.
 
 ### Global install
 
 If you plan to often use this package, you can install it globally in your `$HOME/bin/` directory.
-You can run something like the followings, assuming you are at the package root directory:
+You can run something like the followings, assuming you are at the package's root directory:
 
     cp -R devtools* ~/bin/ \
         && cp -R piwi-bash-library ~/bin/
@@ -95,6 +97,10 @@ To see a full help info with the list of available actions, run:
 
     ./devtools.sh -h
 
+To see the complete list of available actions, run:
+
+    ./devtools.sh list-actions
+
 To see a specific help info for an action, run:
 
     ./devtools.sh help action
@@ -104,7 +110,7 @@ To actually run an action, use:
     ./devtools.sh [global options] [action options] action_name
 
 For any command line call, you can add the `--dry-run` option to debug what would be done
-by your script but not run it actually:
+by the script but not run it actually:
 
     ./devtools.sh [global options] --dry-run [action options] action_name
 
@@ -116,7 +122,7 @@ A manual is available for your current version of the Dev-Tools. To read it, run
 ## Configuration & Dependencies
 
 The package is distributed with a configuration file named `devtools.conf` with default settings.
-You can define or re-define some settings in this file to fit your environment needs globally.
+You can define or re-define some settings in this file to fit your environment needs.
 If you use this package as a "standalone" tool to manage different projects, you can also
 over-write all configuration values in a specific `.devtools` file at the root directory
 of each project.
@@ -132,10 +138,10 @@ Any available configuration variable is shown in the usage string of each action
 Configuration variables are named following some simple rules:
 
 -   a global configuration variable is named like `DEFAULT_VARIABLE`
--   an action specific configuration variable is named like `DEFAULT_ACTIONNAME_VARIABLE`
+-   an action-specific configuration variable is named like `DEFAULT_ACTIONNAME_VARIABLE`
 
 This package is based on the [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library)
-which is embedded by default in `piwi-bash-library/`. You can over-write the library loaded
+which is embedded by default in the `piwi-bash-library/` directory. You can over-write the library loaded
 (and skip the embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH` of the
 configuration file.
 
@@ -143,7 +149,7 @@ configuration file.
 ## Events triggering
 
 For each action of the `devtools.sh` script, an event will be triggered BEFORE and AFTER the
-action is called. This allows user to define a special behavior for each action using the
+action has been called. This allows user to define a special behavior for each action using the
 configuration values constructed like:
 
     EVENT_PRE_action
@@ -157,9 +163,7 @@ For instance, to print `done` after the `cleanup` action, we would write:
 ## Create a new action
 
 To create a new action handled by `devtools.sh`, just create a new shell script in the
-`devtools-actions/` directory. You can also create it anywhere and call it with the following:
-
-    ./devtools.sh path/to/you/action-script.sh
+`devtools-actions/` directory.
 
 The best way to begin creating your own action is to make a copy of the `dev/action-model.sh` 
 script of the `wip` branch of this package and update the code ...
@@ -188,13 +192,13 @@ The second part of an action script is its work on the project. You can here use
 you can also use any of its features. To know the version actually in use with your version
 of Dev-Tools, run:
 
-    ./devtools.sh --libvers -q
+    ./devtools.sh --libvers
 
 ### Note for development
 
 During development, you can call any file path as an action running:
 
-    $ ./devtools.sh [global options] [action options] ./action/path/from/package/root.sh
+    ./devtools.sh [global options] [action options] ./action/path/from/package/root.sh
 
 
 ## Sources & bugs report
