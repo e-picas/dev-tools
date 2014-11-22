@@ -124,20 +124,24 @@ fi
 verecho "> syncing '${_TARGET}' to '${TARGETSERVER}' ..."
 if ${DRYRUN}; then
     if [ "${METHOD}" == 'ftp' ]||[ "${METHOD}" == 'ncftp' ]; then
-        iexec "cd \"${_TARGET}\" && \
-            find * -i -type d ${FIND_OPTS} -exec ncftpput ${FTP_OPTIONS} ${TARGETSERVER} {} \; && \
-            find * -i -type f -maxdepth 0 ${FIND_OPTS} -exec ncftpput ${FTP_OPTIONS} ${TARGETSERVER} {} \; && \
-            find . -i -type f -maxdepth 1 -name \".*\" ${FIND_OPTS} -exec ncftpput ${FTP_OPTIONS} ${TARGETSERVER} {} \;";
+        export DRYRUN=false
+        iexec "cd \"${_TARGET}\"; \
+            find * -type f ${FIND_OPTS} -print; ";
+        export DRYRUN=true
     else
         iexec "rsync --dry-run ${RSYNC_OPTIONS} ${_TARGET} ${TARGETSERVER}"
 #       rsync --dry-run ${RSYNC_OPTIONS} ${_TARGET} ${TARGETSERVER}
     fi
 else
     if [ "${METHOD}" == 'ftp' ]||[ "${METHOD}" == 'ncftp' ]; then
-        iexec "cd \"${_TARGET}\" && \
-            find * -type d ${FIND_OPTS} -exec ncftpput ${FTP_OPTIONS} ${TARGETSERVER} {} \; && \
-            find * -type f -maxdepth 0 ${FIND_OPTS} -exec ncftpput ${FTP_OPTIONS} ${TARGETSERVER} {} \; && \
-            find . -type f -maxdepth 1 -name \".*\" ${FIND_OPTS} -exec ncftpput ${FTP_OPTIONS} ${TARGETSERVER} {} \;";
+        export _date=$(date '+%d%m%Y-%H%M');
+        export _archive=$(mktemp -d --suffix "-devtools-sync-${_date}");
+        export _logfile=$(get_tempfile_path "devtools-sync-${_date}.log");
+        iexec "cd \"${_TARGET}\"; \
+            find * -type f ${FIND_OPTS} -exec cp -p --parents --dereference {} $_archive \; && \
+            ncftpput -d $_logfile ${FTP_OPTIONS} ${TARGETSERVER} $_archive/* && \
+            rm -rf $_archive ; ";
+        unset _date _archive _logfile
     else
         iexec "rsync ${RSYNC_OPTIONS} ${_TARGET} ${TARGETSERVER}"
     fi
