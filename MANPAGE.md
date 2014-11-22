@@ -268,7 +268,7 @@ Build a manpage file based on a markdown content.
 
 #### sync
 
-Will synchronize a project directory to a target via `rsync` of `ncftp`. The `rsync` method 
+Will synchronize a project directory to a target via `rsync` or `ncftp`. The `rsync` method 
 can use SSH protocol if so ; use the `-x` option to process a `--dry-run` rsync.
 
     devtools.sh  sync  -[common options ...]  [--dry-run]
