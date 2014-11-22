@@ -20,6 +20,7 @@
     },
     "bin": [
         "devtools.sh",
+        "devtools.man",
         "devtools.conf",
         "devtools-actions",
         "piwi-bash-library"
