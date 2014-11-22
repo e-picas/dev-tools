@@ -38,8 +38,8 @@ devtools - Packages development & deployment facilities
 
 ## DESCRIPTION
 
-**DevTools** is a shell script that handles a set of actions (defined themselves as shell scripts)
-to execute something upon a package in development. The usage is quite simple as it just
+**DevTools** is a shell script that handles a set of actions (also defined as shell scripts)
+to execute something upon a project under development. The usage is quite simple as it just
 requires to understand the command line call of one single script. Examples and usage shown
 in this manual all use `devtools.sh` to designate this global script, which is its initial filename
 in a just downloaded package. If you installed the DevTools in your system (in your own `$HOME/bin/`
@@ -94,7 +94,7 @@ Use special option `-V` to get script's version.
 :   increase script verbosity 
 
 **-x**, **--debug**
-:   see debug infos
+:   see debug info
 
 **--dry-run**
 :   see commands to run but do not run them actually 
@@ -108,7 +108,7 @@ Use special option `-V` to get script's version.
 
 :   The `--less` option shows the help information using the `less` program. The `--more`
     option shows the help information using the `more` program. If both options are used,
-    the 'less' program will be choosed preferabily.
+    the 'less' program will be chosen preferably.
 
 **install**
 :   Install the DevTools in your system.
@@ -116,19 +116,19 @@ Use special option `-V` to get script's version.
 :        devtools.sh  install  -[common options ...]  --
 
 :   The `-p=... / --path=...` option can be defined to choose the installation path. It
-    default to current user's `$HOME/bin/` directory.
+    defaults to current user's `$HOME/bin/` directory.
 
 **list-actions**
 :   See available actions list.
 
 **self-check**
-:   check if installed DevTools are up-to-date
+:   check if installed DevTools in `path` are up-to-date
 
 **self-update**
-:   actually update DevTools
+:   actually update DevTools in `path`
 
 **uninstall**
-:   uninstall the DevTools from your system
+:   uninstall the DevTools from `path`
 
 *The following actions are currently available:*
 
@@ -206,10 +206,10 @@ This will fix files and directories UNIX rights recursively on the project.
 :   mask to match binary files in 'bin' (default is empty - configuration variable: `DEFAULT_FIXRIGHTS_BIN_MASK`)
 
 **--dirs** =chmod
-:   the rights level setted for directories (default is `0755` - configuration variable: `DEFAULT_FIXRIGHTS_DIRS_CHMOD`) 
+:   the rights level set for directories (default is `0755` - configuration variable: `DEFAULT_FIXRIGHTS_DIRS_CHMOD`) 
 
 **--files** =chmod
-:   the rights level setted for files (default is `0644` - configuration variable: `DEFAULT_FIXRIGHTS_FILES_CHMOD`) 
+:   the rights level set for files (default is `0644` - configuration variable: `DEFAULT_FIXRIGHTS_FILES_CHMOD`) 
 
 #### flush
 
@@ -473,7 +473,7 @@ A "classic" usage of the script would be:
 
 To get an help string, run:
 
-    devtools.sh -h OR devtools.sh action -h OR devtools.sh help action
+    devtools.sh -h OR devtools.sh help action
 
 To make a dry run before really executing the actions, use:
 
