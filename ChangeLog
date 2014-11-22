@@ -2,7 +2,9 @@
 
 ## 1.3.4 (current dev)
 
-- the 'sync' action is updated to version 1.0.0-beta
+- the 'sync' action now uses a copy of files to synchronize for the 'FTP' method
+    (to open the FTP connection only once)
+- the 'sync' action is upgraded to version 1.0.0
 - the 'devtools.sh' now uses a global shebang (for compatibility)
 - all action scripts now use the global shebang (for compatibility)
 - update of the PiwiBashLibrary to version 2.0.4

@@ -22,7 +22,7 @@
 #
 
 ACTION_NAME="Synchronize"
-ACTION_VERSION="1.0.0-beta"
+ACTION_VERSION="1.0.0"
 ACTION_DESCRIPTION="Will 'rsync' a project directory to a target, which can use SSH or FTP protocols if so ; use the '-x' option to process a '--dry-run' rsync.";
 ACTION_OPTIONS="--method\t=METHOD\t\t\tthe synchronization method to use in 'rsync' (default) or 'ftp' (config var: 'DEFAULT_SYNC_METHOD') \n\
 \t--target\t=SERVER\t\t\tthe server name to use for synchronization (config var: 'DEFAULT_SYNC_SERVER') \n\
