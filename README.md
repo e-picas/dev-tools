@@ -6,7 +6,7 @@ up some un-wanted files to prepare a deployment, actually deploy the package loa
 environment specific files and helping create some GIT version TAGs.
 
 The tools embedded in this package are based on our work about the best practices in project
-development and deployment: <http://github.com/atelierspierrot/atelierspierrot/blob/master/Package-Deployment.md>.
+development and deployment: <http://spip.ateliers-pierrot.fr/nos-activites/notre-philosophie/deployment-rules?lang=en>.
 
 The binaries of this package are all coded in [Bash](http://en.wikipedia.org/wiki/Bash_%28Unix_shell%29).
 
