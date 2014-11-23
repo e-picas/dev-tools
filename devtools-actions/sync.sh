@@ -27,7 +27,7 @@ ACTION_DESCRIPTION="Will 'rsync' a project directory to a target, which can use 
 ACTION_OPTIONS="--method\t=METHOD\t\t\tthe synchronization method to use in 'rsync' (default) or 'ftp' (config var: 'DEFAULT_SYNC_METHOD') \n\
 \t--target\t=SERVER\t\t\tthe server name to use for synchronization (config var: 'DEFAULT_SYNC_SERVER') \n\
 \t--options\t=\"RSYNC/FTP OPTIONS\"\tan options string used for the 'rsync' or 'ftp' command (config var: 'DEFAULT_SYNC_RSYNC_OPTIONS' 'DEFAULT_SYNC_FTP_OPTIONS') \n\
-\t--env\t\t=ENV\t\t\tthe environment shortcut to deploy if so (config var: 'DEFAULT_SYNC_ENV') ; pease note that deployment is not possible via FTP \n\
+\t--env\t\t=ENV\t\t\tthe environment shortcut to deploy if so (config var: 'DEFAULT_SYNC_ENV') ; please note that deployment is not possible via FTP \n\
 \t--no-env\t\t\t\tskip environment deployment \n\
 \t--env-options\t=\"RSYNC OPTIONS\"\tan options string used for the 'rsync' command deploying env (config var: 'DEFAULT_SYNC_RSYNC_ENV_OPTIONS')";
 ACTION_SYNOPSIS="[--method=method]  [--env=env]  [--target=server]  [--options=\"rsync/ftp options\"]  [--env-options=\"rsync options\"]  [--no-env]"
