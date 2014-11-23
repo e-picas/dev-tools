@@ -44,13 +44,11 @@ requires to understand the command line call of one single script. Examples and 
 in this manual all use `devtools.sh` to designate this global script, which is its initial filename
 in a just downloaded package. If you installed the DevTools in your system (in your own `$HOME/bin/`
 directory or any global `/usr/*/bin/` directory), you may replace "devtools.sh" by "devtools"
-in each command line example. In this case, each action is a script installed in the same 
-directory as the global script and named something like `devtools-action_name`.
+in each command line example.
 
 The global script always follows the same rules and acts like a dispatcher that distributes
 the options to an action. More, creating a new action (such as your own actions) is as simple
-as writing a new shell script in the `devtools-actions/` directory (or naming it
-`devtools-myaction` for a global install) and call it with the global script.
+as writing a new shell script in the `devtools-actions/` directory and call it with the global script.
 
 The synopsis usage of the script is something like: **devtools.sh action-name
 [common options] [script options [=value]] --**. You can group short options like `-xc`,
@@ -441,13 +439,11 @@ DEFAULT_VERSIONTAG_HOOK
     the same directory as the script above, then in current user `$HOME`, then in system
     configurations `/etc`.
 
-*devtools-actions/*, *devtools-[action]*
+*devtools-actions/*
 :   This directory contains the actions currently available ; the directory and its contents
     are required to use script's actions ; they will be searched in the same directory as
     the script above, then in current user's `$HOME` ; the scripts must be executable for 
     its/all user(s).
-:   When it is installed globally, each action is stored as a `devtools-action` binary file
-    in the same directory as the global script.
 
 *.devtools_global*
 :   This is the specific dotfile to use for "per user" configuration ; you may write your
