@@ -123,7 +123,7 @@ if [ "${METHOD}" == 'ftp' ]||[ "${METHOD}" == 'ncftp' ]; then
 fi
 
 verecho "> syncing '${_TARGET}' to '${TARGETSERVER}' ..."
-if 5 "$DRYRUN" = 'true' ]; then
+if [ "$DRYRUN" = 'true' ]; then
     if [ "${METHOD}" == 'ftp' ]||[ "${METHOD}" == 'ncftp' ]; then
         export DRYRUN=false
         iexec "cd \"${_TARGET}\"; \
