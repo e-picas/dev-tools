@@ -1,6 +1,6 @@
 Man:        devtools.sh Manual
 Name:       Dev Tools
-Author:     Les Ateliers Pierrot
+Author:     Pierre Cassat
 Date: 2014-11-22
 Version: 1.3.5
 
@@ -70,7 +70,7 @@ considered as an action name.
 For a first start or a quick usage reminder, use option `-h` for a global script help,
 `help action` to see the help about a specific action and use option `--dry-run` to make dry runs.
 
-This package is based on the [Piwi Bash Library](http://github.com/atelierspierrot/piwi-bash-library).
+This package is based on the [Piwi Bash Library](http://github.com/piwi/bash-library).
 
 ## OPTIONS
 
@@ -460,7 +460,7 @@ DEFAULT_VERSIONTAG_HOOK
     root directory of each project (defined by the '-p' option) and is loaded last.
 
 *piwi-bash-library/*
-:   This directory embeds the required third-party [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library).
+:   This directory embeds the required third-party [Piwi Bash Library](https://github.com/piwi/bash-library).
     If you already have a version of the library installed in your system, you can over-write
     the library loaded (and skip the embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH`
     of the global configuration file.
@@ -496,17 +496,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-<http://www.ateliers-pierrot.fr/> - Some rights reserved. For documentation,
-sources & updates, see <http://github.com/atelierspierrot/devtools>. 
+<http://e-piwi.fr/> - Some rights reserved. For documentation,
+sources & updates, see <http://github.com/piwi/dev-tools>. 
 To read GPL-3.0 license conditions, see <http://www.gnu.org/licenses/gpl-3.0.html>.
 
 ## BUGS
 
-To transmit bugs, see <http://github.com/atelierspierrot/devtools/issues>.
+To transmit bugs, see <http://github.com/piwi/dev-tools/issues>.
 
 ## AUTHOR
-
-**Les Ateliers Pierrot** <http://www.ateliers-pierrot.fr/> - Paris, France.
 
 Created and maintained by **Pierre Cassat** (*piwi* - <http://e-piwi.fr/>)
 & contributors.

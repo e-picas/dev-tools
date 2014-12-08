@@ -2,9 +2,8 @@
 # 
 # Dev-Tools - Packages development & deployment facilities
 # Copyleft (C) 2013-2014 Pierre Cassat & contributors
-# <http://github.com/atelierspierrot/dev-tools>
-# <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
-# 
+# <http://github.com/piwi/dev-tools>
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -55,7 +54,7 @@ OPTIND=1
 while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
     case "${OPTION}" in
-        -) LONGOPTARG="$(get_long_option_arg "$OPTARG")"
+        -)  parse_long_option "$OPTARG" "${!OPTIND}"
             case "${OPTARG}" in
                 path*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libvers) ;;
                 name*) TAG_NAME="$LONGOPTARG";;
@@ -83,8 +82,7 @@ if [ -z "${TAG_NAME}" ]; then
         TAG_NAME=$(echo "${lasttag}" | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}')
     fi
 else
-    initial="$(echo ${TAG_NAME} | head -c 1)"
-    if [ "${initial}" != 'v' ]; then
+    if [ "${TAG_NAME:0:1}" != 'v' ]; then
         TAG_NAME="v${TAG_NAME}"
     fi
     already=$(cd ${_TARGET} && git tag | grep ${TAG_NAME})

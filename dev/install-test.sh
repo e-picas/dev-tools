@@ -1,47 +1,72 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # the default installation directory
 _INSTALLDIR=/usr/local
 [ -d /opt/local ] && _INSTALLDIR=/opt/local;
 
-# the default temporary directory
-_TMPDIR=$(mktemp -d)
-
 # the default user name & group
 _USERNAME=$(whoami)
 _USERGROUP=$(id -g -n $_USERNAME)
 
-# help message
-if [ "$1" == '-h' ]||[ "$1" == '--help' ]||[ "$1" == 'help' ]; then
+# get_temp_dir ()
+get_temp_dir () {
+    [ -z "$_TMPDIR" ] && export _TMPDIR=$(mktemp -d);
+    echo "$_TMPDIR"
+}
+
+# debug ()
+debug () {
+    echo "## debug:"
+    echo "InstallDir:   $_INSTALLDIR"
+    echo "UserName:     $_USERNAME"
+    echo "UserGroup:    $_USERGROUP"
+    echo "## install paths:"
+    echo "binaries:     $_INSTALLDIR/bin/"
+    echo "configs:      $_INSTALLDIR/etc/"
+    echo "libraries:    $_INSTALLDIR/lib/"
+    echo "manuals:      $_INSTALLDIR/man/man(X)/"
+}
+
+# error ( string , status=1 )
+error () {
+    echo "error: $1"
+    echo "use options '--help' or '-h' for usage information"
+    exit "${2:-1}"
+}
+
+# usage ()
+usage () {
     echo "usage: $0  [install_base_path = $_INSTALLDIR]"
     exit 0
+}
+
+# safe_path ( path )
+safe_path () {
+    local _path=$1
+    [ "$_path" == '.' ] && _path=$(pwd)
+    _path="${_path/\~/${HOME}}"
+    echo "$_path"
+}
+
+# help message
+if [ "$1" == '-h' ]||[ "$1" == '--help' ]||[ "$1" == 'help' ]; then
+    usage
 fi
 
 # the cli argument
 [ $# -ne 0 ] && _INSTALLDIR="$1" && shift;
 
 # transforming path
-_INSTALLDIR="${_INSTALLDIR/\./`pwd`}"
-_INSTALLDIR="${_INSTALLDIR/\~/${HOME}}"
+_INSTALLDIR=$(safe_path "$_INSTALLDIR")
 
 # verification of the installation directory
 if [ ! -d $_INSTALLDIR ]; then
-    echo "error: the target directory '$_INSTALLDIR' does not exist!"
-    exit 1
+    error "the target directory '$_INSTALLDIR' does not exist!"
 fi
 
-# specia debug with '-x'
+# special debug with '-x'
 if [ "$1" == '-x' ]; then
-    echo "## debug:"
-    echo "InstallDir:   $_INSTALLDIR"
-    echo "TempDir:      $_TMPDIR"
-    echo "UserName:     $_USERNAME"
-    echo "UserGroup:    $_USERGROUP"
-    echo "## install paths:"
-    echo "binaries:     $_INSTALLDIR/bin/"
-    echo "configs:      $_INSTALLDIR/etc/"
-    echo "libraris:     $_INSTALLDIR/lib/"
-    echo "manuals:      $_INSTALLDIR/man/man(X)/"
+    debug
     exit 0
 fi
 
@@ -57,7 +82,7 @@ if ! $(which piwi-bash-library); then
 
     # download last master version archive
     echo "> downloading lastest master version archive ..."
-    wget -q --no-check-certificate https://github.com/atelierspierrot/piwi-bash-library/archive/master.tar.gz 1>&/dev/null
+    wget -q --no-check-certificate https://github.com/piwi/piwi-bash-library/archive/master.tar.gz 1>&/dev/null
     # extract it
     echo "> extracting the archive ..."
     tar -xf master
@@ -89,7 +114,7 @@ echo ">> installation of the 'dev-tools' ..."
 
 # download last master version archive
 echo "> downloading lastest master version archive ..."
-wget -q --no-check-certificate https://github.com/atelierspierrot/dev-tools/archive/master.tar.gz 1>&/dev/null
+wget -q --no-check-certificate https://github.com/piwi/dev-tools/archive/master.tar.gz 1>&/dev/null
 # extract it
 echo "> extracting the archive ..."
 tar -xf master

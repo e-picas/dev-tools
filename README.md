@@ -32,7 +32,7 @@ The following files are required for the Dev-Tools to work:
 -   the original script `devtools.sh`;
 -   the global configuration file `devtools.conf`;
 -   the actions directory (and its contents) `devtools-actions/`;
--   the [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library) directory
+-   the [Piwi Bash Library](https://github.com/piwi/bash-library) directory
     (and its contents) `piwi-bash-library/`.
 
 Additionally, a UNIX-like manual is available in file `devtools.man`. It is not required for the
@@ -42,14 +42,14 @@ script to work but it seems a good advise to include it in your copy.
 
 To download, install and use the package, you need to run something like:
 
-    wget --no-check-certificate https://github.com/atelierspierrot/dev-tools/archive/master.tar.gz
+    wget --no-check-certificate https://github.com/piwi/dev-tools/archive/master.tar.gz
     tar -xvf master.tar.gz
     # do not forget here to change "path/to/your/project" to fit your project ...
     cp -R dev-tools-master/devtools* path/to/your/project/bin/ \
         && cp -R dev-tools-master/piwi-bash-library path/to/your/project/bin
     chmod a+x path/to/your/project/bin/devtools.sh path/to/your/project/bin/devtools-actions/*.sh
 
-If you already use the [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library)
+If you already use the [Piwi Bash Library](https://github.com/piwi/bash-library)
 in your project, you can avoid to duplicate it by following the configuration procedure described
 in next chapter.
 
@@ -77,7 +77,7 @@ you can simply add the package to your requirements and ensure to define a `bin`
 
     "require": {
         ...
-        "atelierspierrot/dev-tools": "1.*"
+        "piwi/dev-tools": "1.*"
     },
     "config": {
         ...
@@ -140,7 +140,7 @@ Configuration variables are named following some simple rules:
 -   a global configuration variable is named like `DEFAULT_VARIABLE`
 -   an action-specific configuration variable is named like `DEFAULT_ACTIONNAME_VARIABLE`
 
-This package is based on the [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library)
+This package is based on the [Piwi Bash Library](https://github.com/piwi/bash-library)
 which is embedded by default in the `piwi-bash-library/` directory. You can over-write the library loaded
 (and skip the embedded version) re-defining the `DEFAULT_BASHLIBRARY_PATH` of the
 configuration file.
@@ -167,7 +167,7 @@ To create a new action handled by `devtools.sh`, just create a new shell script 
 
 The best way to begin creating your own action is to make a copy of the `dev/action-model.sh` 
 script of the `wip` branch of this package and update the code ...
-For more info, see <http://github.com/atelierspierrot/dev-tools/blob/wip/dev/action-model.sh>.
+For more info, see <http://github.com/piwi/dev-tools/blob/wip/dev/action-model.sh>.
 
 ### Action info
 
@@ -188,7 +188,7 @@ The `devtools.sh` accepts that any action defines the following variables:
 
 The second part of an action script is its work on the project. You can here use any kind of
 [Bash](http://en.wikipedia.org/wiki/Bash_%28Unix_shell%29) and UNIX commands and use the 
-`devtools.sh` environment variables. As this package is based on the [Piwi Bash Library](https://github.com/atelierspierrot/piwi-bash-library),
+`devtools.sh` environment variables. As this package is based on the [Piwi Bash Library](https://github.com/piwi/bash-library),
 you can also use any of its features. To know the version actually in use with your version
 of Dev-Tools, run:
 
@@ -204,18 +204,18 @@ During development, you can call any file path as an action running:
 ## Sources & bugs report
 
 The "Dev Tools" package is open source and its source code is hosted on a [GitHub.com](http://github.com)
-repository at <http://github.com/atelierspierrot/dev-tools>. Feel free to make a fork of it and participate.
+repository at <http://github.com/piwi/dev-tools>. Feel free to make a fork of it and participate.
 
-The last stable version is the last available release at <http://github.com/atelierspierrot/dev-tools/releases>.
+The last stable version is the last available release at <http://github.com/piwi/dev-tools/releases>.
 
-To report a bug, please create a ticket at <http://github.com/atelierspierrot/dev-tools/issues>.
+To report a bug, please create a ticket at <http://github.com/piwi/dev-tools/issues>.
 
 
 ## Author & License
 
     Dev-Tools - Packages development & deployment facilities
-    Copyleft (C) 2013-2014 Pierre Cassat & contributors
-    <http://github.com/atelierspierrot/dev-tools>
+    Copyleft (C) 2013-2014, Pierre Cassat & contributors
+    <http://github.com/piwi/dev-tools>
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -229,6 +229,3 @@ To report a bug, please create a ticket at <http://github.com/atelierspierrot/de
     
     You should have received a copy of the GNU General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-    Les Ateliers Pierrot - Paris, France
-    <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>

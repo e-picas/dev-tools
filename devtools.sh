@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 #
 # Dev-Tools - Packages development & deployment facilities
-# Copyright (C) 2013-2014 Les Ateliers Pierrot
-# Created & maintained by Pierre Cassat & contributors
-# <http://github.com/atelierspierrot/dev-tools>
-# <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
+# Copyright (C) 2013-2014, Pierre Cassat & contributors
+# <http://github.com/piwi/dev-tools>
+# <e-piwi.fr> - <me [at] e-piwi.fr>
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -190,12 +189,12 @@ load_actions_infos
 # script infos
 declare -rx LICENSE_TYPE="GPL-3.0"
 declare -rx LICENSE_URL="http://www.gnu.org/licenses/gpl-3.0.html"
-declare -rx SOURCES_HOME="https://github.com/atelierspierrot/dev-tools"
+declare -rx SOURCES_HOME="https://github.com/piwi/dev-tools"
 declare -x COMMON_OPTIONS_GLOBAL="-h|-V"
 declare -x COMMON_OPTIONS_INTERACT="-f|-i|-q|-v"
 OPTIONS_ALLOWED="p:${COMMON_OPTIONS_ALLOWED}"
 LONG_OPTIONS_ALLOWED="${COMMON_LONG_OPTIONS_ALLOWED}"
-COPYRIGHT="Copyright (c) 2013-2014 Les Ateliers Pierrot <http://www.ateliers-pierrot.fr/>"
+COPYRIGHT="Copyright (c) 2013-2014, Pierre Cassat <http://e-piwi.fr/>"
 SCRIPT_VCS='git'
 LICENSE="License ${LICENSE_TYPE}: <${LICENSE_URL}>"
 SOURCES="Sources & updates: <${SOURCES_HOME}>"

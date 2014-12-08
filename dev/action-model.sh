@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # this script is a model to build a custom new action script for Dev-Tools
-# see <http://github.com/atelierspierrot/dev-tools>
+# see <http://github.com/piwi/dev-tools>
 #
 
 # information definitions

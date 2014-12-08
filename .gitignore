@@ -1,24 +1,4 @@
-### OS & software files
-.DS_Store
-.AppleDouble
-.LSOverride
-.Spotlight-V100
-.Trashes
-Icon
-._*
-*~
-*~lock*
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-
-# IDE files
-# to be commented to include them in a project
-.project
-.buildpath
-.idea/*
-
-### Les Ateliers specifics
+### repo specifics
 
 # the composer lock file
 composer.lock

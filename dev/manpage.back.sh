@@ -2,9 +2,8 @@
 # 
 # DevTools - Packages development & deployment facilities
 # Copyleft (c) 2013 Pierre Cassat and contributors
-# <www.ateliers-pierrot.fr> - <contact@ateliers-pierrot.fr>
 # License GPL-3.0 <http://www.opensource.org/licenses/gpl-3.0.html>
-# Sources <http://github.com/atelierspierrot/dev-tools>
+# Sources <http://github.com/piwi/dev-tools>
 #
 # action for Dev-Tools
 #
@@ -85,8 +84,6 @@ manpage_usage () {
     echo "Name: ${NAME}"
     if [ -n "$VERSION" ]; then echo "Version: ${VERSION}"; fi
     if [ -n "$DATE" ]; then echo "Date: ${DATE}"; fi
-#Author:     Les Ateliers Pierrot
-
     if [ ! "x${USAGE}" = 'x' -a "$lib_info" == 'true' ]; then
         echo "${USAGE}\n\n${TMP_VERS}"
     else
