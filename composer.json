@@ -1,22 +1,18 @@
 {
-    "name": "atelierspierrot/dev-tools",
+    "name": "piwi/dev-tools",
     "type": "library",
     "description": "Shell tools & facilities to manage app packages' development",
     "keywords": [ "shell", "developer", "dev tools" ],
-    "homepage": "http://github.com/atelierspierrot/dev-tools",
+    "homepage": "http://github.com/piwi/dev-tools",
     "license": "GPL-3.0",
     "authors": [{
-        "name": "Les Ateliers Pierrot & contributors",
-        "email": "contact@ateliers-pierrot.fr",
-        "homepage": "http://www.ateliers-pierrot.fr/"
-    },{
         "name": "Pierre Cassat",
         "homepage": "http://e-piwi.fr/"
     }],
-    "support": { "issues": "http://github.com/atelierspierrot/dev-tools/issues" },
+    "support": { "issues": "http://github.com/piwi/dev-tools/issues" },
     "require-dev": {
         "piwi/markdown-extended": "dev-master",
-        "atelierspierrot/piwi-bash-library": "1.*" 
+        "piwi/bash-library": "2.*"
     },
     "bin": [
         "devtools.sh",

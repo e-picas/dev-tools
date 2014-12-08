@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# DevTools <http://github.com/atelierspierrot/dev-tools>
+# DevTools <http://github.com/piwi/dev-tools>
 # "version-tag" action hook
 #
 # An example hook script called before version tag creation.
