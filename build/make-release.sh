@@ -8,8 +8,8 @@ else
     exit 1
 fi
 
-source "$LIB_FILE"
-ACTUAL_VERSION="$("$LIB_FILE" -Vq)"
+source "$PBL_FILE"
+ACTUAL_VERSION="$("$PBL_FILE" -Vq)"
 GIT_VERSION="$(git_get_version)"
 
 if [ "$#" -lt 1 ]; then
