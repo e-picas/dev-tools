@@ -33,7 +33,7 @@ The following files are required for the Dev-Tools to work:
 -   the global configuration file `libexec/devtools.conf`;
 -   the actions directory (and its contents) `libexec/devtools-actions/`;
 -   the [Piwi Bash Library](https://github.com/piwi/bash-library) directory
-    (and its contents) `piwi-bash-library/`.
+    (and its contents) `libexec/piwi-bash-library/`.
 
 Additionally, a UNIX-like manual is available in file `man/devtools.man`. It is not required for the
 script to work but it seems a good advise to include it in your copy.
@@ -45,9 +45,9 @@ To download, install and use the package, you need to run something like:
     wget --no-check-certificate https://github.com/piwi/dev-tools/archive/master.tar.gz
     tar -xvf master.tar.gz
     # do not forget here to change "path/to/your/project" to fit your project ...
-    cp -R dev-tools-master/libexec/devtools* path/to/your/project/bin/ \
-        && cp -R dev-tools-master/piwi-bash-library path/to/your/project/bin
+    cp -R dev-tools-master/libexec/* path/to/your/project/bin/
     chmod a+x path/to/your/project/bin/devtools.sh path/to/your/project/bin/devtools-actions/*.sh
+    cp -R dev-tools-master/man/devtools.man path/to/your/project/bin/
 
 If you already use the [Piwi Bash Library](https://github.com/piwi/bash-library)
 in your project, you can avoid to duplicate it by following the configuration procedure described
@@ -58,8 +58,7 @@ in next chapter.
 If you plan to often use this package, you can install it globally in your `$HOME/bin/` directory.
 You can run something like the followings, assuming you are at the package's root directory:
 
-    cp -R devtools* ~/bin/ \
-        && cp -R piwi-bash-library ~/bin/
+    cp -R libexec/* ~/bin/
     chmod a+x ~/bin/devtools.sh ~/bin/devtools-actions/*.sh
 
 For facility, you can even rename `devtools.sh` to just `devtools`:
@@ -74,32 +73,32 @@ For facility, you can even rename `devtools.sh` to just `devtools`:
 
 For a first meet, run in a terminal:
 
-    ./devtools.sh
+    ./bin/devtools
 
 To see a full help info with the list of available actions, run:
 
-    ./devtools.sh -h
+    ./bin/devtools -h
 
 To see the complete list of available actions, run:
 
-    ./devtools.sh list-actions
+    ./bin/devtools list-actions
 
 To see a specific help info for an action, run:
 
-    ./devtools.sh help action
+    ./bin/devtools help action
 
 To actually run an action, use:
 
-    ./devtools.sh [global options] [action options] action_name
+    ./bin/devtools [global options] [action options] action_name
 
 For any command line call, you can add the `--dry-run` option to debug what would be done
 by the script but not run it actually:
 
-    ./devtools.sh [global options] --dry-run [action options] action_name
+    ./bin/devtools [global options] --dry-run [action options] action_name
 
 A manual is available for your current version of the Dev-Tools. To read it, run:
 
-    man ./devtools.man
+    man ./man/devtools.man
 
 
 ## Configuration & Dependencies
@@ -175,13 +174,13 @@ The second part of an action script is its work on the project. You can here use
 you can also use any of its features. To know the version actually in use with your version
 of Dev-Tools, run:
 
-    ./devtools.sh --libvers
+    ./bin/devtools --libvers
 
 ### Note for development
 
 During development, you can call any file path as an action running:
 
-    ./devtools.sh [global options] [action options] ./action/path/from/package/root.sh
+    ./bin/devtools [global options] [action options] ./action/path/from/package/root.sh
 
 
 ## Sources & bugs report
