@@ -14,7 +14,7 @@ _TAGCMD="git --no-pager \
         --format=\"%n## %ad %d (%h)%n%s\"";
 
 # get concerned paths
-_CONCERNEDFILES="devtools.sh devtools.conf MANPAGE.md"
+_CONCERNEDFILES="libexec/devtools.sh libexec/devtools.conf MANPAGE.md"
 
 # prepare the file
 _TMPFILE=CHANGELOG
