@@ -29,13 +29,13 @@ some specific command line options and configuration variables.
 
 The following files are required for the Dev-Tools to work:
 
--   the original script `devtools.sh`;
--   the global configuration file `devtools.conf`;
--   the actions directory (and its contents) `devtools-actions/`;
+-   the original script `libexec/devtools.sh`;
+-   the global configuration file `libexec/devtools.conf`;
+-   the actions directory (and its contents) `libexec/devtools-actions/`;
 -   the [Piwi Bash Library](https://github.com/piwi/bash-library) directory
     (and its contents) `piwi-bash-library/`.
 
-Additionally, a UNIX-like manual is available in file `devtools.man`. It is not required for the
+Additionally, a UNIX-like manual is available in file `man/devtools.man`. It is not required for the
 script to work but it seems a good advise to include it in your copy.
 
 ### Classic install
@@ -45,7 +45,7 @@ To download, install and use the package, you need to run something like:
     wget --no-check-certificate https://github.com/piwi/dev-tools/archive/master.tar.gz
     tar -xvf master.tar.gz
     # do not forget here to change "path/to/your/project" to fit your project ...
-    cp -R dev-tools-master/devtools* path/to/your/project/bin/ \
+    cp -R dev-tools-master/libexec/devtools* path/to/your/project/bin/ \
         && cp -R dev-tools-master/piwi-bash-library path/to/your/project/bin
     chmod a+x path/to/your/project/bin/devtools.sh path/to/your/project/bin/devtools-actions/*.sh
 
@@ -69,23 +69,6 @@ For facility, you can even rename `devtools.sh` to just `devtools`:
 ... or symlink the original:
 
     ln -s devtools.sh devtools
-
-### Note for Composer users
-
-If you are a [Composer](http://getcomposer.org) user and want to use the Dev-Tools in a project, 
-you can simply add the package to your requirements and ensure to define a `bin` directory:
-
-    "require": {
-        ...
-        "piwi/dev-tools": "1.*"
-    },
-    "config": {
-        ...
-        "bin-dir": "bin"
-    },
-
-All the required files will be installed in the `bin-dir` of your project, ready to be used.
-
 
 ## Usage
 

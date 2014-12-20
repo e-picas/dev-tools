@@ -1,25 +1,12 @@
-### repo specifics
-
-# the composer lock file
-composer.lock
-
-# any "tmp*" file or dir anywhere
 *tmp*
-
-# user defined files
 user/*
 */user/*
-
-# the external packages installed by Composer, Template Engine or others
-vendor/*
-*/vendor/*
-
-# specific to the "wip" branch
-build/*
-dev/*
-
-# devtools specific
 deploy-actions/backup
 
-### Hack to allow keeping an empty directory
+# specific to the "wip" branch
+dev/*
+modules/*
+tests/*
+
+# hack to allow keeping an empty directory
 !.gitkeep

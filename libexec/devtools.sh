@@ -27,13 +27,23 @@
 
 ###### Current version
 NAME="DevTools"
-VERSION="1.3.5"
-DATE="2014-11-22"
-VCSVERSION="master@0d2bc3accadedf5604f9240441f961f86679d74d"
+VERSION="0.1.0-dev"
+DATE="2014-12-20"
+VCSVERSION="wip@cae49290b7ec8650c665bae98289d38815d51da4"
 
 ###### First paths
 ##@ _REALPATH _REALDIRPATH _DEVTOOLS_CONFIGFILE _DEVTOOLS_ACTIONSDIR
-declare -rx _REALPATH="$0"
+if [ -L "$0" ]
+then
+    if [ -f "$(readlink "$0")" ]
+    then
+        declare -rx _REALPATH="$(readlink "$0")"
+    else
+        declare -rx _REALPATH="$(dirname "$0")/$(readlink "$0")"
+    fi
+else
+    declare -rx _REALPATH="$0"
+fi
 declare -rx _REALDIRPATH="$(dirname "$_REALPATH")"
 declare -rx _DEVTOOLS_CONFIGFILE="${_REALDIRPATH}/devtools.conf"
 declare -rx _DEVTOOLS_ACTIONSDIR="${_REALDIRPATH}/devtools-actions"
@@ -486,7 +496,7 @@ installAction () {
     if [ "$_info" = 'true' ]; then
         verecho "> installing ${NAME} to \"${_BIN}\""
     fi
-    iexec "cp ${_PWD}/devtools.sh ${_BIN} \
+    iexec "cp ${_PWD}/libexec/devtools.sh ${_BIN} \
         && cp -R ${_PWD}/devtools-actions ${_BIN} \
         && cp ${_PWD}/devtools.conf ${_BIN} \
         && cp ${_PWD}/devtools.man ${_BIN} \
