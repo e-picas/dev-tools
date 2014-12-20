@@ -80,9 +80,11 @@ if [ -f "$CFGFILE" ]; then source "$CFGFILE"; else echo "$CFGFILE"; exit 1; fi
 
 ######## Inclusion of the lib
 declare -rx LIBFILE=$(findRequirements "$DEFAULT_BASHLIBRARY_PATH" "bash library")
-declare -rx USERBINLIBFILE=$(findRequirements "${HOME}/bin/piwi-bash-library.sh" "bash library")
-declare -rx BINLIBFILE=$(findRequirements "/usr/local/bin/piwi-bash-library.sh" "bash library")
+declare -rx LIBFILE_REL=$(findRequirements "${_REALDIRPATH}/${DEFAULT_BASHLIBRARY_PATH}" "bash library")
+declare -rx USERBINLIBFILE=$(findRequirements "${HOME}/bin/piwi-bash-library" "bash library")
+declare -rx BINLIBFILE=$(findRequirements "/usr/local/bin/piwi-bash-library" "bash library")
 if [ -f "$LIBFILE" ]; then source "$LIBFILE";
+elif [ -f "$LIBFILE_REL" ]; then source "$LIBFILE_REL";
 elif [ -f "$USERBINLIBFILE" ]; then source "$USERBINLIBFILE";
 elif [ -f "$BINLIBFILE" ]; then source "$BINLIBFILE";
 else echo "$LIBFILE"; exit 1;
