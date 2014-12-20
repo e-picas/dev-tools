@@ -52,7 +52,7 @@ done
 #SUFFIX="__`echo ${TARGETENV} | tr '[:lower:]' '[:upper:]'`__"
 SUFFIX="__$(string_to_upper "$TARGETENV")__"
 
-_TARGET=$(realpath "${_TARGET}")
+_TARGET=$(realpath "$_TARGET")
 
 verecho "> deploying files with '${SUFFIX}' suffix in '${_TARGET}' ..."
 iexec "find \"${_TARGET}\" -name \"*${SUFFIX}\" -exec sh -c 'cp -v \"\$1\" \"\${1%%\$2}\"' _ {} \"${SUFFIX}\" \;"

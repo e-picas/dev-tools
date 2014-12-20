@@ -92,17 +92,17 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     esac
 done
 
-_TARGET=$(realpath "${_TARGET}")
+_TARGET=$(realpath "$_TARGET")
 MANPAGE_SOURCE_RP="${_TARGET}/${MANPAGE_SOURCE}"
 MANPAGE_FILENAME_RP="${_TARGET}/${MANPAGE_FILENAME}"
-MANPAGE_NAME=$(basename "${MANPAGE_FILENAME}")
+MANPAGE_NAME=$(basename "$MANPAGE_FILENAME")
 
 if [ -z "$MARKDOWN_BIN" ]; then
     error "Markdown binary not defined!"
 elif [ ! -f "$MARKDOWN_BIN" ]; then
     echo "The binary '${MARKDOWN_BIN}' can't be found ; the manpage will not be updated !"
     prompt 'Do you want to continue' 'Y/n' 'y'
-    if [ "${USERRESPONSE}" != 'y' ]; then exit 0; fi
+    if [ "$USERRESPONSE" != 'y' ]; then exit 0; fi
 fi
 
 if [ ! -f "$MANPAGE_SOURCE_RP" ]; then

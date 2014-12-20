@@ -53,13 +53,13 @@ fi
 OPTIND=1
 while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     OPTARG="${OPTARG#=}"
-    case ${OPTION} in
-        -) LONGOPTARG="`get_long_option_arg \"${OPTARG}\"`"
-            case ${OPTARG} in
+    case "${OPTION}" in
+        -)  parse_long_option "$OPTARG" "${!OPTIND}"
+            case "${OPTARG}" in
                 path*|help|man|usage|vers*|interactive|verbose|force|debug|dry-run|quiet|libvers) ;;
-                name*) TAG_NAME=${LONGOPTARG};;
-                branch*) BRANCH_NAME=${LONGOPTARG};;
-                hook*) HOOK_PATH=${LONGOPTARG};;
+                name*) TAG_NAME="$LONGOPTARG";;
+                branch*) BRANCH_NAME="$LONGOPTARG";;
+                hook*) HOOK_PATH="$LONGOPTARG";;
                 no-hook) declare -rx HOOK_PATH="";;
                 *) ;;
             esac ;;

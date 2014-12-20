@@ -31,7 +31,7 @@ if [ -z "$DEFAULT_CLEANUP_NAMES" ]; then
     error "Configuration var 'DEFAULT_CLEANUP_NAMES' not found !"
 fi
 
-_TARGET=$(realpath "${_TARGET}")
+_TARGET=$(realpath "$_TARGET")
 
 verecho "> cleaning files in '${_TARGET}' ..."
 for FNAME in "${DEFAULT_CLEANUP_NAMES[@]}"; do

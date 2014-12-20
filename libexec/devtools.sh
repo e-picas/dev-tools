@@ -4,7 +4,7 @@
 # Copyright (C) 2013-2014, Pierre Cassat & contributors
 # <http://github.com/piwi/dev-tools>
 # <e-piwi.fr> - <me [at] e-piwi.fr>
-#
+# 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -29,7 +29,7 @@
 NAME="DevTools"
 VERSION="0.1.0"
 DATE="2014-12-21"
-VCSVERSION="master@767e63787063d1fc7e2d0dc3f4a23800e7e86d50"
+VCSVERSION="master@01a69721b6c578953310f7308f51d93342effd80"
 
 ###### First paths
 ##@ _REALPATH _REALDIRPATH _DEVTOOLS_CONFIGFILE _DEVTOOLS_ACTIONSDIR
@@ -58,11 +58,11 @@ findRequirements() {
     REQFILE="$1"
     ROOTREQFILE="${_REALDIRPATH}/${REQFILE}"
     REQINFO="$2"
-    if [ -e "${REQFILE}" ]; then
-        echo "${REQFILE}"
+    if [ -e "$REQFILE" ]; then
+        echo "$REQFILE"
         return 0
-    elif [ -e "${ROOTREQFILE}" ]; then
-        echo "${ROOTREQFILE}"
+    elif [ -e "$ROOTREQFILE" ]; then
+        echo "$ROOTREQFILE"
         return 0
     else
         PADDER=$(printf '%0.1s' "#"{1..1000})
@@ -119,7 +119,7 @@ load_actions_infos () {
         if [ -n "$ACTION_DESCRIPTION" ]; then
             ACTIONS_DESCRIPTION["$pos"]="$ACTION_DESCRIPTION"
         fi
-        if [ -n "${ACTION_CFGVARS}" ]; then
+        if [ -n "$ACTION_CFGVARS" ]; then
             ACTIONS_CFGVARS=("${ACTIONS_CFGVARS[@]}" "${ACTION_CFGVARS[@]}")
         fi
         if [ -n "$ACTION_OPTIONS" ]; then
@@ -248,10 +248,10 @@ action_file () {
     if [ ! -z "${ACTION}" ]; then
         ACTION_FILE="${_BASEDIR}/${ACTION}.sh"
         # hack to allow direct call of a file as action (with path from root)
-        if [ ! -f "${ACTIONFILE}" ]; then
+        if [ ! -f "$ACTIONFILE" ]; then
             TMP_ACTIONFILE="${_REALDIRPATH}/${ACTION}"
-            if [ -f "${TMP_ACTIONFILE}" ]; then
-                ACTION_FILE="${TMP_ACTIONFILE}"
+            if [ -f "$TMP_ACTIONFILE" ]; then
+                ACTION_FILE="$TMP_ACTIONFILE"
             fi
         fi    
     fi
@@ -299,7 +299,7 @@ load_action () {
 # find action and load its index in ACTION_INDEX
 find_action () {
     local ACTION="$1"
-    if [ ! -z "${ACTION}" ]; then
+    if [ ! -z "$ACTION" ]; then
         for i in ${!ACTIONS_LIST[*]}; do
             if [ "${ACTIONS_LIST[$i]}" = "$ACTION" ]; then
                 export ACTION_INDEX="$i"
@@ -418,7 +418,7 @@ targetdir_required () {
         prompt 'Target directory of the project to work on' "$(pwd)" ''
         export _TARGET="$USERRESPONSE"
     fi
-    if [ ! -d "${_TARGET}" ]; then error "Unknown root directory '${_TARGET}' !"; fi
+    if [ ! -d "$_TARGET" ]; then error "Unknown root directory '${_TARGET}' !"; fi
     load_target_config
 }
 
@@ -445,11 +445,11 @@ trigger_event () {
 load_user_config () {
     if [ ! -z "$HOME" ]; then
         local target_configfile=$(realpath "${HOME}/${DEFAULT_USER_CONFIG_FILE}")
-        if [ -f "${target_configfile}" ]; then
-            source "${target_configfile}"
+        if [ -f "$target_configfile" ]; then
+            source "$target_configfile"
         fi
         for p in "${ACTIONS_CFGVARS[@]}"; do
-            export "${p}"
+            export "$p"
         done
     fi
 }
@@ -458,11 +458,11 @@ load_user_config () {
 # overwrite current deploy config with target's custom one if so
 load_target_config () {
     local target_configfile=$(realpath "${_TARGET}/${DEFAULT_PROJECT_CONFIG_FILE}")
-    if [ -f "${target_configfile}" ]; then
-        source "${target_configfile}"
+    if [ -f "$target_configfile" ]; then
+        source "$target_configfile"
     fi
     for p in "${ACTIONS_CFGVARS[@]}"; do
-        export "${p}"
+        export "$p"
     done
 }
 
@@ -618,7 +618,7 @@ load_user_config
 load_target_config
 
 # let's go
-if [ ! -z "${ACTION}" ]
+if [ ! -z "$ACTION" ]
 then
     action_exists "$ACTION"
     ACTION_TOUPPER=$(echo "$ACTION" | tr '[:lower:]' '[:upper:]')
@@ -629,7 +629,7 @@ then
     if [ ! -z "${!PREACTION}" ]; then
         trigger_event "${!PREACTION}"
     fi
-    source "${ACTION_FILE}"
+    source "$ACTION_FILE"
     if [ ! -z "${!POSTACTION}" ]; then
         trigger_event "${!POSTACTION}"
     fi

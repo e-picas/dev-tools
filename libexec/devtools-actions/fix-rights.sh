@@ -68,7 +68,7 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     esac
 done
 
-_TARGET=$(realpath "${_TARGET}")
+_TARGET=$(realpath "$_TARGET")
 _TARGET_BIN=$(realpath "${_TARGET}/${BIN_DIR}")
 
 verecho "> fixing rights in '${_TARGET}' ..."

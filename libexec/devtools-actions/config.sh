@@ -60,10 +60,10 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     esac
 done
 
-_TARGET=$(realpath "${_TARGET}")
-filepath=$(realpath "${CFG_FILEPATH}")
+_TARGET=$(realpath "$_TARGET")
+filepath=$(realpath "$CFG_FILEPATH")
 
-if [ ! -z "${CFGACTION}" ]
+if [ ! -z "$CFGACTION" ]
 then
     case "$CFGACTION" in
         read)
@@ -92,7 +92,7 @@ then
             fi
             ;;
         file)
-            echo "${filepath}"
+            echo "$filepath"
             ;;
         get)
             verecho "Getting config value '${CFGVAR}' from config file '${filepath}':"

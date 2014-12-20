@@ -38,11 +38,11 @@ END=""
 OUTPUT=""
 SHOW_FILENAME=false
 
-if [ ! -z "${DEFAULT_EXTRACT_BEGIN_MASK}" ]; then
-    BEGIN="${DEFAULT_EXTRACT_BEGIN_MASK}"
+if [ ! -z "$DEFAULT_EXTRACT_BEGIN_MASK" ]; then
+    BEGIN="$DEFAULT_EXTRACT_BEGIN_MASK"
 fi
-if [ ! -z "${DEFAULT_EXTRACT_END_MASK}" ]; then
-    END="${DEFAULT_EXTRACT_END_MASK}"
+if [ ! -z "$DEFAULT_EXTRACT_END_MASK" ]; then
+    END="$DEFAULT_EXTRACT_END_MASK"
 fi
 if [ ! -z "$DEFAULT_EXTRACT_SHOW_FILENAME" ]; then
     SHOW_FILENAME="$DEFAULT_EXTRACT_SHOW_FILENAME"
@@ -65,10 +65,10 @@ while getopts ":${OPTIONS_ALLOWED}" OPTION; do
     esac
 done
 
-if [ -z "${BEGIN}" ]; then
+if [ -z "$BEGIN" ]; then
     simple_error "No mask defined to begin matching !\n\tuse the '--begin' option or the 'DEFAULT_EXTRACT_BEGIN_MASK' configuration var"
 fi
-if [ -z "${END}" ]; then
+if [ -z "$END" ]; then
     simple_error "No mask defined to end matching !\n\tuse the '--end' option or the 'DEFAULT_EXTRACT_END_MASK' configuration var"
 fi
 
