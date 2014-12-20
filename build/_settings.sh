@@ -7,7 +7,7 @@ export DATE=$(git log -1 --format="%ci" --date=short | cut -s -f 1 -d ' ')
 
 export LIB_SOURCE="libexec/devtools.sh"
 export LIB_FILE="${HERE}/../${LIB_SOURCE}"
-export PBL_SOURCE="piwi-bash-library/piwi-bash-library.bash"
+export PBL_SOURCE="libexec/piwi-bash-library/piwi-bash-library.bash"
 export PBL_FILE="${HERE}/../${PBL_SOURCE}"
 export TESTS_DIR="${HERE}/../tests"
 export MDMAN_SOURCE="man/MANPAGE.md"
