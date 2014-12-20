@@ -1,8 +1,8 @@
 Man:        devtools.sh Manual
 Name:       Dev Tools
 Author:     Pierre Cassat
-Date: 2014-11-22
-Version: 1.3.5
+Date: 2014-12-20
+Version: 0.1.0-dev
 
 
 ## NAME
