@@ -4,7 +4,6 @@ user/*
 deploy-actions/backup
 
 # specific to the "wip" branch
-#build/*
 #dev/*
 #modules/*
 #tests/*
