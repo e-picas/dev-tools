@@ -1,5 +1,5 @@
-Man:        devtools.sh Manual
-Name:       Dev Tools
+Man:        Dev Tools Manual
+Man-name:   devtools
 Author:     Pierre Cassat
 Date: 2014-12-21
 Version: 0.2.0-dev
@@ -104,18 +104,18 @@ Use special option `-V` to get script's version.
 **help / usage**
 :   See the help information about the script or an action.
 
-:        devtools.sh  help  -[common options ...]  <action>  [--less]  [--more]  --
+         devtools.sh  help  -[common options ...]  <action>  [--less]  [--more]  --
 
-:   The `--less` option shows the help information using the `less` program. The `--more`
+    The `--less` option shows the help information using the `less` program. The `--more`
     option shows the help information using the `more` program. If both options are used,
     the 'less' program will be chosen preferably.
 
 **install**
 :   Install the DevTools in your system.
 
-:        devtools.sh  install  -[common options ...]  --
+         devtools.sh  install  -[common options ...]  --
 
-:   The `-p=... / --path=...` option can be defined to choose the installation path. It
+    The `-p=... / --path=...` option can be defined to choose the installation path. It
     defaults to current user's `$HOME/bin/` directory.
 
 **list-actions**

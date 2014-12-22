@@ -1,17 +1,11 @@
 .\" author: Pierre Cassat
-
-.TH  "NAME" "3" "2014-12-20" "Version 0.1.0-dev" "devtools.sh Manual"
-
+.TH  "devtools" "3" "2014-12-21" "Version 0.2.0-dev" "Dev Tools Manual"
 .SH NAME
-
 .PP
 devtools - Packages development & deployment facilities
-
 .SH SYNOPSIS
-
 .PP
 \fBdevtools.sh action [common options] [script options [=value]] --\fP
-
 .PP
 \fBdevtools.sh\fP  [\fB-V\fP]  [\fB-f\fP|\fB-i\fP|\fB-q\fP|\fB-v\fP]  [\fB-x\fP|\fB--dry-run\fP]  [\fB-p\fP | \fB--path\fP \fI=path\fP]  ...
     ... help  <action>  [\fB--less\fP]  [\fB--more\fP]
@@ -22,7 +16,6 @@ devtools - Packages development & deployment facilities
     ... self-check  [<path> = ~/bin/]
     ... self-update  [<path> = ~/bin/]
     --
-
 .PP
 \fBdevtools.sh\fP  <action>  [\fB-h\fP|\fB--help\fP|\fB-V\fP]  [\fB-f\fP|\fB-i\fP|\fB-q\fP|\fB-v\fP]  [\fB-x\fP|\fB--dry-run\fP]  [\fB-p\fP | \fB--path\fP \fI=path\fP]  ...
     ... cleanup
@@ -36,9 +29,7 @@ devtools - Packages development & deployment facilities
     ... sync  [\fB--method\fP \fI=method\fP]  [\fB--env\fP \fI=env\fP]  [\fB--target\fP \fI=server\fP]  [\fB--options\fP \fI="rsync/ftp options"\fP]  [\fB--env-options\fP \fI="rsync options"\fP]  [\fB--no-env\fP] 
     ... version-tag  [\fB--name\fP \fI=version\fP]  [\fB--branch\fP \fI=name\fP]  [\fB--hook\fP \fI=path\fP]  [\fB--no-hook\fP] 
     --
-
 .SH DESCRIPTION
-
 .PP
 \fBDevTools\fP is a shell script that handles a set of actions (also defined as shell scripts)
 to execute something upon a project under development. The usage is quite simple as it just
@@ -48,13 +39,11 @@ in a just downloaded package. If you installed the DevTools in your system (in y
 directory or any global `\fS/usr/*/bin/\fP` directory), you may replace "devtools.sh" by "devtools"
 in each command line example. In this case, each action is a script installed in the same 
 directory as the global script and named something like `\fSdevtools-action_name\fP`.
-
 .PP
 The global script always follows the same rules and acts like a dispatcher that distributes
 the options to an action. More, creating a new action (such as your own actions) is as simple
 as writing a new shell script in the `\fSdevtools-actions/\fP` directory (or naming it
 `\fSdevtools-myaction\fP` for a global install) and call it with the global script.
-
 .PP
 The synopsis usage of the script is something like: \fBdevtools.sh action-name
 [common options] [script options [=value]] --\fP. You can group short options like `\fS-xc\fP`,
@@ -67,7 +56,6 @@ short or long option with argument too as long as you use the equal sign:
 devtools.sh action -vi -p ../my/path action
 .EE
 .RE
-
 .PP
 is the same as:
 .RS
@@ -76,92 +64,78 @@ is the same as:
 devtools.sh -vi -p=../my/path action
 .EE
 .RE
-
 .PP
 Basically, the first string which does not begin by a dash `\fS-\fP` in your command will be
 considered as an action name.
-
 .PP
 For a first start or a quick usage reminder, use option `\fS-h\fP` for a global script help,
 `\fShelp action\fP` to see the help about a specific action and use option `\fS--dry-run\fP` to make dry runs.
-
 .PP
 This package is based on the Piwi Bash Library <http://github.com/piwi/bash-library>.
-
 .SH OPTIONS
-
 .PP
 Use special option `\fS-V\fP` to get script's version.
-
 .PP
 \fIThe following common options are supported:\fP
 .TP
-\fB-f\fP, \fB--force\fP
-force some commands to not prompt confirmation 
+\fB-f\fP, \fB--force\fP force some commands to not prompt confirmation 
 .TP
 \fB-i\fP, \fB--interactive\fP
-ask for confirmation before some actions
+ ask for confirmation before some actions
 .TP
 \fB-p\fP, \fB--path\fP =path
-define the project directory path (default is `\fSpwd\fP` - the `\fSpath\fP` argument must exist)
+ define the project directory path (default is `\fSpwd\fP` - the `\fSpath\fP` argument must exist)
 .TP
 \fB-q\fP, \fB--quiet\fP
-decrease script verbosity, nothing will be written unless errors 
+ decrease script verbosity, nothing will be written unless errors 
 .TP
 \fB-v\fP, \fB--verbose\fP
-increase script verbosity 
+ increase script verbosity 
 .TP
 \fB-x\fP, \fB--debug\fP
-see debug info
+ see debug info
 .TP
 \fB--dry-run\fP
-see commands to run but do not run them actually
+ see commands to run but do not run them actually
 .PP
 \fIThe following internal actions are available:\fP
 .TP
-\fBhelp / usage\fP
-See the help information about the script or an action.
-.RS
+\fBhelp / usage\fP See the help information about the script or an action.
 
-.EX
+.br
  devtools.sh  help  -[common options ...]  <action>  [--less]  [--more]  --
-.EE
-.RE
-.PP
+.br
+
 The `\fS--less\fP` option shows the help information using the `\fSless\fP` program. The `\fS--more\fP`
 option shows the help information using the `\fSmore\fP` program. If both options are used,
 the 'less' program will be chosen preferably.
 .TP
 \fBinstall\fP
-Install the DevTools in your system.
-.RS
+ Install the DevTools in your system.
 
-.EX
+.br
  devtools.sh  install  -[common options ...]  --
-.EE
-.RE
-.PP
+.br
+
 The `\fS-p=... / --path=...\fP` option can be defined to choose the installation path. It
 defaults to current user's `\fS$HOME/bin/\fP` directory.
 .TP
 \fBlist-actions\fP
-See available actions list.
+ See available actions list.
 .TP
 \fBself-check\fP
-check if installed DevTools in `\fSpath\fP` are up-to-date
+ check if installed DevTools in `\fSpath\fP` are up-to-date
 .TP
 \fBself-update\fP
-actually update DevTools in `\fSpath\fP`
+ actually update DevTools in `\fSpath\fP`
 .TP
 \fBuninstall\fP
-uninstall the DevTools from `\fSpath\fP`
+ uninstall the DevTools from `\fSpath\fP`
 .PP
 \fIThe following actions are currently available:\fP
-
 .TP cleanup
 \fBcleanup\fP
 .RS
-
 .PP
 This will clean (remove) all OS or IDE specific files from the project
 (configuration variable: `\fSDEFAULT_CLEANUP_NAMES\fP`).
@@ -171,12 +145,10 @@ This will clean (remove) all OS or IDE specific files from the project
 devtools.sh  cleanup  -[common options ...]  [--dry-run]  --
 .EE
 .RE
-
 .RE
 .TP config
 \fBconfig\fP
 .RS
-
 .PP
 Manage the devtools configuration for a package, stored in `\fS.devtools\fP` dotfile ;
 with no option, current configuration will be shown.
@@ -189,22 +161,20 @@ devtools.sh  config  -[common options ...]  [--dry-run]
 .EE
 .RE
 .TP
-\fB--filename\fP
-see current configuration file path for the project
+\fB--filename\fP see current configuration file path for the project
 .TP
 \fB--full\fP
-see the full configuration entries for the project (defaults and custom)
+ see the full configuration entries for the project (defaults and custom)
 .TP
 \fB--val\fP =value
-define a configuration variable value (requires the `\fS--var\fP` option to be defined)
+ define a configuration variable value (requires the `\fS--var\fP` option to be defined)
 .TP
 \fB--var\fP =name
-select a configuration variable to read or define
+ select a configuration variable to read or define
 .RE
 .TP deploy
 \fBdeploy\fP
 .RS
-
 .PP
 Will search for files suffixed by `\fS__ENV__\fP` in the project path (recursively) and
 over-write the original ones (without suffix).
@@ -217,13 +187,11 @@ devtools.sh  deploy  -[common options ...]  [--dry-run]
 .EE
 .RE
 .TP
-\fB--env\fP =name
-the environment shortcut to deploy (default is `\fSDEFAULT\fP` - configuration variable: `\fSDEFAULT_DEPLOY_ENV\fP`)
+\fB--env\fP =name the environment shortcut to deploy (default is `\fSDEFAULT\fP` - configuration variable: `\fSDEFAULT_DEPLOY_ENV\fP`)
 .RE
 .TP extract
 \fBextract\fP
 .RS
-
 .PP
 Will search and extract strings from files contents recursively ; result is written on STDOUT
 but can be stored in a file.
@@ -238,22 +206,20 @@ devtools.sh  extract  -[common options ...]  [--dry-run]
 .EE
 .RE
 .TP
-\fB--begin\fP =mask
-the mask to use to begin the matching (configuration variable: `\fSDEFAULT_EXTRACT_BEGIN_MASK\fP`) 
+\fB--begin\fP =mask the mask to use to begin the matching (configuration variable: `\fSDEFAULT_EXTRACT_BEGIN_MASK\fP`) 
 .TP
 \fB--end\fP =mask
-the mask to use to end the matching (configuration variable: `\fSDEFAULT_EXTRACT_END_MASK\fP`) 
+ the mask to use to end the matching (configuration variable: `\fSDEFAULT_EXTRACT_END_MASK\fP`) 
 .TP
 \fB--output\fP =filename
-a filename to write results in (this will overwrite any existing file)
+ a filename to write results in (this will overwrite any existing file)
 .TP
 \fB--show-filename\fP
-write matching filenames before extracted content (configuration variable: `\fSDEFAULT_EXTRACT_SHOW_FILENAME\fP`)
+ write matching filenames before extracted content (configuration variable: `\fSDEFAULT_EXTRACT_SHOW_FILENAME\fP`)
 .RE
 .TP fixrights
 \fBfix-rights\fP
 .RS
-
 .PP
 This will fix files and directories UNIX rights recursively on the project.
 .RS
@@ -267,22 +233,20 @@ devtools.sh  fix-rights  -[common options ...]  [--dry-run]
 .EE
 .RE
 .TP
-\fB--bin\fP =path
-directory name of the binaries, to define their rights on `\fSa+x\fP` (default is `\fSbin/\fP` - configuration variable: `\fSDEFAULT_FIXRIGHTS_BIN_DIR\fP`)
+\fB--bin\fP =path directory name of the binaries, to define their rights on `\fSa+x\fP` (default is `\fSbin/\fP` - configuration variable: `\fSDEFAULT_FIXRIGHTS_BIN_DIR\fP`)
 .TP
 \fB--bin-mask\fP =mask
-mask to match binary files in 'bin' (default is empty - configuration variable: `\fSDEFAULT_FIXRIGHTS_BIN_MASK\fP`)
+ mask to match binary files in 'bin' (default is empty - configuration variable: `\fSDEFAULT_FIXRIGHTS_BIN_MASK\fP`)
 .TP
 \fB--dirs\fP =chmod
-the rights level set for directories (default is `\fS0755\fP` - configuration variable: `\fSDEFAULT_FIXRIGHTS_DIRS_CHMOD\fP`) 
+ the rights level set for directories (default is `\fS0755\fP` - configuration variable: `\fSDEFAULT_FIXRIGHTS_DIRS_CHMOD\fP`) 
 .TP
 \fB--files\fP =chmod
-the rights level set for files (default is `\fS0644\fP` - configuration variable: `\fSDEFAULT_FIXRIGHTS_FILES_CHMOD\fP`)
+ the rights level set for files (default is `\fS0644\fP` - configuration variable: `\fSDEFAULT_FIXRIGHTS_FILES_CHMOD\fP`)
 .RE
 .TP flush
 \fBflush\fP
 .RS
-
 .PP
 This will clean (remove) all contents recursively from temporary directories
 (configuration variable: `\fSDEFAULT_FLUSH_DIRNAMES\fP`).
@@ -292,12 +256,10 @@ This will clean (remove) all contents recursively from temporary directories
 devtools.sh  flush  -[common options ...]  [--dry-run]  --
 .EE
 .RE
-
 .RE
 .TP manpage
 \fBmanpage\fP
 .RS
-
 .PP
 Build a manpage file based on a markdown content ; the manpage is added in system manpages
 and can be referenced if the `\fSwhatis\fP` and `\fSmakewhatis\fP` binaries are found or defined.
@@ -312,32 +274,30 @@ devtools.sh  manpage  -[common options ...]  [--dry-run]
 .EE
 .RE
 .TP
-\fB--dir\fP =name
-the manpage system directory to install manpage in 
+\fB--dir\fP =name the manpage system directory to install manpage in 
 .TP
 \fB--filename\fP =filename
-the filename to use to create the manpage (configuration variable: `\fSDEFAULT_MANPAGE_FILENAME\fP`) 
+ the filename to use to create the manpage (configuration variable: `\fSDEFAULT_MANPAGE_FILENAME\fP`) 
 .TP
 \fB--makewhatis\fP =bin path
-the binary to use for the 'makewhatis' command (configuration variable: `\fSDEFAULT_MANPAGE_MAKEWHATIS_BIN\fP`)
+ the binary to use for the 'makewhatis' command (configuration variable: `\fSDEFAULT_MANPAGE_MAKEWHATIS_BIN\fP`)
 .TP
 \fB--markdown\fP =bin path
-the binary to use for the 'markdown' command 
+ the binary to use for the 'markdown' command 
 (default is installed MarkdownExtended package - configuration variable: `\fSDEFAULT_MANPAGE_MARKDOWN_BIN\fP`) 
 .TP
 \fB--section\fP =reference
-the manpage section (default is '3' - configuration variable: `\fSDEFAULT_MANPAGE_SECTION\fP`) 
+ the manpage section (default is '3' - configuration variable: `\fSDEFAULT_MANPAGE_SECTION\fP`) 
 .TP
 \fB--source\fP =filename
-the manpage source file (default is `\fSMANPAGE.md\fP` - configuration variable: `\fSDEFAULT_MANPAGE_SOURCE\fP`) 
+ the manpage source file (default is `\fSMANPAGE.md\fP` - configuration variable: `\fSDEFAULT_MANPAGE_SOURCE\fP`) 
 .TP
 \fB--whatis\fP =bin path
-the binary to use for the 'whatis' command (configuration variable: `\fSDEFAULT_MANPAGE_WHATIS_BIN\fP`)
+ the binary to use for the 'whatis' command (configuration variable: `\fSDEFAULT_MANPAGE_WHATIS_BIN\fP`)
 .RE
 .TP md2man
 \fBmd2man\fP
 .RS
-
 .PP
 Build a manpage file based on a markdown content.
 .RS
@@ -349,20 +309,18 @@ devtools.sh  md2man  -[common options ...]  [--dry-run]
 .EE
 .RE
 .TP
-\fB--filename\fP =filename
-the filename to use to create the manpage (configuration variable: `\fSDEFAULT_MANPAGE_FILENAME\fP`) 
+\fB--filename\fP =filename the filename to use to create the manpage (configuration variable: `\fSDEFAULT_MANPAGE_FILENAME\fP`) 
 .TP
 \fB--markdown\fP =bin path
-the binary to use for the 'markdown' command 
+ the binary to use for the 'markdown' command 
 (default is installed MarkdownExtended package - configuration variable: `\fSDEFAULT_MANPAGE_MARKDOWN_BIN\fP`) 
 .TP
 \fB--source\fP =filename
-the manpage source file (default is `\fSMANPAGE.md\fP` - configuration variable: `\fSDEFAULT_MANPAGE_SOURCE\fP`)
+ the manpage source file (default is `\fSMANPAGE.md\fP` - configuration variable: `\fSDEFAULT_MANPAGE_SOURCE\fP`)
 .RE
 .TP sync
 \fBsync\fP
 .RS
-
 .PP
 Will synchronize a project directory to a target via `\fSrsync\fP` or `\fSncftp\fP`. The `\fSrsync\fP` method 
 can use SSH protocol if so ; use the `\fS-x\fP` option to process a `\fS--dry-run\fP` rsync.
@@ -377,30 +335,28 @@ devtools.sh  sync  -[common options ...]  [--dry-run]
 .EE
 .RE
 .TP
-\fB--env\fP =env
-the environment shortcut to deploy if so (configuration variable: `\fSDEFAULT_SYNC_ENV\fP`)
+\fB--env\fP =env the environment shortcut to deploy if so (configuration variable: `\fSDEFAULT_SYNC_ENV\fP`)
 .TP
 \fB--env-options\fP ="rsync opts"
-an options string used for the 'rsync' command when deploying the environment files
+ an options string used for the 'rsync' command when deploying the environment files
 (configuration variable: `\fSDEFAULT_SYNC_RSYNC_ENV_OPTIONS\fP`) 
 .TP
 \fB--method\fP =method
-the method to use for the synchronization in 'rsync', 'ftp' ; default method is 'rsync'
+ the method to use for the synchronization in 'rsync', 'ftp' ; default method is 'rsync'
 (configuration variable: `\fSDEFAULT_SYNC_METHOD\fP`) 
 .TP
 \fB--no-env\fP
-skip any configured environment deployment
+ skip any configured environment deployment
 .TP
 \fB--options\fP ="rsync/ftp opts"
-an options string used for the 'rsync' or 'ftp' command (configuration variable: `\fSDEFAULT_SYNC_RSYNC_OPTIONS\fP`) 
+ an options string used for the 'rsync' or 'ftp' command (configuration variable: `\fSDEFAULT_SYNC_RSYNC_OPTIONS\fP`) 
 .TP
 \fB--target\fP =server
-the server name to use for synchronization (configuration variable: `\fSDEFAULT_SYNC_SERVER\fP`)
+ the server name to use for synchronization (configuration variable: `\fSDEFAULT_SYNC_SERVER\fP`)
 .RE
 .TP versiontag
 \fBversion-tag\fP
 .RS
-
 .PP
 This will create a new GIT version TAG according to the semantic versioning (see <http://semver.org/>).
 .RS
@@ -412,22 +368,20 @@ devtools.sh  version-tag  -[common options ...]  [--dry-run]
 .EE
 .RE
 .TP
-\fB--branch\fP =name
-which branch to use (default is `\fSmaster\fP` - configuration variable: `\fSDEFAULT_VERSIONTAG_BRANCH\fP`)
+\fB--branch\fP =name which branch to use (default is `\fSmaster\fP` - configuration variable: `\fSDEFAULT_VERSIONTAG_BRANCH\fP`)
 .TP
 \fB--hook\fP =path
-define a pre-tag hook file (configuration variable: `\fSDEFAULT_VERSIONTAG_HOOK\fP` - see `\fSpre-tag-hook.sample\fP`)
+ define a pre-tag hook file (configuration variable: `\fSDEFAULT_VERSIONTAG_HOOK\fP` - see `\fSpre-tag-hook.sample\fP`)
 .TP
 \fB--name\fP =version
-the name of the new tag ; default will be next increased version number 
+ the name of the new tag ; default will be next increased version number 
 .TP
 \fB--no-hook\fP
-do not run any pre-tag hook file (disable config setting)
+ do not run any pre-tag hook file (disable config setting)
 .RS
 .RS
 .RS
 .SH ENVIRONMENT
-
 .PP
 The script doesn't really define environment variables but handles a set of configuration
 variables that can be overwritten or modified to fit your needs and special environment.
@@ -435,171 +389,155 @@ If you want to define a configuration value globally, edit the `\fSdevtools.conf
 which is loaded at any call of the script. You can also define "per project" configuration
 settings creating a `\fS.devtools\fP` file at the root of the project. The `\fSconfig\fP` action of
 the script can help you to manage this type of configuration.
-
 .PP
 \fIThe following configuration variables are available:\fP
-
 .TP global
 \fBglobal\fP
 .RS
 .TP
-DEFAULT_BASHLIBRARY_PATH
-relative path from your project dir to 'piwi-bash-library.sh' ; default is `\fSpiwi-bash-library/piwi-bash-library.sh\fP`
+DEFAULT_BASHLIBRARY_PATH relative path from your project dir to 'piwi-bash-library.sh' ; default is `\fSpiwi-bash-library/piwi-bash-library.sh\fP`
 .TP
 DEFAULT_PROJECT_CONFIG_FILE
-default project config file (DO NOT CHANGE after a first usage) ; default is `\fS.devtools\fP`
+ default project config file (DO NOT CHANGE after a first usage) ; default is `\fS.devtools\fP`
 .TP
 DEFAULT_USER_CONFIG_FILE
-default project config file (DO NOT CHANGE after a first usage) ; default is `\fS.devtools_global\fP`
+ default project config file (DO NOT CHANGE after a first usage) ; default is `\fS.devtools_global\fP`
 .RE
-.TP cleanup_5495fde7bd8f1
+.TP cleanup_54983cb374926
 \fBcleanup\fP
 .RS
 .TP
-DEFAULT_CLEANUP_NAMES
-list of file names or masks to remove when cleaning a project ; default is:
+DEFAULT_CLEANUP_NAMES list of file names or masks to remove when cleaning a project ; default is:
 .DS&#95;Store .AppleDouble .LSOverride .Spotlight-V100 .Trashes Icon .&#95;&#42; &#42;~ &#42;~lock&#42; 
 Thumbs.db ehthumbs.db Desktop.ini .project .buildpath
 .RE
-.TP deploy_5495fde7bda80
+.TP deploy_54983cb374a90
 \fBdeploy\fP
 .RS
 .TP
-DEFAULT_DEPLOY_ENV
-default environment name to deploy when using action `\fSdeploy\fP` ; default is `\fSdefault\fP`
+DEFAULT_DEPLOY_ENV default environment name to deploy when using action `\fSdeploy\fP` ; default is `\fSdefault\fP`
 .RE
-.TP extract_5495fde7bdc0b
+.TP extract_54983cb374bf5
 \fBextract\fP
 .RS
 .TP
-DEFAULT_EXTRACT_BEGIN_MASK DEFAULT_EXTRACT_END_MASK
-the default masks to begin and end file contents extraction when using action `\fSextract\fP`
+DEFAULT_EXTRACT_BEGIN_MASK DEFAULT_EXTRACT_END_MASK the default masks to begin and end file contents extraction when using action `\fSextract\fP`
 .TP
 DEFAULT_EXTRACT_SHOW_FILENAME
-whether to show source filename before contents extracted when using action `\fSextract\fP` ; default is `\fSfalse\fP`
+ whether to show source filename before contents extracted when using action `\fSextract\fP` ; default is `\fSfalse\fP`
 .RE
-.TP fixrights_5495fde7bdd99
+.TP fixrights_54983cb374d87
 \fBfix-rights\fP
 .RS
 .TP
-DEFAULT_FIXRIGHTS_BIN_DIR
-the default binaries path in the project when using action `\fSfix-rights\fP` ; default is `\fSbin/\fP`
+DEFAULT_FIXRIGHTS_BIN_DIR the default binaries path in the project when using action `\fSfix-rights\fP` ; default is `\fSbin/\fP`
 .TP
 DEFAULT_FIXRIGHTS_BIN_MASK
-the default mask to match binary files when using action `\fSfix-rights\fP`
+ the default mask to match binary files when using action `\fSfix-rights\fP`
 .TP
 DEFAULT_FIXRIGHTS_FILES_CHMOD DEFAULT_FIXRIGHTS_DIRS_CHMOD
-default rights levels to use on files and directories when using action `\fSfix-rights\fP` ;
+ default rights levels to use on files and directories when using action `\fSfix-rights\fP` ;
 default is `\fS0755\fP` dor directories and `\fS0644\fP` for files
 .RE
-.TP manpage_5495fde7bdf20
+.TP manpage_54983cb374eef
 \fBmanpage\fP
 .RS
 .TP
-DEFAULT_MANPAGE_SECTION
-default system manpage type to use when using action `\fSmanpage\fP` ; default is `\fS3\fP` which
+DEFAULT_MANPAGE_SECTION default system manpage type to use when using action `\fSmanpage\fP` ; default is `\fS3\fP` which
 is the recommended section for third-party manpages
 .TP
 DEFAULT_MANPAGE_SOURCE DEFAULT_MANPAGE_FILENAME
-default source and target file names when using action `\fSmanpage\fP`
+ default source and target file names when using action `\fSmanpage\fP`
 .TP
 DEFAULT_MANPAGE_WHATIS_BIN DEFAULT_MANPAGE_MAKEWHATIS_BIN DEFAULT_MANPAGE_MARKDOWN_BIN
-path of the binaries to use for the `\fSwhatis\fP`, `\fSmakewhatis\fP` and `\fSmarkdown\fP` commands
+ path of the binaries to use for the `\fSwhatis\fP`, `\fSmakewhatis\fP` and `\fSmarkdown\fP` commands
 when using action `\fSmanpage\fP` ; default is what the script found in your system using
 the `\fSwhich\fP` command
 .RE
-.TP md2man_5495fde7be095
+.TP md2man_54983cb375054
 \fBmd2man\fP
 .RS
 .TP
-DEFAULT_MD2MAN_MARKDOWN_BIN
-path of the binary to use for the `\fSmarkdown\fP` command ; default is what the script found
+DEFAULT_MD2MAN_MARKDOWN_BIN path of the binary to use for the `\fSmarkdown\fP` command ; default is what the script found
 in your system using the `\fSwhich\fP` command
 .TP
 DEFAULT_MD2MAN_SOURCE DEFAULT_MD2MAN_FILENAME
-default source and target file names when using action `\fSmanpage\fP` ; default is a source 
+ default source and target file names when using action `\fSmanpage\fP` ; default is a source 
 file named `\fSMANPAGE.md\fP`
 .RE
-.TP sync_5495fde7be254
+.TP sync_54983cb3751eb
 \fBsync\fP
 .RS
 .TP
-DEFAULT_SYNC_METHOD
-default method to use in `\fSrsync\fP` and `\fSftp\fP` ; default is `\fSrsync\fP`
+DEFAULT_SYNC_METHOD default method to use in `\fSrsync\fP` and `\fSftp\fP` ; default is `\fSrsync\fP`
 .TP
 DEFAULT_SYNC_SERVER
-default distant server to synchronize when using action `\fSsync\fP`
-.PP
-to use an SSH tunnel with method `\fSrsync\fP`, write "-e ssh user@server.name:~/server/path/"
-.PP
-to use the `\fSftp\fP` method, write "-u USER -p PASSWORD -P PORT SERVERNAME REMOTEDIR"
-.PP
-to use a host configuration file for the `\fSftp\fP` method, write "-f FILENAME REMOTEDIR"
+ default distant server to synchronize when using action `\fSsync\fP`
+ to use an SSH tunnel with method `\fSrsync\fP`, write "-e ssh user@server.name:~/server/path/"
+ to use the `\fSftp\fP` method, write "-u USER -p PASSWORD -P PORT SERVERNAME REMOTEDIR"
+ to use a host configuration file for the `\fSftp\fP` method, write "-f FILENAME REMOTEDIR"
 .TP
 DEFAULT_SYNC_RSYNC_OPTIONS DEFAULT_SYNC_FTP_OPTIONS
-default options to use with the `\fSrysnc\fP` or `\fSftp\fP` commands when using action `\fSsync\fP` ; 
+ default options to use with the `\fSrysnc\fP` or `\fSftp\fP` commands when using action `\fSsync\fP` ; 
 default is `\fSavrlzh\fP` which may be used for a default synchronization keeping files permissions
 .TP
 DEFAULT_SYNC_ENV DEFAULT_SYNC_RSYNC_ENV_OPTIONS
-default environment and options to use with the `\fSrysnc\fP` command when using action `\fSsync\fP` ; default is
+ default environment and options to use with the `\fSrysnc\fP` command when using action `\fSsync\fP` ; default is
 `\fSavrlzh\fP` which may be used for a default synchronization keeping files permissions
 .TP
 DEFAULT_SYNC_FTP_EXCLUDED_FILES DEFAULT_SYNC_FTP_EXCLUDED_DIRS
-arrays of filenames or dirnames to exclude from synchronization when using the `\fSftp\fP` method ;
+ arrays of filenames or dirnames to exclude from synchronization when using the `\fSftp\fP` method ;
 you can write REGEXP masks
 .RE
-.TP versiontag_5495fde7be3df
+.TP versiontag_54983cb3754b9
 \fBversion-tag\fP
 .RS
 .TP
-DEFAULT_VERSIONTAG_BRANCH
-default branch name to use to create tags when using action `\fSversion-tag\fP` ; default is
+DEFAULT_VERSIONTAG_BRANCH default branch name to use to create tags when using action `\fSversion-tag\fP` ; default is
 `\fSmaster\fP`
 .TP
 DEFAULT_VERSIONTAG_HOOK
-path of the hook filename when using action `\fSversion-tag\fP`
+ path of the hook filename when using action `\fSversion-tag\fP`
 .RS
 .RS
 .RS
 .SH FILES
 .TP
-\fIdevtools.sh\fP, \fIdevtools\fP
-The library source file ; this is the script name to call in command line ; it can be
+\fIdevtools.sh\fP, \fIdevtools\fP The library source file ; this is the script name to call in command line ; it can be
 stored anywhere in the file system ; its relevant place could be `\fS$HOME/bin\fP` for a user
 or, for a global installation, in a place like `\fS/usr/local/bin\fP` (be sure to put it in
 a directory included in the global `\fS$PATH\fP`) ; the script must be executable for its/all
 user(s).
 .TP
 \fIdevtools.conf\fP
-The global script configuration file ; this file is required and will be searched in
+ The global script configuration file ; this file is required and will be searched in
 the same directory as the script above, then in current user `\fS$HOME\fP`, then in system
 configurations `\fS/etc\fP`.
 .TP
 \fIdevtools-actions/\fP, \fIdevtools-[action]\fP
-This directory contains the actions currently available ; the directory and its contents
+ This directory contains the actions currently available ; the directory and its contents
 are required to use script's actions ; they will be searched in the same directory as
 the script above, then in current user's `\fS$HOME\fP` ; the scripts must be executable for 
 its/all user(s).
-When it is installed globally, each action is stored as a `\fSdevtools-action\fP` binary file
+ When it is installed globally, each action is stored as a `\fSdevtools-action\fP` binary file
 in the same directory as the global script.
 .TP
 \fI.devtools_global\fP
-This is the specific dotfile to use for "per user" configuration ; you may write your
+ This is the specific dotfile to use for "per user" configuration ; you may write your
 configuration following the global `\fSdevtools.conf\fP` rules ; this file is searched at the
 root directory of user's `\fS$HOME\fP` and is loaded first.
 .TP
 \fI.devtools\fP
-This is the specific dotfile to use for "per project" configuration ; you may write your
+ This is the specific dotfile to use for "per project" configuration ; you may write your
 configuration following the global `\fSdevtools.conf\fP` rules ; this file is searched at the
 root directory of each project (defined by the '-p' option) and is loaded last.
 .TP
 \fIpiwi-bash-library/\fP
-This directory embeds the required third-party Piwi Bash Library <https://github.com/piwi/bash-library>.
+ This directory embeds the required third-party Piwi Bash Library <https://github.com/piwi/bash-library>.
 If you already have a version of the library installed in your system, you can over-write
 the library loaded (and skip the embedded version) re-defining the `\fSDEFAULT_BASHLIBRARY_PATH\fP`
 of the global configuration file.
 .SH EXAMPLES
-
 .PP
 A "classic" usage of the script would be:
 .RS
@@ -608,7 +546,6 @@ A "classic" usage of the script would be:
 devtools.sh action -p ../relative/path/to/concerned/project
 .EE
 .RE
-
 .PP
 To get an help string, run:
 .RS
@@ -617,7 +554,6 @@ To get an help string, run:
 devtools.sh -h OR devtools.sh help action
 .EE
 .RE
-
 .PP
 To make a dry run before really executing the actions, use:
 .RS
@@ -626,46 +562,34 @@ To make a dry run before really executing the actions, use:
 devtools.sh action --dry-run ...
 .EE
 .RE
-
 .SH LICENSE
-
 .PP
 Copyleft (C) 2013-2014 Pierre Cassat & contributors
-
 .PP
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
 .PP
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
-
 .PP
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
-
 .PP
 <http://e-piwi.fr/> - Some rights reserved. For documentation,
 sources & updates, see <http://github.com/piwi/dev-tools>. 
 To read GPL-3.0 license conditions, see <http://www.gnu.org/licenses/gpl-3.0.html>.
-
 .SH BUGS
-
 .PP
 To transmit bugs, see <http://github.com/piwi/dev-tools/issues>.
-
 .SH AUTHOR
-
 .PP
 Created and maintained by \fBPierre Cassat\fP (\fIpiwi\fP - <http://e-piwi.fr/>)
 & contributors.
-
 .SH SEE ALSO
-
 .PP
 piwi-bash-library(3)
 
