@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 #
-# Dev-Tools - Packages development & deployment facilities
-# Copyright (C) 2013-2014, Pierre Cassat & contributors
-# <http://github.com/piwi/dev-tools>
-# <e-piwi.fr> - <me [at] e-piwi.fr>
+# This file is part of the DevTools package.
+#
+# Copyleft (ↄ) 2013-2015 Pierre Cassat <me@e-piwi.fr> & contributors
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,6 +16,9 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# The source code of this package is available online at 
+# <http://github.com/piwi/dev-tools>
 # 
 # ------------------
 #
@@ -206,7 +208,7 @@ declare -x COMMON_OPTIONS_GLOBAL="-h|-V"
 declare -x COMMON_OPTIONS_INTERACT="-f|-i|-q|-v"
 OPTIONS_ALLOWED="p:${COMMON_OPTIONS_ALLOWED}"
 LONG_OPTIONS_ALLOWED="${COMMON_LONG_OPTIONS_ALLOWED}"
-COPYRIGHT="Copyright (c) 2013-2014, Pierre Cassat <http://e-piwi.fr/>"
+COPYRIGHT="Copyleft (ↄ) 2013-2015 Pierre Cassat & contributors"
 SCRIPT_VCS='git'
 LICENSE="License ${LICENSE_TYPE}: <${LICENSE_URL}>"
 SOURCES="Sources & updates: <${SOURCES_HOME}>"
