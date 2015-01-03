@@ -479,7 +479,7 @@ To make a dry run before really executing the actions, use:
 
 ## LICENSE
 
-Copyleft (C) 2013-2014 Pierre Cassat & contributors
+Copyleft (ↄ) 2013-2015 Pierre Cassat <me@e-piwi.fr> & contributors
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -494,8 +494,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-<http://e-piwi.fr/> - Some rights reserved. For documentation,
-sources & updates, see <http://github.com/piwi/dev-tools>. 
+For documentation, sources & updates, see <http://github.com/piwi/dev-tools>. 
 To read GPL-3.0 license conditions, see <http://www.gnu.org/licenses/gpl-3.0.html>.
 
 ## BUGS

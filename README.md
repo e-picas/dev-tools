@@ -196,7 +196,7 @@ To report a bug, please create a ticket at <http://github.com/piwi/dev-tools/iss
 ## Author & License
 
     Dev-Tools - Packages development & deployment facilities
-    Copyleft (C) 2013-2014, Pierre Cassat & contributors
+    Copyleft (ↄ) 2013-2015 Pierre Cassat & contributors
     <http://github.com/piwi/dev-tools>
     
     This program is free software: you can redistribute it and/or modify
