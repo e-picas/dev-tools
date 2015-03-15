@@ -148,8 +148,8 @@ To create a new action handled by `devtools.sh`, just create a new shell script 
 `devtools-actions/` directory.
 
 The best way to begin creating your own action is to make a copy of the `dev/action-model.sh` 
-script of the `wip` branch of this package and update the code ...
-For more info, see <http://github.com/piwi/dev-tools/blob/wip/dev/action-model.sh>.
+script of the `dev` branch of this package and update the code ...
+For more info, see <http://github.com/piwi/dev-tools/blob/dev/dev/action-model.sh>.
 
 ### Action info
 

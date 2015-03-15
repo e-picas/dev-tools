@@ -69,7 +69,7 @@ fi
 
 git commit -m "Version ${_VERSION} : automatic version number and date insertion"
 LASTSHA=`git log -1 --format="%H"`
-git checkout wip && git cherry-pick ${LASTSHA}
-git checkout master && git push origin master wip;
+git checkout dev && git cherry-pick ${LASTSHA}
+git checkout master && git push origin master dev;
 
 # Endfile
