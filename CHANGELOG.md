@@ -15,8 +15,19 @@
     * 3100bc9 - fixing typos in README (piwi)
     * 3050e25 - add the manpage in composer binaries to install + review of the README (piwi)
 
+--
+!! - moving ownership of the repository to: <http://github.com/piwi/dev-tools>
+NOTE - The "old-" tags referred to <http://github.com/atelierspierrot/dev-tools>.
+--
+
 * old-v1.3.5 (2014-11-22 - 9e2aac7)
 
+    *   the 'sync' action now use a copy of files to synchronize for the 'FTP' method
+    *   the 'devtools.sh' now uses a global shebang (for compatibility)
+    *   all action scripts now use the global shebang (for compatibility)
+        (to open the FTP connection only once)
+    *   the 'sync' action is upgraded to version 1.0.0
+    *   update of the PiwiBashLibrary to version 2.0.4
     * 0d2bc3a - upgrading the 'sync' action to version 1.0.0 + info in ChangeLog (piwi)
     * 24266b7 - review & update of the FTP 'sync' method (piwi)
     * 7719bd3 - deletion of a false 'help' comment (piwi)
@@ -26,6 +37,7 @@
 
 * old-v1.3.4 (2014-11-20 - 186c066)
 
+    *   update of the PiwiBashLibrary to version 2.0.3
     * 8a824db - adding the 'help action' info in global lib help (piwi)
     * dddcc47 - updating lib shebang for compatibility (piwi)
     * 277faff - Upgrading the 'sync' action to '1.0.0-beta' (piwi)
@@ -35,11 +47,16 @@
 * old-v1.3.3 (2014-06-11 - 173fad3)
 * old-v1.3.2 (2014-06-03 - 1a76a8e)
 
+    *   renaming old 'atelierspierrot/markdown-extended' to 'piwi/markdown-extended'
+    *   update of the PiwiBashLibrary to version 2.0.2
     * b711566 - renaming '.devtools_globals' to '.devtools_global' (no trailing 's') (Piero Wbmstr)
     * 1aae15a - manual merge of 'wip' state (Piero Wbmstr)
 
 * old-v1.3.1 (2014-05-18 - 77df2f6)
 
+    *   PiwiBashLibrary updated to version 2.0.1
+    *   pre-tag-hook ameliorated
+    *   new FTP method for the 'sync' action
     * 6f1275f - reviewing the 'sync' method doc (Piero Wbmstr)
     * 40453e8 - new FTP method for synchronization (Piero Wbmstr)
     * 46864bc - Updating the PiwiBashLibrary to version 2.0.1 (Piero Wbmstr)
@@ -72,12 +89,27 @@
 
 * old-v1.2.0 (2013-11-04 - 4792d91)
 
+    *   new 'less' and 'more' options for the help
+    *   switching the old BashLibrary package to PiwiBashLibrary 1.0.0
+    *   new 'env' option for the 'synch' action
+    *   new 'list-actions' internal action
     * e6d3dbb - Switching the old "bash-library" package to the new "piwi-bash-library" (Piero Wbmstr)
     * 41e46c7 - Adding the 'less' and 'more' options for 'help' (Piero Wbmstr)
     * 6221f3d - Work on the manpage and help string (Piero Wbmstr)
     * f3e043c - Cleaning the "manpage" action (new library version) (Piero Wbmstr)
 
 * old-v1.1.0 (2013-10-24 - 2466fa9)
+
+    *   renaming original 'deploy.sh' in 'dev-tools.sh', it's real name
+    *   'dev-tools' becomes 'devtools'
+    *   BashLibrary updated to version 1.0.4
+    *   new dependence to the 'atelierspierrot/markdown-extended' package
+    *   usage of the default BashLibrary "usage" strings
+    *   internal configuration is now handled in 'devtools.conf'
+    *   actions:
+        - new 'pre-tag-hook' feature for the 'version-tag' action
+        - changing action 'filename' to 'show-filename' for the 'extract' action
+        - new 'manpage' action
 
     * bb9f706 - Adding the 'mandb' command for Linux + taking first any installed markdown-extended (Piero Wbmstr)
     * 2a82dea - Detail about help rendering (Piero Wbmstr)
@@ -101,11 +133,22 @@
 
 * old-v1.0.1 (2013-10-14 - 63c41f3)
 
+    *   full redesign:
+        - specific help string for each action
+        - new files rights
+        - allow usage of a personal action filename
+        - new naming for conig vars
+        - new 'dry-run' option (same as '-x')
+    *   new 'extract' action
+    *   'version-tag' action review: correction in informations
+
     * 6c51165 - New version 1.0.1 (Piero Wbmstr)
     * 845755d - New gitignore settings to prepare WIP branch (Piero Wbmstr)
 
 * old-v1.0.0 (2013-10-14 - 602c56b)
 
+    *   BashLibrary version 0.0.1
+    *   initial actions
     * 445d7f0 - New bash library version (Piero Wbmstr)
     * 5a44702 - New version of the Bash Library (Piero Wbmstr)
     * 10d1f92 - New deploy actions (Piero Wbmstr)
