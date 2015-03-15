@@ -3,7 +3,7 @@ user/*
 */user/*
 deploy-actions/backup
 
-# specific to the "wip" branch
+# specific to the "dev" branch
 dev/*
 modules/*
 tests/*
